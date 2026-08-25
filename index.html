@@ -455,6 +455,372 @@
   
   
     <article class="card-wrapper card">
+      <a href="/posts/mysql-replication/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 복제(Replication)와 Read Replica</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>복제(Replication)란
+
+MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이상의 Slave(복제본)로 실시간 복사하는 구조로 구성할 수 있다. 이렇게 Master의 변경사항을 받아 따라가는 Slave 서버를 Read Replica라고 부른다.
+
+                 write                     ...</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787637000"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-connection-pool/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 커넥션 풀(Connection Pool)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>커넥션 풀이 왜 필요한가
+
+매 요청마다 DB 커넥션을 새로 맺으면(TCP 연결 + 인증) 그 자체로 시간이 소요된다. 요청이 많아질수록 이 비용이 계속 반복되면서 낭비가 커진다.
+
+그래서 애플리케이션이 시작할 때 커넥션을 미리 여러 개 만들어두고, 요청이 들어올 때마다 그중 하나를 빌려서 쓰고, 다 쓰면 반납하는 방식을 쓴다. 이게 커넥션 풀(Conn...</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787636700"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-lock-deadlock/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 락(Lock)과 데드락(Deadlock)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>앞서 ACID 격리 수준 글에서 “읽기 일관성은 격리 수준이, 쓰기 순서는 락(Lock)이 담당한다”고 정리했다. 이번엔 그 락을 직접 걸어보고, 락 때문에 생기는 데드락까지 정리한다.
+
+락(Lock) → Row Lock
+
+BEGIN;
+SELECT qty FROM coupon WHERE id = 1 FOR UPDATE; -- 락 걸림!
+UPDATE c...</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787636100"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-clustered-covering-index/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>지난 글(MySQL 인덱스 자료구조 - B+Tree)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다.
+
+클러스터드 인덱스 (Clustered Index) = PK 인덱스
+
+InnoDB는 PK로 만든 인덱스가 있으면, 테이블의 실제 데이터(Row) 자체가 그 B+Tree의 리프 노드에 저장된다. 이걸 클러스터드 인덱스라고 부른다.
+
+
+  ...</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787634000"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-index-btree/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 인덱스 자료구조 - B+Tree</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>MySQL(InnoDB)의 인덱스는 내부적으로 B+Tree라는 정렬된 트리 구조로 저장된다.
+
+트리(Tree)란?
+
+찾고 싶은 값이 있을 때, 맨 위(루트)부터 값을 비교하면서 내려가며 관련된 가지만 타고 내려간다. 전체를 다 뒤지지 않고 필요한 경로만 따라가기 때문에 속도가 빨라진다.
+
+              [ 루트, Root ]         ...</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787628300"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-storage-engine/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 스토리지 엔진 (InnoDB vs MyISAM)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>MySQL의 대표적인 스토리지 엔진 두 가지, InnoDB와 MyISAM을 비교해본다.
+
+InnoDB
+
+
+  트랜잭션 지원 (커밋/롤백 가능)
+  Row(행) 단위 락 — 필요한 행만 잠그기 때문에 동시성이 좋다
+  FK(외래키) 제약조건 지원
+  장애 시 복구 기능 제공 (redo log 기반)
+  MySQL / MariaDB 기본 엔진, 사실상 표...</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787627700"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
       <a href="/posts/mysql-acid/" class="post-preview row g-0 flex-md-row-reverse">
         
 
@@ -607,21 +973,42 @@ A - Atomicity (원자성)
 
 
   <section id="access-lastmod">
-    <h2 class="panel-heading">최근 업데이트</h2>
+    <h2 class="panel-heading">Recent Update</h2>
     <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-acid/">MySQL ACID</a>
+          <a href="/posts/mysql-replication/">MySQL 복제(Replication)와 Read Replica</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-normalization/">MySQL 정규화, 역정규화</a>
+          <a href="/posts/mysql-connection-pool/">MySQL 커넥션 풀(Connection Pool)</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/mysql-lock-deadlock/">MySQL 락(Lock)과 데드락(Deadlock)</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/mysql-clustered-covering-index/">MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/mysql-index-btree/">MySQL 인덱스 자료구조 - B+Tree</a>
         </li>
       
     </ul>
@@ -655,10 +1042,6 @@ A - Atomicity (원자성)
     
     
     
-      
-        
-        
-
   
     
     
@@ -669,32 +1052,15 @@ A - Atomicity (원자성)
     
     
     
-      
-    
   
     
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
     
   
     
@@ -720,12 +1086,226 @@ A - Atomicity (원자성)
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
     
   
     
     
     
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
     
   
     
@@ -765,12 +1345,59 @@ A - Atomicity (원자성)
     
     
     
+      
+    
   
     
     
     
     
       
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
     
   
     
@@ -791,7 +1418,7 @@ A - Atomicity (원자성)
 
 
   <section>
-    <h2 class="panel-heading">인기 태그</h2>
+    <h2 class="panel-heading">Trending Tags</h2>
     <div class="d-flex flex-wrap mt-3 mb-1 me-3">
       
         
@@ -801,16 +1428,28 @@ A - Atomicity (원자성)
         <a class="post-tag btn btn-outline-primary" href="/tags/sql/">sql</a>
       
         
-        <a class="post-tag btn btn-outline-primary" href="/tags/acid/">acid</a>
+        <a class="post-tag btn btn-outline-primary" href="/tags/btree/">btree</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/index/">index</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/transaction/">transaction</a>
       
         
-        <a class="post-tag btn btn-outline-primary" href="/tags/%EC%97%AD%EC%A0%95%EA%B7%9C%ED%99%94/">역정규화</a>
+        <a class="post-tag btn btn-outline-primary" href="/tags/acid/">acid</a>
       
         
-        <a class="post-tag btn btn-outline-primary" href="/tags/%EC%A0%95%EA%B7%9C%ED%99%94/">정규화</a>
+        <a class="post-tag btn btn-outline-primary" href="/tags/connection-pool/">connection-pool</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/deadlock/">deadlock</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/innodb/">innodb</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/lock/">lock</a>
       
     </div>
   </section>
@@ -897,10 +1536,6 @@ A - Atomicity (원자성)
     
     
     
-      
-        
-        
-
   
     
     
@@ -911,32 +1546,15 @@ A - Atomicity (원자성)
     
     
     
-      
-    
   
     
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
     
   
     
@@ -962,12 +1580,226 @@ A - Atomicity (원자성)
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
     
   
     
     
     
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1007,12 +1839,59 @@ A - Atomicity (원자성)
     
     
     
+      
+    
   
     
     
     
     
       
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
     
   
     
@@ -1033,7 +1912,7 @@ A - Atomicity (원자성)
 
 
   <section>
-    <h2 class="panel-heading">인기 태그</h2>
+    <h2 class="panel-heading">Trending Tags</h2>
     <div class="d-flex flex-wrap mt-3 mb-1 me-3">
       
         
@@ -1043,16 +1922,28 @@ A - Atomicity (원자성)
         <a class="post-tag btn btn-outline-primary" href="/tags/sql/">sql</a>
       
         
-        <a class="post-tag btn btn-outline-primary" href="/tags/acid/">acid</a>
+        <a class="post-tag btn btn-outline-primary" href="/tags/btree/">btree</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/index/">index</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/transaction/">transaction</a>
       
         
-        <a class="post-tag btn btn-outline-primary" href="/tags/%EC%97%AD%EC%A0%95%EA%B7%9C%ED%99%94/">역정규화</a>
+        <a class="post-tag btn btn-outline-primary" href="/tags/acid/">acid</a>
       
         
-        <a class="post-tag btn btn-outline-primary" href="/tags/%EC%A0%95%EA%B7%9C%ED%99%94/">정규화</a>
+        <a class="post-tag btn btn-outline-primary" href="/tags/connection-pool/">connection-pool</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/deadlock/">deadlock</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/innodb/">innodb</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/lock/">lock</a>
       
     </div>
   </section>

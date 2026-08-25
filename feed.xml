@@ -4,7 +4,7 @@
   <id>https://choisooyoung-dev.github.io/</id>
   <title>Soo Dev Log</title>
   <subtitle>MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록</subtitle>
-  <updated>2026-08-25T12:14:58+09:00</updated>
+  <updated>2026-08-25T15:10:42+09:00</updated>
   <author>
     <name>Sooyoung Choi</name>
     <uri>https://choisooyoung-dev.github.io/</uri>
@@ -20,14 +20,14 @@
 
   
   <entry>
-    <title>MySQL ACID</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-acid/" rel="alternate" type="text/html" title="MySQL ACID" />
-    <published>2026-08-25T11:45:00+09:00</published>
+    <title>MySQL 복제(Replication)와 Read Replica</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-replication/" rel="alternate" type="text/html" title="MySQL 복제(Replication)와 Read Replica" />
+    <published>2026-08-25T14:50:00+09:00</published>
   
-    <updated>2026-08-25T11:45:00+09:00</updated>
+    <updated>2026-08-25T14:50:00+09:00</updated>
   
-    <id>https://choisooyoung-dev.github.io/posts/mysql-acid/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-acid/" />
+    <id>https://choisooyoung-dev.github.io/posts/mysql-replication/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-replication/" />
     <author>
       <name>Sooyoung Choi</name>
     </author>
@@ -38,40 +38,31 @@
     
   
 
-  <summary>트랜잭션이 지켜야 하는 4가지 특성, ACID를 정리해본다.
+  <summary>복제(Replication)란
 
-A - Atomicity (원자성)
+MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이상의 Slave(복제본)로 실시간 복사하는 구조로 구성할 수 있다. 이렇게 Master의 변경사항을 받아 따라가는 Slave 서버를 Read Replica라고 부른다.
 
-트랜잭션 안의 작업들은 전부 성공하거나 전부 실패해야 한다. 중간에 하나라도 실패하면 그 전에 처리된 작업까지 전부 롤백한다.
-
-
-  EX) 재고 차감 + 주문 생성이 하나의 트랜잭션 →
-재고 차감은 성공했는데 주문 생성이 실패하면, 재고 차감도 같이 롤백된다.
+                 write                         read
+Client ────────────────▶ Master ── binlog ──▶ Slave ◀──────────── Client
+                                     복제
 
 
-START TRANSACTION;
-UPDATE stock SET quantity = quantity - 1 WHERE product_id = 1;
-INSERT INTO orders (product_id, user_id) VALUES (1, 100);
-COMMIT;
 
-
-  넷 다 성공해야 COMMIT, 하나라도 실패하면 ROLLBACK
-
-
-C ...</summary>
+  Master는 데이터가 변경될 때마다 그 내용을 binlog(binary log)라는 로그에 기록한다.
+  Slave는 이 binl...</summary>
 
   </entry>
 
   
   <entry>
-    <title>MySQL 정규화, 역정규화</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-normalization/" rel="alternate" type="text/html" title="MySQL 정규화, 역정규화" />
-    <published>2026-08-25T11:24:00+09:00</published>
+    <title>MySQL 커넥션 풀(Connection Pool)</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-connection-pool/" rel="alternate" type="text/html" title="MySQL 커넥션 풀(Connection Pool)" />
+    <published>2026-08-25T14:45:00+09:00</published>
   
-    <updated>2026-08-25T11:24:00+09:00</updated>
+    <updated>2026-08-25T14:45:00+09:00</updated>
   
-    <id>https://choisooyoung-dev.github.io/posts/mysql-normalization/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-normalization/" />
+    <id>https://choisooyoung-dev.github.io/posts/mysql-connection-pool/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-connection-pool/" />
     <author>
       <name>Sooyoung Choi</name>
     </author>
@@ -82,31 +73,129 @@ C ...</summary>
     
   
 
-  <summary>테이블을 설계할 때 늘 고민하게 되는 정규화(Normalization)와 역정규화(Denormalization)를 정리해본다.
+  <summary>커넥션 풀이 왜 필요한가
 
-정규화 (Normalization)
+매 요청마다 DB 커넥션을 새로 맺으면(TCP 연결 + 인증) 그 자체로 시간이 소요된다. 요청이 많아질수록 이 비용이 계속 반복되면서 낭비가 커진다.
 
-데이터 중복을 없애서 갱신 이상(Anomaly)을 방지하는 테이블 설계 원칙.
-하나의 정보는 한 곳에만 저장하고, 나머지 테이블에서는 그 정보를 참조(FK)하게 만드는 게 핵심이다.
+그래서 애플리케이션이 시작할 때 커넥션을 미리 여러 개 만들어두고, 요청이 들어올 때마다 그중 하나를 빌려서 쓰고, 다 쓰면 반납하는 방식을 쓴다. 이게 커넥션 풀(Connection Pool)이다.
 
-정규화를 안 하면 생기는 문제 (이상 현상)
 
+  EX) TypeORM에서는 이렇게 풀 크기를 지정한다.
+  extra: {
+  connectionLimit: 10,
+}
+  
+
+
+풀 크기, 무작정 크게 잡으면 안 되는 이유
+
+
+  풀 크기를 너무 작게 잡으면 → 동시 요청이 몰릴 때 빌릴 수 있는 커넥션이 없어서 커넥션 타임아웃이 난다.
+  풀 크기를 너무 크게 잡으면 ...</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>MySQL 락(Lock)과 데드락(Deadlock)</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/" rel="alternate" type="text/html" title="MySQL 락(Lock)과 데드락(Deadlock)" />
+    <published>2026-08-25T14:35:00+09:00</published>
+  
+    <updated>2026-08-25T14:35:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
 
   
     
-      종류
-      설명
-      예시
+    <category term="MySQL" />
     
   
+
+  <summary>앞서 ACID 격리 수준 글에서 “읽기 일관성은 격리 수준이, 쓰기 순서는 락(Lock)이 담당한다”고 정리했다. 이번엔 그 락을 직접 걸어보고, 락 때문에 생기는 데드락까지 정리한다.
+
+락(Lock) → Row Lock
+
+BEGIN;
+SELECT qty FROM coupon WHERE id = 1 FOR UPDATE; -- 락 걸림!
+UPDATE coupon SET qty = qty - 1 WHERE id = 1;
+COMMIT; -- 락 풀림!
+
+
+
+  SELECT ... FOR UPDATE는 조회하면서 동시에 해당 row에 쓰기 락(exclusive lock)을 건다.
+  InnoDB는 Row(행) 단위 락이라서, 다른 트랜잭션이 같은 row를 건드리려고 하면 앞 트랜잭션이 COMMIT(또는 ROL...</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/" rel="alternate" type="text/html" title="MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스" />
+    <published>2026-08-25T14:00:00+09:00</published>
+  
+    <updated>2026-08-25T14:00:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
   
     
-      삽입 이상 (Insert Anomaly)
-      불필요한 데이터까지 같이 넣어야 저장이 가능한 상황
-      학생이 없는데 강의 정보만 등록하고 싶어도 학생 컬럼이 필수라 등록 불가
+    <category term="MySQL" />
     
+  
+
+  <summary>지난 글(MySQL 인덱스 자료구조 - B+Tree)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다.
+
+클러스터드 인덱스 (Clustered Index) = PK 인덱스
+
+InnoDB는 PK로 만든 인덱스가 있으면, 테이블의 실제 데이터(Row) 자체가 그 B+Tree의 리프 노드에 저장된다. 이걸 클러스터드 인덱스라고 부른다.
+
+
+  PK로 조회할 때: B+Tree를 타고 내려가서 리프 노드에 도착하면, 그 자리에 바로 실제 데이터가 있다. 한 번에 끝난다.
+  PK가 아닌 걸로 조회할 때 (유니크 인덱스 등, = 세컨더리 인덱스): 이 인덱스의 B+Tree 리프에는 실제 데이터가 아니라 PK 값만 저장되어 있다.
     
-  ...</summary>
+      세컨더리 인덱스를 타고 내려가 리프에서 PK를 찾는다...</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>MySQL 인덱스 자료구조 - B+Tree</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-index-btree/" rel="alternate" type="text/html" title="MySQL 인덱스 자료구조 - B+Tree" />
+    <published>2026-08-25T12:25:00+09:00</published>
+  
+    <updated>2026-08-25T12:25:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-index-btree/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-index-btree/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>MySQL(InnoDB)의 인덱스는 내부적으로 B+Tree라는 정렬된 트리 구조로 저장된다.
+
+트리(Tree)란?
+
+찾고 싶은 값이 있을 때, 맨 위(루트)부터 값을 비교하면서 내려가며 관련된 가지만 타고 내려간다. 전체를 다 뒤지지 않고 필요한 경로만 따라가기 때문에 속도가 빨라진다.
+
+              [ 루트, Root ]           ← 맨 위 시작점
+              /            \
+          [ A ]            [ B ]      ← 노드(Node): 트리를 이루는 한 칸
+         /     \                \
+      [ C ]   [ D ]             [ E ]  ← 자식(Child): 한 노드 아래로 연결...</summary>
 
   </entry>
 

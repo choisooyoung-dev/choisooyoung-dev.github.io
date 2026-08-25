@@ -30,24 +30,24 @@
 
   <!-- Begin Jekyll SEO tag v2.9.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="MySQL 정규화, 역정규화" />
+<meta property="og:title" content="MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="테이블을 설계할 때 늘 고민하게 되는 정규화(Normalization)와 역정규화(Denormalization)를 정리해본다." />
-<meta name="twitter:description" property="og:description" content="테이블을 설계할 때 늘 고민하게 되는 정규화(Normalization)와 역정규화(Denormalization)를 정리해본다." />
-<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-normalization/" />
-<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-normalization/" />
+<meta name="description" content="지난 글(MySQL 인덱스 자료구조 - B+Tree)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다." />
+<meta name="twitter:description" property="og:description" content="지난 글(MySQL 인덱스 자료구조 - B+Tree)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다." />
+<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/" />
+<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/" />
 <meta property="og:site_name" content="Soo Dev Log" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2026-08-25T11:24:00+09:00" />
-<meta property="article:modified_time" content="2026-08-25T11:24:00+09:00" />
+<meta property="article:published_time" content="2026-08-25T14:00:00+09:00" />
+<meta property="article:modified_time" content="2026-08-25T14:00:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="MySQL 정규화, 역정규화" />
+<meta name="twitter:title" content="MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T11:24:00+09:00","datePublished":"2026-08-25T11:24:00+09:00","description":"테이블을 설계할 때 늘 고민하게 되는 정규화(Normalization)와 역정규화(Denormalization)를 정리해본다.","headline":"MySQL 정규화, 역정규화","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-normalization/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-normalization/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T14:00:00+09:00","datePublished":"2026-08-25T14:00:00+09:00","description":"지난 글(MySQL 인덱스 자료구조 - B+Tree)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다.","headline":"MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>MySQL 정규화, 역정규화 | Soo Dev Log
+  <title>MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스 | Soo Dev Log
   </title>
 
   <!--
@@ -451,6 +451,39 @@
 
       
     
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
 
     
   
@@ -466,28 +499,6 @@
       
         
         
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
       
 
       
@@ -560,7 +571,7 @@
       <a href="javascript:history.back()" aria-label="back" class="me-2 text-muted" style="text-decoration:none;">
         <i class="fas fa-arrow-left"></i>
       </a>
-      MySQL 정규화, 역정규화
+      MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스
     </h1>
     
 
@@ -578,7 +589,7 @@
 
 <time
   
-  data-ts="1787624640"
+  data-ts="1787634000"
   data-df="YYYY/MM/DD"
   
     data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -633,9 +644,9 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="1227 단어"
+  title="1721 단어"
 >읽는 시간
-     <em>6분</em>
+     <em>9분</em>
 </span>
 
         </div>
@@ -644,136 +655,194 @@
   </header>
 
   <div class="content">
-    <p>테이블을 설계할 때 늘 고민하게 되는 정규화(Normalization)와 역정규화(Denormalization)를 정리해본다.</p>
+    <p>지난 글(<a href="/posts/mysql-index-btree/">MySQL 인덱스 자료구조 - B+Tree</a>)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다.</p>
 
-<h2 id="정규화-normalization"><span class="me-2">정규화 (Normalization)</span><a href="#정규화-normalization" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<h2 id="클러스터드-인덱스-clustered-index--pk-인덱스"><span class="me-2">클러스터드 인덱스 (Clustered Index) = PK 인덱스</span><a href="#클러스터드-인덱스-clustered-index--pk-인덱스" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<p><strong>데이터 중복을 없애서 갱신 이상(Anomaly)을 방지하는 테이블 설계 원칙.</strong>
-하나의 정보는 한 곳에만 저장하고, 나머지 테이블에서는 그 정보를 참조(FK)하게 만드는 게 핵심이다.</p>
+<p>InnoDB는 <strong>PK로 만든 인덱스가 있으면, 테이블의 실제 데이터(Row) 자체가 그 B+Tree의 리프 노드에 저장된다.</strong> 이걸 클러스터드 인덱스라고 부른다.</p>
 
-<h3 id="정규화를-안-하면-생기는-문제-이상-현상"><span class="me-2">정규화를 안 하면 생기는 문제 (이상 현상)</span><a href="#정규화를-안-하면-생기는-문제-이상-현상" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<ul>
+  <li><strong>PK로 조회할 때</strong>: B+Tree를 타고 내려가서 리프 노드에 도착하면, 그 자리에 <strong>바로 실제 데이터가 있다.</strong> 한 번에 끝난다.</li>
+  <li><strong>PK가 아닌 걸로 조회할 때</strong> (유니크 인덱스 등, = <strong>세컨더리 인덱스</strong>): 이 인덱스의 B+Tree 리프에는 실제 데이터가 아니라 <strong>PK 값</strong>만 저장되어 있다.
+    <ol>
+      <li>세컨더리 인덱스를 타고 내려가 리프에서 PK를 찾는다.</li>
+      <li>그 PK로 다시 클러스터드 인덱스(PK 인덱스)를 타고 내려가서 진짜 데이터를 찾는다.
+        <ul>
+          <li>이 2번째 단계를 <strong>“back to table lookup”</strong> 이라고 부른다. 조회를 두 번 하는 셈이라 PK로 직접 조회하는 것보다 느리다.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="커버링-인덱스-covering-index"><span class="me-2">커버링 인덱스 (Covering Index)</span><a href="#커버링-인덱스-covering-index" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>PK가 아닌 컬럼으로 조회하면 원래는 세컨더리 인덱스 → back to table lookup까지 거쳐야 한다. 그런데 <strong><code class="language-plaintext highlighter-rouge">SELECT</code>하는 컬럼이 전부 그 세컨더리 인덱스에 이미 포함된 값이라면?</strong></p>
+
+<p>→ <strong>클러스터드 인덱스까지 갈 필요 없이, 세컨더리 인덱스만 보고 바로 조회가 끝난다.</strong> 이런 상태를 “<strong>인덱스가 쿼리를 커버한다(covering)</strong>“고 하고, 이 인덱스를 커버링 인덱스라고 부른다.</p>
+
+<blockquote>
+  <p><strong>EX)</strong> <code class="language-plaintext highlighter-rouge">order_num</code>, <code class="language-plaintext highlighter-rouge">status</code> 두 컬럼으로 복합 인덱스가 걸려 있다고 하면</p>
+
+  <div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="k">SELECT</span> <span class="n">order_num</span><span class="p">,</span> <span class="n">status</span>
+<span class="k">FROM</span> <span class="n">discount_order</span>
+<span class="k">WHERE</span> <span class="n">order_num</span> <span class="o">=</span> <span class="s1">'20250825-0000213'</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div>  </div>
+
+  <p><code class="language-plaintext highlighter-rouge">SELECT</code>하는 컬럼(<code class="language-plaintext highlighter-rouge">order_num</code>, <code class="language-plaintext highlighter-rouge">status</code>)이 전부 인덱스에 포함되어 있으므로, back to table lookup 없이 인덱스만으로 끝난다.</p>
+</blockquote>
+
+<h3 id="explain으로-확인하기"><span class="me-2"><code class="language-plaintext highlighter-rouge">EXPLAIN</code>으로 확인하기</span><a href="#explain으로-확인하기" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="k">EXPLAIN</span>
+<span class="k">SELECT</span> <span class="n">order_num</span><span class="p">,</span> <span class="n">status</span>
+<span class="k">FROM</span> <span class="n">discount_order</span>
+<span class="k">WHERE</span> <span class="n">order_num</span> <span class="o">=</span> <span class="s1">'20250825-0000213'</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div></div>
 
 <div class="table-wrapper"><table>
   <thead>
     <tr>
-      <th>종류</th>
-      <th>설명</th>
-      <th>예시</th>
+      <th>id</th>
+      <th>select_type</th>
+      <th>table</th>
+      <th>type</th>
+      <th>possible_keys</th>
+      <th>key</th>
+      <th>key_len</th>
+      <th>ref</th>
+      <th>rows</th>
+      <th>Extra</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>삽입 이상 (Insert Anomaly)</td>
-      <td>불필요한 데이터까지 같이 넣어야 저장이 가능한 상황</td>
-      <td>학생이 없는데 강의 정보만 등록하고 싶어도 학생 컬럼이 필수라 등록 불가</td>
-    </tr>
-    <tr>
-      <td>갱신 이상 (Update Anomaly)</td>
-      <td>중복 저장된 값 중 일부만 바뀌어서 데이터 불일치 발생</td>
-      <td>고객 주소를 주문 테이블마다 저장 → 고객이 이사해도 과거 주문 행들은 옛 주소로 남음</td>
-    </tr>
-    <tr>
-      <td>삭제 이상 (Delete Anomaly)</td>
-      <td>한 행을 지웠는데 의도치 않게 다른 정보까지 같이 사라짐</td>
-      <td>마지막 주문 하나를 지웠더니 그 고객의 주소 정보 자체가 통째로 사라짐</td>
+      <td>1</td>
+      <td>SIMPLE</td>
+      <td>discount_order</td>
+      <td>ref</td>
+      <td>idx_order_status</td>
+      <td>idx_order_status</td>
+      <td>42</td>
+      <td>const</td>
+      <td>1</td>
+      <td><strong>Using index</strong></td>
     </tr>
   </tbody>
 </table></div>
 
-<blockquote>
-  <p><strong>EX)</strong> 주문 테이블에 매번 고객 주소를 같이 기입 →
-고객이 주소를 변경 →
-이미 저장된 과거 주문 행들에는 반영이 안 됨 (갱신 이상)</p>
-</blockquote>
-
-<h3 id="해결-방법"><span class="me-2">해결 방법</span><a href="#해결-방법" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">customerId</code> 같은 식별자만 주문 테이블에 남기고, 주소 같은 상세 정보는 <code class="language-plaintext highlighter-rouge">customer</code> 테이블로 따로 뺀다.</li>
-  <li>이후엔 FK(<code class="language-plaintext highlighter-rouge">customerId</code>)로 조인해서 주소를 조회 → 주소는 <code class="language-plaintext highlighter-rouge">customer</code> 테이블 딱 한 곳에서만 관리되므로 변경 시 모든 주문에 자동으로 반영된 것처럼 조회된다.</li>
-</ul>
-
-<h3 id="정규화-단계-간단-정리"><span class="me-2">정규화 단계 (간단 정리)</span><a href="#정규화-단계-간단-정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li><strong>1NF</strong>: 컬럼 값이 원자값(더 이상 쪼갤 수 없는 값)이어야 함 — 한 컬럼에 여러 값을 콤마로 넣지 않기</li>
-  <li><strong>2NF</strong>: 1NF를 만족하면서, 기본키의 일부에만 종속되는 컬럼(부분 함수 종속)을 제거</li>
-  <li><strong>3NF</strong>: 2NF를 만족하면서, 기본키가 아닌 컬럼이 다른 일반 컬럼에 종속되는 것(이행 종속)을 제거</li>
-</ul>
-
-<p>실무에서는 보통 3NF 정도까지만 맞추고, 그 이상(BCNF 등)은 상황에 따라 판단한다.</p>
-
-<h2 id="역정규화-denormalization"><span class="me-2">역정규화 (Denormalization)</span><a href="#역정규화-denormalization" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-
-<p><strong>조회 성능을 위해, 정규화로 쪼개놓은 데이터를 일부러 다시 중복 저장하는 것.</strong>
-JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.</p>
+<p><code class="language-plaintext highlighter-rouge">Extra</code> 컬럼에 <strong><code class="language-plaintext highlighter-rouge">Using index</code></strong>가 찍히면 커버링 인덱스로 처리됐다는 뜻이다. 만약 <code class="language-plaintext highlighter-rouge">SELECT *</code>로 바꾸거나, 인덱스에 없는 컬럼을 하나라도 조회하면 이 값이 사라지고 대신 실제 데이터를 찾으러 가는 과정(back to table lookup)이 추가된다.</p>
 
 <blockquote>
-  <p><strong>EX)</strong> 주문 통계 화면에서 매번 <code class="language-plaintext highlighter-rouge">SUM(price)</code>로 총 주문 금액 계산 →
-주문 건수가 많아질수록 매번 전체를 훑어야 해서 성능 저하</p>
+  <p>참고로 <code class="language-plaintext highlighter-rouge">Extra</code>에 <code class="language-plaintext highlighter-rouge">Using index condition</code>이 찍히는 경우도 있는데, 이건 커버링과는 다르게 <strong>인덱스로 조건은 걸러내지만 최종적으로는 테이블(클러스터드 인덱스)까지 가서 데이터를 가져오는 경우</strong>다. 순수하게 인덱스만으로 끝나는 건 <code class="language-plaintext highlighter-rouge">Using index</code>뿐이다.</p>
 </blockquote>
 
-<h3 id="해결-방법-1"><span class="me-2">해결 방법</span><a href="#해결-방법-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<h3 id="실무에서-select-를-지양하는-이유"><span class="me-2">실무에서 <code class="language-plaintext highlighter-rouge">SELECT *</code>를 지양하는 이유</span><a href="#실무에서-select-를-지양하는-이유" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<ol>
+  <li><strong>필요 없는 데이터까지 네트워크로 전송</strong>하게 된다. (컬럼이 많을수록, 행이 많을수록 낭비가 커짐)</li>
+  <li><strong>커버링 인덱스로 최적화될 기회를 날린다.</strong> 필요한 컬럼만 명시했다면 인덱스만으로 끝났을 조회가, <code class="language-plaintext highlighter-rouge">*</code> 때문에 인덱스에 없는 컬럼까지 필요해져서 back to table lookup이 강제로 발생한다.</li>
+</ol>
+
+<h2 id="복합-인덱스-composite-index"><span class="me-2">복합 인덱스 (Composite Index)</span><a href="#복합-인덱스-composite-index" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>여러 컬럼을 묶어서 만드는 인덱스. <code class="language-plaintext highlighter-rouge">INDEX (userId, createdAt)</code>처럼 두 개 이상의 컬럼을 하나의 인덱스로 만든다.</p>
+
+<h2 id="카디널리티-cardinality"><span class="me-2">카디널리티 (Cardinality)</span><a href="#카디널리티-cardinality" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p><strong>한 컬럼에 서로 다른 값이 몇 종류나 있는지</strong>를 나타내는 지표.</p>
 
 <ul>
-  <li>집계값(SUM)을 미리 계산해서 별도 컬럼/테이블에 중복 저장해둔다.</li>
-  <li>조회할 땐 그 저장된 값을 그냥 읽기만 하면 되므로 빠르다.</li>
+  <li><code class="language-plaintext highlighter-rouge">status</code> (예: <code class="language-plaintext highlighter-rouge">enum('pending','done','cancelled')</code>) → 값의 종류가 몇 개 안 됨 → <strong>카디널리티 낮음</strong></li>
+  <li><code class="language-plaintext highlighter-rouge">userId</code> → 사용자마다 거의 다 다른 값 → <strong>카디널리티 높음</strong></li>
 </ul>
 
-<h3 id="trade-off"><span class="me-2">Trade-off</span><a href="#trade-off" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<p>카디널리티가 높을수록, 그 컬럼으로 조건을 걸었을 때 후보군이 확 줄어든다 (= 검색이 잘 좁혀진다).</p>
 
-<ul>
-  <li>저장해둔 값과 원본 데이터가 어긋나지 않으려면, 주문이 추가/수정/삭제될 때마다 중복 저장된 값도 같이 갱신해줘야 한다.</li>
-  <li>즉 <strong>읽기(조회) 성능은 좋아지지만, 쓰기(갱신) 로직이 복잡해지고 데이터 일관성 관리 부담이 커진다.</strong></li>
-</ul>
+<h2 id="복합-인덱스의-컬럼-순서"><span class="me-2">복합 인덱스의 컬럼 순서</span><a href="#복합-인덱스의-컬럼-순서" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>원칙: <strong>동등 비교(<code class="language-plaintext highlighter-rouge">=</code>) 컬럼을 먼저, 범위 비교(<code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">BETWEEN</code> 등) 컬럼을 뒤에.</strong> 그리고 그중에서도 <strong>카디널리티가 높은(잘 좁혀주는) 컬럼을 앞에 둔다.</strong></p>
 
 <blockquote>
-  <p><strong>trade-off</strong>: 하나를 얻으면 하나를 포기해야 하는 관계. 여기서는 “조회 속도” ↔ “데이터 일관성/쓰기 복잡도”의 트레이드오프.</p>
+  <p><strong>EX)</strong></p>
+  <div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="k">WHERE</span> <span class="n">userId</span> <span class="o">=</span> <span class="mi">5</span> <span class="k">AND</span> <span class="n">createdAt</span> <span class="o">&gt;</span> <span class="s1">'2026-09-01'</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div>  </div>
+  <p><code class="language-plaintext highlighter-rouge">userId</code>는 <code class="language-plaintext highlighter-rouge">=</code>(동등 비교, 카디널리티 높음), <code class="language-plaintext highlighter-rouge">createdAt</code>은 <code class="language-plaintext highlighter-rouge">&gt;</code>(범위 비교) → <strong>인덱스는 <code class="language-plaintext highlighter-rouge">(userId, createdAt)</code> 순서로 만든다.</strong></p>
 </blockquote>
 
-<h3 id="역정규화를-고려하는-경우"><span class="me-2">역정규화를 고려하는 경우</span><a href="#역정규화를-고려하는-경우" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<h3 id="userid-createdat-순서로-만들면"><span class="me-2"><code class="language-plaintext highlighter-rouge">(userId, createdAt)</code> 순서로 만들면</span><a href="#userid-createdat-순서로-만들면" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 
-<ul>
-  <li>통계/대시보드처럼 집계 조회가 매우 잦고, 실시간성이 크게 중요하지 않은 경우</li>
-  <li>JOIN 비용이 실제로 병목으로 확인된 경우 (막연히 “느릴 것 같다”가 아니라 측정 후 판단)</li>
-  <li>캐시나 배치(batch)로 집계값을 갱신하는 방식으로 일관성 부담을 줄일 수 있는 경우</li>
-</ul>
+<p><code class="language-plaintext highlighter-rouge">userId</code>로 먼저 크게 좁힌 다음, 그 안에서만 <code class="language-plaintext highlighter-rouge">createdAt</code>이 정렬되어 있다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>                    [ Root: userId 기준 분기 ]
+                    /         |          \
+              userId=3     userId=5    userId=7
+                 |             |            |
+           (그 안에서 createdAt 순서 정렬)
+                 |             |            |
+           2026-08-01    2026-07-01    2026-08-01
+           2026-08-10    2026-07-15    2026-08-04
+</pre></td></tr></tbody></table></code></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">userId = 5</code>로 검색하면 트리 한 번에 해당 그룹으로 바로 이동하고, 그 안에서 <code class="language-plaintext highlighter-rouge">createdAt</code>도 이미 정렬돼 있어서 범위 조건까지 한 번에 빠르게 훑을 수 있다.</p>
+
+<h3 id="반대로-createdat-userid-순서로-만들면"><span class="me-2">반대로 <code class="language-plaintext highlighter-rouge">(createdAt, userId)</code> 순서로 만들면?</span><a href="#반대로-createdat-userid-순서로-만들면" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<p><code class="language-plaintext highlighter-rouge">createdAt</code>(범위 비교 컬럼)이 먼저 오면, <code class="language-plaintext highlighter-rouge">userId = 5</code> 조건이 있어도 <strong>날짜별로 흩어진 모든 그룹을 다 헤집고 다녀야</strong> <code class="language-plaintext highlighter-rouge">userId = 5</code>인 행들을 모을 수 있다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>        [ Root: createdAt 기준 분기 ]
+        /      |      |      |    ...    |      \
+   07-01   07-02   07-04   07-05  ...  07-28   07-31
+     |        |       |       |            |
+  (그 안에서 userId 값들이 순서 없이 흩어져 있음)
+     |
+  userId: 3, 7, 8, ...
+</pre></td></tr></tbody></table></code></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">userId = 5</code>인 행이 여러 날짜에 걸쳐 흩어져 있으므로, 거의 모든 리프를 다 확인해야 한다. → <strong>인덱스를 걸어놨는데도 사실상 전체 스캔에 가깝게 동작한다.</strong></p>
 
 <h2 id="정리"><span class="me-2">정리</span><a href="#정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<div class="table-wrapper"><table>
-  <thead>
-    <tr>
-      <th> </th>
-      <th>정규화</th>
-      <th>역정규화</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>목적</td>
-      <td>데이터 무결성 유지, 중복 제거</td>
-      <td>조회 성능 향상</td>
-    </tr>
-    <tr>
-      <td>장점</td>
-      <td>갱신 이상 방지, 저장 공간 절약</td>
-      <td>JOIN 감소로 조회 빠름</td>
-    </tr>
-    <tr>
-      <td>단점</td>
-      <td>JOIN이 많아져 조회가 느려질 수 있음</td>
-      <td>중복 데이터 관리(갱신) 부담, 일관성 깨질 위험</td>
-    </tr>
-    <tr>
-      <td>우선순위</td>
-      <td>기본적으로 정규화부터</td>
-      <td>성능 문제가 실측으로 확인된 부분만 부분적으로 역정규화</td>
-    </tr>
-  </tbody>
-</table></div>
-
-<p>결론적으로 <strong>기본은 정규화로 설계하고, 실제로 성능 문제가 확인된 부분에 한해 선택적으로 역정규화를 적용</strong>하는 게 일반적인 접근이다.</p>
+<ul>
+  <li><strong>클러스터드 인덱스</strong>(PK): 리프에 실제 데이터가 있다. PK 조회가 제일 빠른 이유.</li>
+  <li><strong>세컨더리 인덱스</strong>: 리프에 PK만 있어서, 데이터를 찾으려면 PK로 한 번 더 조회(back to table lookup)해야 한다.</li>
+  <li><strong>커버링 인덱스</strong>: <code class="language-plaintext highlighter-rouge">SELECT</code> 컬럼이 전부 인덱스에 있으면 back to table lookup 없이 인덱스만으로 끝난다 (<code class="language-plaintext highlighter-rouge">Extra: Using index</code>).</li>
+  <li><code class="language-plaintext highlighter-rouge">SELECT *</code>는 네트워크 낭비 + 커버링 인덱스 기회 상실이라는 두 가지 이유로 지양한다.</li>
+  <li><strong>복합 인덱스</strong>는 <code class="language-plaintext highlighter-rouge">(동등 비교 컬럼, 범위 비교 컬럼)</code> 순서로, 그중에서도 <strong>카디널리티 높은 컬럼을 앞에</strong> 두는 게 원칙이다. 순서가 뒤바뀌면 인덱스가 있어도 사실상 못 쓰는 것과 비슷해질 수 있다.</li>
+</ul>
 
   </div>
 
@@ -803,14 +872,14 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
           >mysql</a>
         
           <a
-            href="/tags/%EC%A0%95%EA%B7%9C%ED%99%94/"
+            href="/tags/index/"
             class="post-tag no-text-decoration"
-          >정규화</a>
+          >index</a>
         
           <a
-            href="/tags/%EC%97%AD%EC%A0%95%EA%B7%9C%ED%99%94/"
+            href="/tags/btree/"
             class="post-tag no-text-decoration"
-          >역정규화</a>
+          >btree</a>
         
       </div>
     
@@ -1419,55 +1488,55 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   
 
   
@@ -1517,6 +1586,40 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
   <aside id="related-posts" aria-labelledby="related-label">
     <h3 class="mb-4" id="related-label">관련된 글</h3>
     <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+      
+        <article class="col">
+          <a href="/posts/mysql-index-btree/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787628300"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+              <h4 class="pt-0 my-2">MySQL 인덱스 자료구조 - B+Tree</h4>
+              <div class="text-muted">
+                <p>MySQL(InnoDB)의 인덱스는 내부적으로 B+Tree라는 정렬된 트리 구조로 저장된다.
+
+트리(Tree)란?
+
+찾고 싶은 값이 있을 때, 맨 위(루트)부터 값을 비교하면서 내려가며 관련된 가지만 타고 내려간다. 전체를 다 뒤지지 않고 필요한 경로만 따라가기 때문에 속도가 빨라진다.
+
+              [ 루트, Root ]         ...</p>
+              </div>
+            </div>
+          </a>
+        </article>
       
         <article class="col">
           <a href="/posts/mysql-replication/" class="post-preview card h-100">
@@ -1585,44 +1688,6 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
           </a>
         </article>
       
-        <article class="col">
-          <a href="/posts/mysql-lock-deadlock/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787636100"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 락(Lock)과 데드락(Deadlock)</h4>
-              <div class="text-muted">
-                <p>앞서 ACID 격리 수준 글에서 “읽기 일관성은 격리 수준이, 쓰기 순서는 락(Lock)이 담당한다”고 정리했다. 이번엔 그 락을 직접 걸어보고, 락 때문에 생기는 데드락까지 정리한다.
-
-락(Lock) → Row Lock
-
-1
-2
-3
-4
-BEGIN;
-SELECT qty FROM coupon WHERE id = 1 FOR UPDATE; -- 락 걸림!
-...</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
     </nav>
   </aside>
   <!-- #related-posts -->
@@ -1637,18 +1702,22 @@ SELECT qty FROM coupon WHERE id = 1 FOR UPDATE; -- 락 걸림!
   
 
   
-    <div class="btn btn-outline-primary disabled" aria-label="이전 글">
-      <p>-</p>
-    </div>
+    <a
+      href="/posts/mysql-index-btree/"
+      class="btn btn-outline-primary"
+      aria-label="이전 글"
+    >
+      <p>MySQL 인덱스 자료구조 - B+Tree</p>
+    </a>
   
 
   
     <a
-      href="/posts/mysql-acid/"
+      href="/posts/mysql-lock-deadlock/"
       class="btn btn-outline-primary"
       aria-label="다음 글"
     >
-      <p>MySQL ACID</p>
+      <p>MySQL 락(Lock)과 데드락(Deadlock)</p>
     </a>
   
 </nav>

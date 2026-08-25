@@ -30,24 +30,24 @@
 
   <!-- Begin Jekyll SEO tag v2.9.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="Categories" />
+<meta property="og:title" content="MySQL 커넥션 풀(Connection Pool)" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록" />
-<meta name="twitter:description" property="og:description" content="MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록" />
-<link rel="canonical" href="https://choisooyoung-dev.github.io/tabs/categories/" />
-<meta property="og:url" content="https://choisooyoung-dev.github.io/tabs/categories/" />
+<meta name="description" content="커넥션 풀이 왜 필요한가" />
+<meta name="twitter:description" property="og:description" content="커넥션 풀이 왜 필요한가" />
+<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-connection-pool/" />
+<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-connection-pool/" />
 <meta property="og:site_name" content="Soo Dev Log" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2026-08-25T15:10:42+09:00" />
-<meta property="article:modified_time" content="2026-08-25T15:10:42+09:00" />
+<meta property="article:published_time" content="2026-08-25T14:45:00+09:00" />
+<meta property="article:modified_time" content="2026-08-25T14:45:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Categories" />
+<meta name="twitter:title" content="MySQL 커넥션 풀(Connection Pool)" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T15:10:42+09:00","datePublished":"2026-08-25T15:10:42+09:00","description":"MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록","headline":"Categories","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/tabs/categories/"},"url":"https://choisooyoung-dev.github.io/tabs/categories/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T14:45:00+09:00","datePublished":"2026-08-25T14:45:00+09:00","description":"커넥션 풀이 왜 필요한가","headline":"MySQL 커넥션 풀(Connection Pool)","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-connection-pool/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-connection-pool/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>Categories | Soo Dev Log
+  <title>MySQL 커넥션 풀(Connection Pool) | Soo Dev Log
   </title>
 
   <!--
@@ -107,9 +107,16 @@
   <!-- 3rd-party Dependencies -->
 
   
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.27.20/dist/tocbot.min.css">
   
 
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css">
+  
+
+  
+    <!-- Image Popup -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css">
   
 
   <!-- JavaScript -->
@@ -269,7 +276,7 @@
       </li>
       <!-- the real tabs -->
       
-        <li class="nav-item active">
+        <li class="nav-item">
           <a href="/tabs/categories/" class="nav-link">
             <i class="fa-fw fas fa-stream"></i>
             
@@ -344,7 +351,7 @@
     </button>
 
     <div id="topbar-title">
-      Categories
+      포스트
     </div>
   </div>
 </header>
@@ -361,82 +368,387 @@
         <div class="row flex-grow-1">
           <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
             
-              
+              <!-- Refactor the HTML structure -->
+
+
+
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+
+<!-- Change the icon of checkbox -->
+
+
+
+<!-- Handle images -->
+
+
+
+
+
+<!-- Add header for code snippets -->
+
+
+
+<!-- Create heading anchors -->
+
+
+
+
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+
+
+
+<!-- return -->
+
 
 
 
 <article class="px-1">
-  
-    
-    
-    <h1 class="dynamic-title">
-      Categories
+  <header>
+    <h1 data-toc-skip class="d-flex align-items-center">
+      <a href="javascript:history.back()" aria-label="back" class="me-2 text-muted" style="text-decoration:none;">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      MySQL 커넥션 풀(Connection Pool)
     </h1>
-    <div class="content">
+    
+
+    <div class="post-meta text-muted">
+      <!-- published date -->
+      <span>
+        게시
+        <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787636700"
+  data-df="YYYY/MM/DD"
+  
+    data-bs-toggle="tooltip" data-bs-placement="bottom"
+  
+>
+  2026/08/25
+</time>
+
+      </span>
+
+      <!-- lastmod date -->
       
 
+      
 
-
-
-
-
-
-
-
-
-
-  
-  
-  
-
-  
-    
-
-    
-
-    
-    
-
-    <div class="card categories">
-      <!-- top-category -->
-      <div
-        id="h_0"
-        class="card-header d-flex justify-content-between hide-border-bottom"
-      >
-        <span class="ms-2">
-          <i class="far fa-folder fa-fw"></i>
-
+      <div class="d-flex justify-content-between">
+        <!-- author(s) -->
+        <span>
           
-          <a href="/categories/mysql/" class="mx-2">MySQL</a>
 
-          <!-- content count -->
-          
-          <span class="text-muted small font-weight-light">
-            (8)
-          </span>
+          By
+
+          <em>
+            
+              <a href="">Sooyoung Choi</a>
+            
+          </em>
         </span>
 
-        <!-- arrow -->
+        <div>
+          <!-- pageviews -->
+          
+
+          <!-- read time -->
+          <!-- Calculate the post's reading time, and display the word count in tooltip -->
+
+
+
+<!-- words per minute -->
+
+
+
+
+
+
+
+
+
+
+<!-- return element -->
+<span
+  class="readtime"
+  data-bs-toggle="tooltip"
+  data-bs-placement="bottom"
+  title="736 단어"
+>읽는 시간
+     <em>4분</em>
+</span>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <h2 id="커넥션-풀이-왜-필요한가"><span class="me-2">커넥션 풀이 왜 필요한가</span><a href="#커넥션-풀이-왜-필요한가" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>매 요청마다 DB 커넥션을 새로 맺으면(TCP 연결 + 인증) 그 자체로 시간이 소요된다. 요청이 많아질수록 이 비용이 계속 반복되면서 낭비가 커진다.</p>
+
+<p>그래서 <strong>애플리케이션이 시작할 때 커넥션을 미리 여러 개 만들어두고</strong>, 요청이 들어올 때마다 그중 하나를 빌려서 쓰고, 다 쓰면 반납하는 방식을 쓴다. 이게 <strong>커넥션 풀(Connection Pool)</strong>이다.</p>
+
+<blockquote>
+  <p><strong>EX)</strong> TypeORM에서는 이렇게 풀 크기를 지정한다.</p>
+  <div class="language-ts highlighter-rouge"><div class="code-header">
+        <span data-label-text="TypeScript"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nx">extra</span><span class="p">:</span> <span class="p">{</span>
+  <span class="nl">connectionLimit</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></div>  </div>
+</blockquote>
+
+<h2 id="풀-크기-무작정-크게-잡으면-안-되는-이유"><span class="me-2">풀 크기, 무작정 크게 잡으면 안 되는 이유</span><a href="#풀-크기-무작정-크게-잡으면-안-되는-이유" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<ul>
+  <li><strong>풀 크기를 너무 작게</strong> 잡으면 → 동시 요청이 몰릴 때 빌릴 수 있는 커넥션이 없어서 <strong>커넥션 타임아웃</strong>이 난다.</li>
+  <li><strong>풀 크기를 너무 크게</strong> 잡으면 → MySQL 서버가 감당할 수 있는 최대 커넥션 수(<code class="language-plaintext highlighter-rouge">max_connections</code>)를 넘겨버릴 수 있다.</li>
+</ul>
+
+<h3 id="실제로-초과하면-무슨-일이-생기나"><span class="me-2">실제로 초과하면 무슨 일이 생기나</span><a href="#실제로-초과하면-무슨-일이-생기나" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<blockquote>
+  <p><strong>EX)</strong> 서버 인스턴스 3대, 각 인스턴스마다 <code class="language-plaintext highlighter-rouge">connectionLimit: 100</code>, MySQL <code class="language-plaintext highlighter-rouge">max_connections: 200</code>인 상황</p>
+</blockquote>
+
+<ul>
+  <li>전체 커넥션 수요는 최대 <code class="language-plaintext highlighter-rouge">3 × 100 = 300</code>개인데, MySQL은 <code class="language-plaintext highlighter-rouge">200</code>개까지만 받아준다.</li>
+  <li><strong>200개를 넘는 순간부터</strong> MySQL은 새로운 커넥션 시도 자체를 거부한다.</li>
+  <li>그 시점 이후 커넥션을 맺으려는 서버들은 <code class="language-plaintext highlighter-rouge">Too many connections</code> 에러를 받는다.</li>
+  <li>이 에러를 받은 요청들은 <strong>DB 작업을 시도조차 못 하고 그대로 실패</strong>한다. (쿼리가 느린 게 아니라, 애초에 연결 자체가 안 되는 것)</li>
+</ul>
+
+<h2 id="실무에서의-기준"><span class="me-2">실무에서의 기준</span><a href="#실무에서의-기준" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>핵심 공식은 이거다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>서버 인스턴스 수 × 인스턴스당 connectionLimit  &lt;  MySQL max_connections
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>그냥 작기만 하면 되는 게 아니라, <strong>여유 있게</strong> 작아야 한다. (다른 애플리케이션/관리 도구/모니터링 툴도 커넥션을 나눠 쓰기 때문)</p>
+
+<blockquote>
+  <p><strong>EX)</strong> 서버 인스턴스 3대, MySQL <code class="language-plaintext highlighter-rouge">max_connections: 200</code>이라면
+→ 인스턴스당 <code class="language-plaintext highlighter-rouge">connectionLimit</code>은 <strong>5~60 정도</strong>가 적정선.
+(3대 × 60 = 180으로, 200에 딱 붙지 않고 여유를 남겨둔 값)</p>
+</blockquote>
+
+<h2 id="정리"><span class="me-2">정리</span><a href="#정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<ul>
+  <li>커넥션 풀은 매 요청마다 커넥션을 새로 맺는 비용(TCP + 인증)을 없애기 위해, 미리 만들어둔 커넥션을 빌려 쓰고 반납하는 방식이다.</li>
+  <li>풀 크기는 <strong>작으면 타임아웃, 크면 MySQL의 <code class="language-plaintext highlighter-rouge">max_connections</code> 초과</strong>로 이어지므로 양쪽 다 조심해야 한다.</li>
+  <li>여러 서버 인스턴스를 운영한다면, <strong>(인스턴스 수 × 인스턴스당 풀 크기)가 MySQL <code class="language-plaintext highlighter-rouge">max_connections</code>보다 여유 있게 작아야</strong> <code class="language-plaintext highlighter-rouge">Too many connections</code> 에러를 피할 수 있다.</li>
+</ul>
+
+  </div>
+
+  <div class="post-tail-wrapper text-muted">
+    <!-- categories -->
+    
+      <div class="post-meta mb-3">
+        <i class="far fa-folder-open fa-fw me-1"></i>
         
-          <span data-bs-toggle="collapse" class="category-trigger hide-border-bottom disabled">
-            <i class="fas fa-fw fa-angle-right"></i>
-          </span>
+          <a href="/categories/mysql/">MySQL</a>
+      </div>
+    
+
+    <!-- tags -->
+    
+      <div class="post-tags">
+        <i class="fa fa-tags fa-fw me-1"></i>
+        
+          <a
+            href="/tags/sql/"
+            class="post-tag no-text-decoration"
+          >sql</a>
+        
+          <a
+            href="/tags/mysql/"
+            class="post-tag no-text-decoration"
+          >mysql</a>
+        
+          <a
+            href="/tags/connection-pool/"
+            class="post-tag no-text-decoration"
+          >connection-pool</a>
         
       </div>
-      <!-- .card-header -->
+    
 
-      <!-- Sub-categories -->
-      
-    </div>
-    <!-- .card -->
+    <div
+      class="
+        post-tail-bottom
+        d-flex justify-content-between align-items-center mt-5 pb-2
+      "
+    >
+      <div class="license-wrapper">
+        
+          
+
+          This post is licensed under 
+        <a href="https://creativecommons.org/licenses/by/4.0/">
+          CC BY 4.0
+        </a>
+         by the author.
+        
+      </div>
+
+      <!-- Post sharing snippet -->
+
+<div class="share-wrapper d-flex align-items-center">
+  <span class="share-label text-muted">공유하기</span>
+  <span class="share-icons">
+    
+    
+    
 
     
-  
 
+    <button
+      id="copy-link"
+      aria-label="Copy link"
+      class="btn small"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="링크 복사하기"
+      data-title-succeed="링크가 복사되었습니다!"
+    >
+      <i class="fa-fw fas fa-link pe-none fs-6"></i>
+    </button>
+  </span>
+</div>
 
     </div>
-  
+    <!-- .post-tail-bottom -->
+  </div>
+  <!-- div.post-tail-wrapper -->
 </article>
+
 
             
           </main>
@@ -945,12 +1257,295 @@
             </div>
 
             
+              
+              
+
+
+
+  <section id="toc-wrapper" class="d-none ps-0 pe-4">
+    <h2 class="panel-heading ps-3 mb-2">바로가기</h2>
+    <nav id="toc"></nav>
+  </section>
+
+
+            
           </aside>
         </div>
 
         <div class="row">
           <!-- tail -->
           <div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            
+              
+              <!-- Recommend the other 3 posts according to the tags and categories of the current post. -->
+
+<!-- The total size of related posts -->
+
+
+<!-- An random integer that bigger than 0 -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy} -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <aside id="related-posts" aria-labelledby="related-label">
+    <h3 class="mb-4" id="related-label">관련된 글</h3>
+    <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+      
+        <article class="col">
+          <a href="/posts/mysql-replication/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787637000"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+              <h4 class="pt-0 my-2">MySQL 복제(Replication)와 Read Replica</h4>
+              <div class="text-muted">
+                <p>복제(Replication)란
+
+MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이상의 Slave(복제본)로 실시간 복사하는 구조로 구성할 수 있다. 이렇게 Master의 변경사항을 받아 따라가는 Slave 서버를 Read Replica라고 부른다.
+
+1
+2
+3
+                 write               ...</p>
+              </div>
+            </div>
+          </a>
+        </article>
+      
+        <article class="col">
+          <a href="/posts/mysql-lock-deadlock/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787636100"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+              <h4 class="pt-0 my-2">MySQL 락(Lock)과 데드락(Deadlock)</h4>
+              <div class="text-muted">
+                <p>앞서 ACID 격리 수준 글에서 “읽기 일관성은 격리 수준이, 쓰기 순서는 락(Lock)이 담당한다”고 정리했다. 이번엔 그 락을 직접 걸어보고, 락 때문에 생기는 데드락까지 정리한다.
+
+락(Lock) → Row Lock
+
+BEGIN;
+SELECT qty FROM coupon WHERE id = 1 FOR UPDATE; -- 락 걸림!
+UPDATE c...</p>
+              </div>
+            </div>
+          </a>
+        </article>
+      
+        <article class="col">
+          <a href="/posts/mysql-clustered-covering-index/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787634000"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+              <h4 class="pt-0 my-2">MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</h4>
+              <div class="text-muted">
+                <p>지난 글(MySQL 인덱스 자료구조 - B+Tree)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다.
+
+클러스터드 인덱스 (Clustered Index) = PK 인덱스
+
+InnoDB는 PK로 만든 인덱스가 있으면, 테이블의 실제 데이터(Row) 자체가 그 B+Tree의 리프 노드에 저장된다. 이걸 클러스터드 인덱스라고 부른다.
+
+
+  ...</p>
+              </div>
+            </div>
+          </a>
+        </article>
+      
+    </nav>
+  </aside>
+  <!-- #related-posts -->
+
+
+            
+              
+              <!-- Navigation buttons at the bottom of the post. -->
+
+<nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation">
+  
+  
+
+  
+    <a
+      href="/posts/mysql-lock-deadlock/"
+      class="btn btn-outline-primary"
+      aria-label="이전 글"
+    >
+      <p>MySQL 락(Lock)과 데드락(Deadlock)</p>
+    </a>
+  
+
+  
+    <a
+      href="/posts/mysql-replication/"
+      class="btn btn-outline-primary"
+      aria-label="다음 글"
+    >
+      <p>MySQL 복제(Replication)와 Read Replica</p>
+    </a>
+  
+</nav>
+
+            
+              
+              <!-- The comments switcher -->
+
+
             
 
             <!-- The Footer -->
@@ -1466,6 +2061,13 @@
 
 
 
+  
+
+  
+    <!-- image lazy-loading & popup & clipboard -->
+    
+  
+
 
 
 
@@ -1487,20 +2089,80 @@
 
   
 
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/glightbox@3.3.0/dist/js/glightbox.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.11/dayjs.min.js,npm/dayjs@1.11.11/locale/ko.min.js,npm/dayjs@1.11.11/plugin/relativeTime.min.js,npm/dayjs@1.11.11/plugin/localizedFormat.min.js,npm/tocbot@4.27.20/dist/tocbot.min.js"></script>
 
 
 
 
 
 
-<script src="/assets/js/dist/categories.min.js"></script>
+<script src="/assets/js/dist/post.min.js"></script>
 
 
 
 <!-- Pageviews -->
+
+  
+
+  
 
 
 
