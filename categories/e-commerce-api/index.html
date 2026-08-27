@@ -30,24 +30,22 @@
 
   <!-- Begin Jekyll SEO tag v2.9.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="MySQL 스토리지 엔진 (InnoDB vs MyISAM)" />
+<meta property="og:title" content="E-commerce API" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="InnoDB와 MyISAM 스토리지 엔진의 차이를 트랜잭션 지원, 락 단위, FK 제약조건 중심으로 비교 정리한다." />
-<meta name="twitter:description" property="og:description" content="InnoDB와 MyISAM 스토리지 엔진의 차이를 트랜잭션 지원, 락 단위, FK 제약조건 중심으로 비교 정리한다." />
-<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-storage-engine/" />
-<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-storage-engine/" />
+<meta name="description" content="MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록" />
+<meta name="twitter:description" property="og:description" content="MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록" />
+<link rel="canonical" href="https://choisooyoung-dev.github.io/categories/e-commerce-api/" />
+<meta property="og:url" content="https://choisooyoung-dev.github.io/categories/e-commerce-api/" />
 <meta property="og:site_name" content="Soo Dev Log" />
-<meta property="og:type" content="article" />
-<meta property="article:published_time" content="2026-08-25T12:15:00+09:00" />
-<meta property="article:modified_time" content="2026-08-25T12:15:00+09:00" />
+<meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="MySQL 스토리지 엔진 (InnoDB vs MyISAM)" />
+<meta name="twitter:title" content="E-commerce API" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T12:15:00+09:00","datePublished":"2026-08-25T12:15:00+09:00","description":"InnoDB와 MyISAM 스토리지 엔진의 차이를 트랜잭션 지원, 락 단위, FK 제약조건 중심으로 비교 정리한다.","headline":"MySQL 스토리지 엔진 (InnoDB vs MyISAM)","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-storage-engine/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-storage-engine/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록","headline":"E-commerce API","url":"https://choisooyoung-dev.github.io/categories/e-commerce-api/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>MySQL 스토리지 엔진 (InnoDB vs MyISAM) | Soo Dev Log
+  <title>E-commerce API | Soo Dev Log
   </title>
 
   <!--
@@ -107,16 +105,9 @@
   <!-- 3rd-party Dependencies -->
 
   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.27.20/dist/tocbot.min.css">
-  
 
   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css">
-  
 
-  
-    <!-- Image Popup -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css">
   
 
   <!-- JavaScript -->
@@ -351,7 +342,7 @@
     </button>
 
     <div id="topbar-title">
-      포스트
+      카테고리
     </div>
   </div>
 </header>
@@ -368,164 +359,28 @@
         <div class="row flex-grow-1">
           <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
             
-              <!-- Refactor the HTML structure -->
-
-
-
-<!--
-  In order to allow a wide table to scroll horizontally,
-  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
--->
-
-
-
-<!--
-  Fixed kramdown code highlight rendering:
-  https://github.com/penibelst/jekyll-compress-html/issues/101
-  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
--->
-
-
-
-<!-- Change the icon of checkbox -->
-
-
-
-<!-- Handle images -->
-
-
-
-
-
-<!-- Add header for code snippets -->
-
-
-
-<!-- Create heading anchors -->
-
-
-
-
-
-  
-  
-
-  
-    
-    
-
-    
-      
-        
-        
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-
-    
-  
-
-  
-  
-
-  
-    
-    
-
-    
-      
-        
-        
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-
-    
-  
-
-  
-  
-
-  
-
-  
-  
-
-  
-
-
-
-
-<!-- return -->
-
+              
 
 
 
 <article class="px-1">
-  <header>
-    <h1 data-toc-skip class="d-flex align-items-center">
-      <a href="javascript:history.back()" aria-label="back" class="me-2 text-muted" style="text-decoration:none;">
-        <i class="fas fa-arrow-left"></i>
-      </a>
-      MySQL 스토리지 엔진 (InnoDB vs MyISAM)
-    </h1>
-    
-      <p class="post-desc fw-light mb-4">InnoDB와 MyISAM 스토리지 엔진의 차이를 트랜잭션 지원, 락 단위, FK 제약조건 중심으로 비교 정리한다.</p>
+  
     
 
-    <div class="post-meta text-muted">
-      <!-- published date -->
-      <span>
-        게시
+
+
+<div id="page-category">
+  <h1 class="ps-lg-2">
+    <i class="far fa-folder-open fa-fw text-muted"></i>
+    E-commerce API
+    <span class="lead text-muted ps-2">1</span>
+  </h1>
+
+  <ul class="content ps-0">
+    
+      <li class="d-flex justify-content-between px-md-3">
+        <a href="/posts/shopee-app-setup/">Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지</a>
+        <span class="dash flex-grow-1"></span>
         <!--
   Date format snippet
   See: ${JS_ROOT}/utils/locale-dateime.js
@@ -536,265 +391,22 @@
 
 <time
   
-  data-ts="1787627700"
+    class="text-muted small text-nowrap"
+  
+  data-ts="1787788800"
   data-df="YYYY/MM/DD"
   
-    data-bs-toggle="tooltip" data-bs-placement="bottom"
-  
 >
-  2026/08/25
+  2026/08/27
 </time>
 
-      </span>
-
-      <!-- lastmod date -->
-      
-
-      
-
-      <div class="d-flex justify-content-between">
-        <!-- author(s) -->
-        <span>
-          
-
-          By
-
-          <em>
-            
-              <a href="">Sooyoung Choi</a>
-            
-          </em>
-        </span>
-
-        <div>
-          <!-- pageviews -->
-          
-
-          <!-- read time -->
-          <!-- Calculate the post's reading time, and display the word count in tooltip -->
-
-
-
-<!-- words per minute -->
-
-
-
-
-
-
-
-
-
-
-<!-- return element -->
-<span
-  class="readtime"
-  data-bs-toggle="tooltip"
-  data-bs-placement="bottom"
-  title="767 단어"
->읽는 시간
-     <em>4분</em>
-</span>
-
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div class="content">
-    <p>MySQL의 대표적인 스토리지 엔진 두 가지, InnoDB와 MyISAM을 비교해본다.</p>
-
-<h2 id="innodb"><span class="me-2">InnoDB</span><a href="#innodb" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-
-<ul>
-  <li><strong>트랜잭션 지원</strong> (커밋/롤백 가능)</li>
-  <li><strong>Row(행) 단위 락</strong> — 필요한 행만 잠그기 때문에 동시성이 좋다</li>
-  <li><strong>FK(외래키) 제약조건 지원</strong></li>
-  <li><strong>장애 시 복구 기능 제공</strong> (redo log 기반)</li>
-  <li>MySQL / MariaDB <strong>기본 엔진</strong>, 사실상 표준</li>
-</ul>
-
-<h2 id="myisam"><span class="me-2">MyISAM</span><a href="#myisam" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-
-<ul>
-  <li><strong>트랜잭션 지원 X</strong> (커밋/롤백 개념 자체가 없음)</li>
-  <li><strong>테이블 전체 단위로 락</strong> — 한 행만 수정해도 테이블 전체가 잠겨서 동시에 여럿이 못 씀</li>
-  <li><strong>FK 없음</strong></li>
-</ul>
-
-<h3 id="만약-재고-차감--로그-생성-로직을-myisam으로-만든다면"><span class="me-2">만약 “재고 차감 + 로그 생성” 로직을 MyISAM으로 만든다면?</span><a href="#만약-재고-차감--로그-생성-로직을-myisam으로-만든다면" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<blockquote>
-  <p><strong>EX)</strong> 재고를 차감하고, 그 내역을 로그 테이블에 남기는 두 단계 작업을
-MyISAM 테이블로 처리한다고 가정</p>
-</blockquote>
-
-<ul>
-  <li><strong>동시 접근 문제</strong>는 테이블 락으로 어떻게든 막을 수는 있다.</li>
-  <li>하지만 <strong>트랜잭션이 없어서 롤백이 안 된다는 게 가장 큰 문제</strong>다.
-    <ul>
-      <li>재고 차감은 성공했는데, 그 직후 로그 생성이 실패해도 되돌릴 방법이 없다.</li>
-      <li>→ <strong>재고는 줄었는데 로그는 안 남는 상황</strong>이 실제로 발생할 수 있다. (원자성 깨짐)</li>
-    </ul>
-  </li>
-  <li><strong>테이블 전체 락</strong>이라, 서로 관련 없는 행(row)을 건드리는 요청까지도 전부 테이블 락에 걸려서 기다려야 한다.
-    <ul>
-      <li>다들 순서대로 기다려야 하니 <strong>병목현상</strong>이 생긴다.</li>
-    </ul>
-  </li>
-</ul>
-
-<p>정리하면:</p>
-
-<ul>
-  <li><strong>동시성 문제</strong> → 락으로 어떻게든 막을 수는 있다 (다만 테이블 락이라 성능은 크게 떨어진다)</li>
-  <li><strong>원자성 문제</strong> → 트랜잭션이 없으면 애초에 해결이 불가능하다</li>
-</ul>
-
-<p>즉 MyISAM은 락만으로 동시성은 흉내 낼 수 있어도, <strong>트랜잭션이 없다는 근본적인 한계 때문에 원자성이 필요한 로직(재고 차감처럼 여러 단계가 하나로 묶여야 하는 작업)에는 적합하지 않다.</strong></p>
-
-<h2 id="비교-정리"><span class="me-2">비교 정리</span><a href="#비교-정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-
-<div class="table-wrapper"><table>
-  <thead>
-    <tr>
-      <th> </th>
-      <th>InnoDB</th>
-      <th>MyISAM</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>트랜잭션</td>
-      <td>O</td>
-      <td>X</td>
-    </tr>
-    <tr>
-      <td>락 단위</td>
-      <td>Row(행) 단위</td>
-      <td>테이블 전체</td>
-    </tr>
-    <tr>
-      <td>FK 제약조건</td>
-      <td>O</td>
-      <td>X</td>
-    </tr>
-    <tr>
-      <td>장애 복구</td>
-      <td>O (redo log)</td>
-      <td>약함</td>
-    </tr>
-    <tr>
-      <td>동시성</td>
-      <td>좋음</td>
-      <td>나쁨 (테이블 락)</td>
-    </tr>
-    <tr>
-      <td>적합한 경우</td>
-      <td>대부분의 일반적인 서비스 (읽기/쓰기 동시 발생)</td>
-      <td>읽기 위주, 쓰기가 거의 없는 특수한 경우</td>
-    </tr>
-  </tbody>
-</table></div>
-
-<h2 id="결론"><span class="me-2">결론</span><a href="#결론" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-
-<p>지금은 특별한 이유가 없다면 <strong>InnoDB를 기본으로 쓰는 게 맞다.</strong> MyISAM은 트랜잭션과 FK가 필요 없고, 쓰기가 거의 없는 극히 제한적인 경우(예: 아카이브성 읽기 전용 테이블)가 아니라면 실무에서 선택할 이유가 거의 없다. 실제로 MySQL 5.5부터 기본 엔진 자체가 MyISAM에서 InnoDB로 바뀌었다.</p>
-
-  </div>
-
-  <div class="post-tail-wrapper text-muted">
-    <!-- categories -->
+      </li>
     
-      <div class="post-meta mb-3">
-        <i class="far fa-folder-open fa-fw me-1"></i>
-        
-          <a href="/categories/mysql/">MySQL</a>
-      </div>
-    
-
-    <!-- tags -->
-    
-      <div class="post-tags">
-        <i class="fa fa-tags fa-fw me-1"></i>
-        
-          <a
-            href="/tags/sql/"
-            class="post-tag no-text-decoration"
-          >sql</a>
-        
-          <a
-            href="/tags/mysql/"
-            class="post-tag no-text-decoration"
-          >mysql</a>
-        
-          <a
-            href="/tags/innodb/"
-            class="post-tag no-text-decoration"
-          >innodb</a>
-        
-          <a
-            href="/tags/myisam/"
-            class="post-tag no-text-decoration"
-          >myisam</a>
-        
-          <a
-            href="/tags/storage-engine/"
-            class="post-tag no-text-decoration"
-          >storage-engine</a>
-        
-      </div>
-    
-
-    <div
-      class="
-        post-tail-bottom
-        d-flex justify-content-between align-items-center mt-5 pb-2
-      "
-    >
-      <div class="license-wrapper">
-        
-          
-
-          This post is licensed under 
-        <a href="https://creativecommons.org/licenses/by/4.0/">
-          CC BY 4.0
-        </a>
-         by the author.
-        
-      </div>
-
-      <!-- Post sharing snippet -->
-
-<div class="share-wrapper d-flex align-items-center">
-  <span class="share-label text-muted">공유하기</span>
-  <span class="share-icons">
-    
-    
-    
-
-    
-
-    <button
-      id="copy-link"
-      aria-label="Copy link"
-      class="btn small"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      title="링크 복사하기"
-      data-title-succeed="링크가 복사되었습니다!"
-    >
-      <i class="fa-fw fas fa-link pe-none fs-6"></i>
-    </button>
-  </span>
+  </ul>
 </div>
 
-    </div>
-    <!-- .post-tail-bottom -->
-  </div>
-  <!-- div.post-tail-wrapper -->
+  
 </article>
-
 
             
           </main>
@@ -1323,275 +935,12 @@ MyISAM 테이블로 처리한다고 가정</p>
             </div>
 
             
-              
-              
-
-
-
-  <section id="toc-wrapper" class="d-none ps-0 pe-4">
-    <h2 class="panel-heading ps-3 mb-2">바로가기</h2>
-    <nav id="toc"></nav>
-  </section>
-
-
-            
           </aside>
         </div>
 
         <div class="row">
           <!-- tail -->
           <div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
-            
-              
-              <!-- Recommend the other 3 posts according to the tags and categories of the current post. -->
-
-<!-- The total size of related posts -->
-
-
-<!-- An random integer that bigger than 0 -->
-
-
-<!-- Equals to TAG_SCORE / {max_categories_hierarchy} -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-
-
-
-
-
-
-
-
-
-  <aside id="related-posts" aria-labelledby="related-label">
-    <h3 class="mb-4" id="related-label">관련된 글</h3>
-    <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
-      
-        <article class="col">
-          <a href="/posts/mysql-replication/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787637000"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 복제(Replication)와 Read Replica</h4>
-              <div class="text-muted">
-                <p>MySQL Master-Slave 복제 구조와 binlog, 복제 지연(Replication Lag) 문제와 해결 방법을 정리한다.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
-        <article class="col">
-          <a href="/posts/mysql-connection-pool/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787636700"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 커넥션 풀(Connection Pool)</h4>
-              <div class="text-muted">
-                <p>DB 커넥션 풀이 필요한 이유와, 풀 크기를 잘못 잡았을 때 발생하는 Too many connections 문제를 정리한다.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
-        <article class="col">
-          <a href="/posts/mysql-lock-deadlock/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787636100"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 락(Lock)과 데드락(Deadlock)</h4>
-              <div class="text-muted">
-                <p>MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
-    </nav>
-  </aside>
-  <!-- #related-posts -->
-
-
-            
-              
-              <!-- Navigation buttons at the bottom of the post. -->
-
-<nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation">
-  
-  
-
-  
-    <a
-      href="/posts/mysql-acid/"
-      class="btn btn-outline-primary"
-      aria-label="이전 글"
-    >
-      <p>MySQL ACID</p>
-    </a>
-  
-
-  
-    <a
-      href="/posts/mysql-index-btree/"
-      class="btn btn-outline-primary"
-      aria-label="다음 글"
-    >
-      <p>MySQL 인덱스 자료구조 - B+Tree</p>
-    </a>
-  
-</nav>
-
-            
-              
-              <!-- The comments switcher -->
-
-
             
 
             <!-- The Footer -->
@@ -2127,13 +1476,6 @@ MyISAM 테이블로 처리한다고 가정</p>
 
 
 
-  
-
-  
-    <!-- image lazy-loading & popup & clipboard -->
-    
-  
-
 
 
 
@@ -2183,52 +1525,20 @@ MyISAM 테이블로 처리한다고 가정</p>
 
   
 
-  
-    
-
-    
-
-  
-
-  
-    
-
-    
-
-  
-
-  
-    
-
-    
-
-  
-
-  
-    
-
-    
-
-  
 
 
-
-  <script src="https://cdn.jsdelivr.net/combine/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/glightbox@3.3.0/dist/js/glightbox.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.11/dayjs.min.js,npm/dayjs@1.11.11/locale/ko.min.js,npm/dayjs@1.11.11/plugin/relativeTime.min.js,npm/dayjs@1.11.11/plugin/localizedFormat.min.js,npm/tocbot@4.27.20/dist/tocbot.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/combine/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/dayjs@1.11.11/dayjs.min.js,npm/dayjs@1.11.11/locale/ko.min.js,npm/dayjs@1.11.11/plugin/relativeTime.min.js,npm/dayjs@1.11.11/plugin/localizedFormat.min.js"></script>
 
 
 
 
 
 
-<script src="/assets/js/dist/post.min.js"></script>
+<script src="/assets/js/dist/misc.min.js"></script>
 
 
 
 <!-- Pageviews -->
-
-  
-
-  
 
 
 

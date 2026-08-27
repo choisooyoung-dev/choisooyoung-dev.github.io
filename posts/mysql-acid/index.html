@@ -32,8 +32,8 @@
 <meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="MySQL ACID" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="트랜잭션이 지켜야 하는 4가지 특성, ACID를 정리해본다." />
-<meta name="twitter:description" property="og:description" content="트랜잭션이 지켜야 하는 4가지 특성, ACID를 정리해본다." />
+<meta name="description" content="MySQL 트랜잭션의 ACID(원자성·일관성·격리성·지속성)와 트랜잭션 격리 수준(Isolation Level)을 예시와 함께 정리한다." />
+<meta name="twitter:description" property="og:description" content="MySQL 트랜잭션의 ACID(원자성·일관성·격리성·지속성)와 트랜잭션 격리 수준(Isolation Level)을 예시와 함께 정리한다." />
 <link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-acid/" />
 <meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-acid/" />
 <meta property="og:site_name" content="Soo Dev Log" />
@@ -43,7 +43,7 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="MySQL ACID" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T11:45:00+09:00","datePublished":"2026-08-25T11:45:00+09:00","description":"트랜잭션이 지켜야 하는 4가지 특성, ACID를 정리해본다.","headline":"MySQL ACID","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-acid/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-acid/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T11:45:00+09:00","datePublished":"2026-08-25T11:45:00+09:00","description":"MySQL 트랜잭션의 ACID(원자성·일관성·격리성·지속성)와 트랜잭션 격리 수준(Isolation Level)을 예시와 함께 정리한다.","headline":"MySQL ACID","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-acid/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-acid/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -552,6 +552,8 @@
       MySQL ACID
     </h1>
     
+      <p class="post-desc fw-light mb-4">MySQL 트랜잭션의 ACID(원자성·일관성·격리성·지속성)와 트랜잭션 격리 수준(Isolation Level)을 예시와 함께 정리한다.</p>
+    
 
     <div class="post-meta text-muted">
       <!-- published date -->
@@ -898,6 +900,13 @@
         
         
         <li class="text-truncate lh-lg">
+          <a href="/posts/shopee-app-setup/">Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
           <a href="/posts/mysql-replication/">MySQL 복제(Replication)와 Read Replica</a>
         </li>
       
@@ -920,13 +929,6 @@
         
         <li class="text-truncate lh-lg">
           <a href="/posts/mysql-clustered-covering-index/">MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-index-btree/">MySQL 인덱스 자료구조 - B+Tree</a>
         </li>
       
     </ul>
@@ -1061,10 +1063,6 @@
     
     
     
-      
-        
-        
-
   
     
     
@@ -1079,23 +1077,6 @@
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1138,6 +1119,47 @@
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -1544,17 +1566,7 @@
 
               <h4 class="pt-0 my-2">MySQL 락(Lock)과 데드락(Deadlock)</h4>
               <div class="text-muted">
-                <p>앞서 ACID 격리 수준 글에서 “읽기 일관성은 격리 수준이, 쓰기 순서는 락(Lock)이 담당한다”고 정리했다. 이번엔 그 락을 직접 걸어보고, 락 때문에 생기는 데드락까지 정리한다.
-
-락(Lock) → Row Lock
-
-1
-2
-3
-4
-BEGIN;
-SELECT qty FROM coupon WHERE id = 1 FOR UPDATE; -- 락 걸림!
-...</p>
+                <p>MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다.</p>
               </div>
             </div>
           </a>
@@ -1582,14 +1594,7 @@ SELECT qty FROM coupon WHERE id = 1 FOR UPDATE; -- 락 걸림!
 
               <h4 class="pt-0 my-2">MySQL 복제(Replication)와 Read Replica</h4>
               <div class="text-muted">
-                <p>복제(Replication)란
-
-MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이상의 Slave(복제본)로 실시간 복사하는 구조로 구성할 수 있다. 이렇게 Master의 변경사항을 받아 따라가는 Slave 서버를 Read Replica라고 부른다.
-
-1
-2
-3
-                 write               ...</p>
+                <p>MySQL Master-Slave 복제 구조와 binlog, 복제 지연(Replication Lag) 문제와 해결 방법을 정리한다.</p>
               </div>
             </div>
           </a>
@@ -1617,11 +1622,7 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
 
               <h4 class="pt-0 my-2">MySQL 커넥션 풀(Connection Pool)</h4>
               <div class="text-muted">
-                <p>커넥션 풀이 왜 필요한가
-
-매 요청마다 DB 커넥션을 새로 맺으면(TCP 연결 + 인증) 그 자체로 시간이 소요된다. 요청이 많아질수록 이 비용이 계속 반복되면서 낭비가 커진다.
-
-그래서 애플리케이션이 시작할 때 커넥션을 미리 여러 개 만들어두고, 요청이 들어올 때마다 그중 하나를 빌려서 쓰고, 다 쓰면 반납하는 방식을 쓴다. 이게 커넥션 풀(Conn...</p>
+                <p>DB 커넥션 풀이 필요한 이유와, 풀 크기를 잘못 잡았을 때 발생하는 Too many connections 문제를 정리한다.</p>
               </div>
             </div>
           </a>
@@ -1839,10 +1840,6 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
     
     
     
-      
-        
-        
-
   
     
     
@@ -1857,23 +1854,6 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1916,6 +1896,47 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     

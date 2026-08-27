@@ -32,8 +32,8 @@
 <meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="MySQL 인덱스 자료구조 - B+Tree" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="MySQL(InnoDB)의 인덱스는 내부적으로 B+Tree라는 정렬된 트리 구조로 저장된다." />
-<meta name="twitter:description" property="og:description" content="MySQL(InnoDB)의 인덱스는 내부적으로 B+Tree라는 정렬된 트리 구조로 저장된다." />
+<meta name="description" content="MySQL 인덱스의 실체인 B+Tree 자료구조를 B-Tree와 비교하고, WHERE/ORDER BY와의 관계를 정리한다." />
+<meta name="twitter:description" property="og:description" content="MySQL 인덱스의 실체인 B+Tree 자료구조를 B-Tree와 비교하고, WHERE/ORDER BY와의 관계를 정리한다." />
 <link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-index-btree/" />
 <meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-index-btree/" />
 <meta property="og:site_name" content="Soo Dev Log" />
@@ -43,7 +43,7 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="MySQL 인덱스 자료구조 - B+Tree" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T12:25:00+09:00","datePublished":"2026-08-25T12:25:00+09:00","description":"MySQL(InnoDB)의 인덱스는 내부적으로 B+Tree라는 정렬된 트리 구조로 저장된다.","headline":"MySQL 인덱스 자료구조 - B+Tree","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-index-btree/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-index-btree/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T12:25:00+09:00","datePublished":"2026-08-25T12:25:00+09:00","description":"MySQL 인덱스의 실체인 B+Tree 자료구조를 B-Tree와 비교하고, WHERE/ORDER BY와의 관계를 정리한다.","headline":"MySQL 인덱스 자료구조 - B+Tree","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-index-btree/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-index-btree/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -530,6 +530,8 @@
       MySQL 인덱스 자료구조 - B+Tree
     </h1>
     
+      <p class="post-desc fw-light mb-4">MySQL 인덱스의 실체인 B+Tree 자료구조를 B-Tree와 비교하고, WHERE/ORDER BY와의 관계를 정리한다.</p>
+    
 
     <div class="post-meta text-muted">
       <!-- published date -->
@@ -844,6 +846,13 @@
         
         
         <li class="text-truncate lh-lg">
+          <a href="/posts/shopee-app-setup/">Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
           <a href="/posts/mysql-replication/">MySQL 복제(Replication)와 Read Replica</a>
         </li>
       
@@ -866,13 +875,6 @@
         
         <li class="text-truncate lh-lg">
           <a href="/posts/mysql-clustered-covering-index/">MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-index-btree/">MySQL 인덱스 자료구조 - B+Tree</a>
         </li>
       
     </ul>
@@ -1007,10 +1009,6 @@
     
     
     
-      
-        
-        
-
   
     
     
@@ -1025,23 +1023,6 @@
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1084,6 +1065,47 @@
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -1490,14 +1512,7 @@
 
               <h4 class="pt-0 my-2">MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</h4>
               <div class="text-muted">
-                <p>지난 글(MySQL 인덱스 자료구조 - B+Tree)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다.
-
-클러스터드 인덱스 (Clustered Index) = PK 인덱스
-
-InnoDB는 PK로 만든 인덱스가 있으면, 테이블의 실제 데이터(Row) 자체가 그 B+Tree의 리프 노드에 저장된다. 이걸 클러스터드 인덱스라고 부른다.
-
-
-  ...</p>
+                <p>클러스터드 인덱스, 커버링 인덱스, 복합 인덱스의 컬럼 순서(카디널리티)까지 EXPLAIN 예제와 함께 정리한다.</p>
               </div>
             </div>
           </a>
@@ -1525,14 +1540,7 @@ InnoDB는 PK로 만든 인덱스가 있으면, 테이블의 실제 데이터(Row
 
               <h4 class="pt-0 my-2">MySQL 복제(Replication)와 Read Replica</h4>
               <div class="text-muted">
-                <p>복제(Replication)란
-
-MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이상의 Slave(복제본)로 실시간 복사하는 구조로 구성할 수 있다. 이렇게 Master의 변경사항을 받아 따라가는 Slave 서버를 Read Replica라고 부른다.
-
-1
-2
-3
-                 write               ...</p>
+                <p>MySQL Master-Slave 복제 구조와 binlog, 복제 지연(Replication Lag) 문제와 해결 방법을 정리한다.</p>
               </div>
             </div>
           </a>
@@ -1560,11 +1568,7 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
 
               <h4 class="pt-0 my-2">MySQL 커넥션 풀(Connection Pool)</h4>
               <div class="text-muted">
-                <p>커넥션 풀이 왜 필요한가
-
-매 요청마다 DB 커넥션을 새로 맺으면(TCP 연결 + 인증) 그 자체로 시간이 소요된다. 요청이 많아질수록 이 비용이 계속 반복되면서 낭비가 커진다.
-
-그래서 애플리케이션이 시작할 때 커넥션을 미리 여러 개 만들어두고, 요청이 들어올 때마다 그중 하나를 빌려서 쓰고, 다 쓰면 반납하는 방식을 쓴다. 이게 커넥션 풀(Conn...</p>
+                <p>DB 커넥션 풀이 필요한 이유와, 풀 크기를 잘못 잡았을 때 발생하는 Too many connections 문제를 정리한다.</p>
               </div>
             </div>
           </a>
@@ -1782,10 +1786,6 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
     
     
     
-      
-        
-        
-
   
     
     
@@ -1800,23 +1800,6 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1859,6 +1842,47 @@ MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이�
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     

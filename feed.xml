@@ -4,7 +4,7 @@
   <id>https://choisooyoung-dev.github.io/</id>
   <title>Soo Dev Log</title>
   <subtitle>MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록</subtitle>
-  <updated>2026-08-25T15:10:42+09:00</updated>
+  <updated>2026-08-27T14:28:09+09:00</updated>
   <author>
     <name>Sooyoung Choi</name>
     <uri>https://choisooyoung-dev.github.io/</uri>
@@ -17,6 +17,30 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지</title>
+    <link href="https://choisooyoung-dev.github.io/posts/shopee-app-setup/" rel="alternate" type="text/html" title="Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지" />
+    <published>2026-08-27T09:00:00+09:00</published>
+  
+    <updated>2026-08-27T09:00:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/shopee-app-setup/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/shopee-app-setup/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="E-commerce API" />
+    
+  
+
+  <summary>Shopee Open API를 쓰기 위한 앱 생성, 앱 인증, 토큰 생성 과정을 정리한다.</summary>
+
+  </entry>
 
   
   <entry>
@@ -38,18 +62,7 @@
     
   
 
-  <summary>복제(Replication)란
-
-MySQL은 Master(원본)에 데이터를 쓰고, 그 변경 내역을 하나 이상의 Slave(복제본)로 실시간 복사하는 구조로 구성할 수 있다. 이렇게 Master의 변경사항을 받아 따라가는 Slave 서버를 Read Replica라고 부른다.
-
-                 write                         read
-Client ────────────────▶ Master ── binlog ──▶ Slave ◀──────────── Client
-                                     복제
-
-
-
-  Master는 데이터가 변경될 때마다 그 내용을 binlog(binary log)라는 로그에 기록한다.
-  Slave는 이 binl...</summary>
+  <summary>MySQL Master-Slave 복제 구조와 binlog, 복제 지연(Replication Lag) 문제와 해결 방법을 정리한다.</summary>
 
   </entry>
 
@@ -73,25 +86,7 @@ Client ────────────────▶ Master ── binlog 
     
   
 
-  <summary>커넥션 풀이 왜 필요한가
-
-매 요청마다 DB 커넥션을 새로 맺으면(TCP 연결 + 인증) 그 자체로 시간이 소요된다. 요청이 많아질수록 이 비용이 계속 반복되면서 낭비가 커진다.
-
-그래서 애플리케이션이 시작할 때 커넥션을 미리 여러 개 만들어두고, 요청이 들어올 때마다 그중 하나를 빌려서 쓰고, 다 쓰면 반납하는 방식을 쓴다. 이게 커넥션 풀(Connection Pool)이다.
-
-
-  EX) TypeORM에서는 이렇게 풀 크기를 지정한다.
-  extra: {
-  connectionLimit: 10,
-}
-  
-
-
-풀 크기, 무작정 크게 잡으면 안 되는 이유
-
-
-  풀 크기를 너무 작게 잡으면 → 동시 요청이 몰릴 때 빌릴 수 있는 커넥션이 없어서 커넥션 타임아웃이 난다.
-  풀 크기를 너무 크게 잡으면 ...</summary>
+  <summary>DB 커넥션 풀이 필요한 이유와, 풀 크기를 잘못 잡았을 때 발생하는 Too many connections 문제를 정리한다.</summary>
 
   </entry>
 
@@ -115,19 +110,7 @@ Client ────────────────▶ Master ── binlog 
     
   
 
-  <summary>앞서 ACID 격리 수준 글에서 “읽기 일관성은 격리 수준이, 쓰기 순서는 락(Lock)이 담당한다”고 정리했다. 이번엔 그 락을 직접 걸어보고, 락 때문에 생기는 데드락까지 정리한다.
-
-락(Lock) → Row Lock
-
-BEGIN;
-SELECT qty FROM coupon WHERE id = 1 FOR UPDATE; -- 락 걸림!
-UPDATE coupon SET qty = qty - 1 WHERE id = 1;
-COMMIT; -- 락 풀림!
-
-
-
-  SELECT ... FOR UPDATE는 조회하면서 동시에 해당 row에 쓰기 락(exclusive lock)을 건다.
-  InnoDB는 Row(행) 단위 락이라서, 다른 트랜잭션이 같은 row를 건드리려고 하면 앞 트랜잭션이 COMMIT(또는 ROL...</summary>
+  <summary>MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다.</summary>
 
   </entry>
 
@@ -151,51 +134,7 @@ COMMIT; -- 락 풀림!
     
   
 
-  <summary>지난 글(MySQL 인덱스 자료구조 - B+Tree)에 이어서, 인덱스의 종류와 복합 인덱스 설계 방법을 정리한다.
-
-클러스터드 인덱스 (Clustered Index) = PK 인덱스
-
-InnoDB는 PK로 만든 인덱스가 있으면, 테이블의 실제 데이터(Row) 자체가 그 B+Tree의 리프 노드에 저장된다. 이걸 클러스터드 인덱스라고 부른다.
-
-
-  PK로 조회할 때: B+Tree를 타고 내려가서 리프 노드에 도착하면, 그 자리에 바로 실제 데이터가 있다. 한 번에 끝난다.
-  PK가 아닌 걸로 조회할 때 (유니크 인덱스 등, = 세컨더리 인덱스): 이 인덱스의 B+Tree 리프에는 실제 데이터가 아니라 PK 값만 저장되어 있다.
-    
-      세컨더리 인덱스를 타고 내려가 리프에서 PK를 찾는다...</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 인덱스 자료구조 - B+Tree</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-index-btree/" rel="alternate" type="text/html" title="MySQL 인덱스 자료구조 - B+Tree" />
-    <published>2026-08-25T12:25:00+09:00</published>
-  
-    <updated>2026-08-25T12:25:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-index-btree/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-index-btree/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>MySQL(InnoDB)의 인덱스는 내부적으로 B+Tree라는 정렬된 트리 구조로 저장된다.
-
-트리(Tree)란?
-
-찾고 싶은 값이 있을 때, 맨 위(루트)부터 값을 비교하면서 내려가며 관련된 가지만 타고 내려간다. 전체를 다 뒤지지 않고 필요한 경로만 따라가기 때문에 속도가 빨라진다.
-
-              [ 루트, Root ]           ← 맨 위 시작점
-              /            \
-          [ A ]            [ B ]      ← 노드(Node): 트리를 이루는 한 칸
-         /     \                \
-      [ C ]   [ D ]             [ E ]  ← 자식(Child): 한 노드 아래로 연결...</summary>
+  <summary>클러스터드 인덱스, 커버링 인덱스, 복합 인덱스의 컬럼 순서(카디널리티)까지 EXPLAIN 예제와 함께 정리한다.</summary>
 
   </entry>
 
