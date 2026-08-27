@@ -4,7 +4,7 @@
   <id>https://choisooyoung-dev.github.io/</id>
   <title>Soo Dev Log</title>
   <subtitle>MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록</subtitle>
-  <updated>2026-08-27T14:28:09+09:00</updated>
+  <updated>2026-08-27T15:31:06+09:00</updated>
   <author>
     <name>Sooyoung Choi</name>
     <uri>https://choisooyoung-dev.github.io/</uri>
@@ -17,6 +17,30 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Shopee Open API로 주문 목록/상세 조회하기</title>
+    <link href="https://choisooyoung-dev.github.io/posts/shopee-get-orders/" rel="alternate" type="text/html" title="Shopee Open API로 주문 목록/상세 조회하기" />
+    <published>2026-08-27T14:25:00+09:00</published>
+  
+    <updated>2026-08-27T14:25:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/shopee-get-orders/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/shopee-get-orders/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="E-commerce API" />
+    
+  
+
+  <summary>Shopee Open API의 주문 목록(get_order_list)과 주문 상세(get_order_detail) 조회 API를 코드로 정리한다.</summary>
+
+  </entry>
 
   
   <entry>
@@ -111,30 +135,6 @@
   
 
   <summary>MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/" rel="alternate" type="text/html" title="MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스" />
-    <published>2026-08-25T14:00:00+09:00</published>
-  
-    <updated>2026-08-25T14:00:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-clustered-covering-index/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>클러스터드 인덱스, 커버링 인덱스, 복합 인덱스의 컬럼 순서(카디널리티)까지 EXPLAIN 예제와 함께 정리한다.</summary>
 
   </entry>
 

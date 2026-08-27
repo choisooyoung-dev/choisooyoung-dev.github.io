@@ -30,24 +30,24 @@
 
   <!-- Begin Jekyll SEO tag v2.9.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="MySQL 락(Lock)과 데드락(Deadlock)" />
+<meta property="og:title" content="Shopee Open API로 주문 목록/상세 조회하기" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다." />
-<meta name="twitter:description" property="og:description" content="MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다." />
-<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/" />
-<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/" />
+<meta name="description" content="Shopee Open API의 주문 목록(get_order_list)과 주문 상세(get_order_detail) 조회 API를 코드로 정리한다." />
+<meta name="twitter:description" property="og:description" content="Shopee Open API의 주문 목록(get_order_list)과 주문 상세(get_order_detail) 조회 API를 코드로 정리한다." />
+<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/shopee-get-orders/" />
+<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/shopee-get-orders/" />
 <meta property="og:site_name" content="Soo Dev Log" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2026-08-25T14:35:00+09:00" />
-<meta property="article:modified_time" content="2026-08-25T14:35:00+09:00" />
+<meta property="article:published_time" content="2026-08-27T14:25:00+09:00" />
+<meta property="article:modified_time" content="2026-08-27T14:25:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="MySQL 락(Lock)과 데드락(Deadlock)" />
+<meta name="twitter:title" content="Shopee Open API로 주문 목록/상세 조회하기" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T14:35:00+09:00","datePublished":"2026-08-25T14:35:00+09:00","description":"MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다.","headline":"MySQL 락(Lock)과 데드락(Deadlock)","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-27T14:25:00+09:00","datePublished":"2026-08-27T14:25:00+09:00","description":"Shopee Open API의 주문 목록(get_order_list)과 주문 상세(get_order_detail) 조회 API를 코드로 정리한다.","headline":"Shopee Open API로 주문 목록/상세 조회하기","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/shopee-get-orders/"},"url":"https://choisooyoung-dev.github.io/posts/shopee-get-orders/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>MySQL 락(Lock)과 데드락(Deadlock) | Soo Dev Log
+  <title>Shopee Open API로 주문 목록/상세 조회하기 | Soo Dev Log
   </title>
 
   <!--
@@ -451,6 +451,28 @@
 
       
     
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
 
     
   
@@ -466,17 +488,6 @@
       
         
         
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
       
 
       
@@ -516,10 +527,10 @@
       <a href="javascript:history.back()" aria-label="back" class="me-2 text-muted" style="text-decoration:none;">
         <i class="fas fa-arrow-left"></i>
       </a>
-      MySQL 락(Lock)과 데드락(Deadlock)
+      Shopee Open API로 주문 목록/상세 조회하기
     </h1>
     
-      <p class="post-desc fw-light mb-4">MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다.</p>
+      <p class="post-desc fw-light mb-4">Shopee Open API의 주문 목록(get_order_list)과 주문 상세(get_order_detail) 조회 API를 코드로 정리한다.</p>
     
 
     <div class="post-meta text-muted">
@@ -536,13 +547,13 @@
 
 <time
   
-  data-ts="1787636100"
+  data-ts="1787808300"
   data-df="YYYY/MM/DD"
   
     data-bs-toggle="tooltip" data-bs-placement="bottom"
   
 >
-  2026/08/25
+  2026/08/27
 </time>
 
       </span>
@@ -591,7 +602,7 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="949 단어"
+  title="1046 단어"
 >읽는 시간
      <em>5분</em>
 </span>
@@ -602,96 +613,324 @@
   </header>
 
   <div class="content">
-    <p>앞서 <a href="/posts/mysql-acid/">ACID 격리 수준</a> 글에서 “읽기 일관성은 격리 수준이, 쓰기 순서는 락(Lock)이 담당한다”고 정리했다. 이번엔 그 락을 직접 걸어보고, 락 때문에 생기는 데드락까지 정리한다.</p>
+    <p><a href="/posts/shopee-app-setup/">앞선 글</a>에서 발급받은 access_token으로, 실제 주문 데이터를 가져와본다.</p>
 
-<h2 id="락lock--row-lock"><span class="me-2">락(Lock) → Row Lock</span><a href="#락lock--row-lock" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<h2 id="shop-api는-서명-방식이-조금-다르다"><span class="me-2">Shop API는 서명 방식이 조금 다르다</span><a href="#shop-api는-서명-방식이-조금-다르다" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<div class="language-sql highlighter-rouge"><div class="code-header">
-        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
-      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-</pre></td><td class="rouge-code"><pre><span class="k">BEGIN</span><span class="p">;</span>
-<span class="k">SELECT</span> <span class="n">qty</span> <span class="k">FROM</span> <span class="n">coupon</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">FOR</span> <span class="k">UPDATE</span><span class="p">;</span> <span class="c1">-- 락 걸림!</span>
-<span class="k">UPDATE</span> <span class="n">coupon</span> <span class="k">SET</span> <span class="n">qty</span> <span class="o">=</span> <span class="n">qty</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="k">COMMIT</span><span class="p">;</span> <span class="c1">-- 락 풀림!</span>
-</pre></td></tr></tbody></table></code></div></div>
+<p>앱 인증/토큰 발급 때 썼던 <strong>공개(Public) API</strong>는 <code class="language-plaintext highlighter-rouge">partner_id + path + timestamp</code>만으로 서명했다. 하지만 주문 조회처럼 <strong>특정 샵의 데이터를 다루는 Shop API</strong>는 여기에 <code class="language-plaintext highlighter-rouge">access_token</code>과 <code class="language-plaintext highlighter-rouge">shop_id</code>가 추가로 들어간다.</p>
 
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">SELECT ... FOR UPDATE</code>는 조회하면서 동시에 <strong>해당 row에 쓰기 락(exclusive lock)을 건다.</strong></li>
-  <li>InnoDB는 <strong>Row(행) 단위 락</strong>이라서, 다른 트랜잭션이 <strong>같은 row</strong>를 건드리려고 하면 앞 트랜잭션이 <code class="language-plaintext highlighter-rouge">COMMIT</code>(또는 <code class="language-plaintext highlighter-rouge">ROLLBACK</code>)해서 락이 풀릴 때까지 기다린다.</li>
-  <li>반면 <strong>해당 테이블의 다른 row는 전혀 영향받지 않아서</strong> 동시에 처리 가능하다.</li>
-</ul>
-
-<blockquote>
-  <p>이게 <a href="/posts/mysql-storage-engine/">MyISAM의 테이블 락</a>과 다른 결정적인 차이다. MyISAM은 행 하나만 바꿔도 테이블 전체가 잠기지만, InnoDB의 row lock은 <strong>딱 그 row만</strong> 잠근다.</p>
-</blockquote>
-
-<h2 id="데드락-deadlock"><span class="me-2">데드락 (Deadlock)</span><a href="#데드락-deadlock" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-
-<p>서로 다른 두 트랜잭션이 <strong>서로가 가진 락을 기다리며 영원히 멈추는 상황.</strong></p>
-
-<div class="language-sql highlighter-rouge"><div class="code-header">
-        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+<div class="language-ts highlighter-rouge"><div class="code-header">
+        <span data-label-text="TypeScript"><i class="fas fa-code fa-fw small"></i></span>
       <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
-</pre></td><td class="rouge-code"><pre><span class="c1">-- 트랜잭션 A</span>
-<span class="k">BEGIN</span><span class="p">;</span>
-<span class="k">UPDATE</span> <span class="n">coupon</span> <span class="k">SET</span> <span class="n">remaining</span> <span class="o">=</span> <span class="n">remaining</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">-- id=1 락 잡음</span>
-<span class="c1">-- 잠시 후</span>
-<span class="k">UPDATE</span> <span class="n">coupon</span> <span class="k">SET</span> <span class="n">remaining</span> <span class="o">=</span> <span class="n">remaining</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">-- id=2 락 필요!</span>
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="k">import</span> <span class="nx">crypto</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">crypto</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">PARTNER_ID</span> <span class="o">=</span> <span class="nc">Number</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SHOPEE_PARTNER_ID</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">PARTNER_KEY</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SHOPEE_PARTNER_KEY</span><span class="o">!</span><span class="p">;</span>
+
+<span class="c1">// Shop API 서명: partner_id + path + timestamp + access_token + shop_id</span>
+<span class="kd">function</span> <span class="nf">signShopApi</span><span class="p">(</span>
+  <span class="nx">path</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+  <span class="nx">timestamp</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+  <span class="nx">accessToken</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+  <span class="nx">shopId</span><span class="p">:</span> <span class="kr">number</span>
+<span class="p">):</span> <span class="kr">string</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">baseString</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">PARTNER_ID</span><span class="p">}${</span><span class="nx">path</span><span class="p">}${</span><span class="nx">timestamp</span><span class="p">}${</span><span class="nx">accessToken</span><span class="p">}${</span><span class="nx">shopId</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">crypto</span>
+    <span class="p">.</span><span class="nf">createHmac</span><span class="p">(</span><span class="dl">"</span><span class="s2">sha256</span><span class="dl">"</span><span class="p">,</span> <span class="nx">PARTNER_KEY</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="nx">baseString</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></div></div>
 
-<div class="language-sql highlighter-rouge"><div class="code-header">
-        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+<p>앱 인증 단계에서 썼던 <code class="language-plaintext highlighter-rouge">sign()</code>(public API용)과 헷갈리지 않게, 별도 함수(<code class="language-plaintext highlighter-rouge">signShopApi</code>)로 분리해두는 걸 추천한다.</p>
+
+<h2 id="1-주문-목록-조회-get_order_list"><span class="me-2">1. 주문 목록 조회 (<code class="language-plaintext highlighter-rouge">get_order_list</code>)</span><a href="#1-주문-목록-조회-get_order_list" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>기간/상태 조건으로 <strong>주문번호(order_sn) 목록</strong>을 먼저 가져온다. (주문 상세 내용까지는 안 들어있다)</p>
+
+<div class="language-ts highlighter-rouge"><div class="code-header">
+        <span data-label-text="TypeScript"><i class="fas fa-code fa-fw small"></i></span>
       <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
-</pre></td><td class="rouge-code"><pre><span class="c1">-- 트랜잭션 B</span>
-<span class="k">BEGIN</span><span class="p">;</span>
-<span class="k">UPDATE</span> <span class="n">coupon</span> <span class="k">SET</span> <span class="n">remaining</span> <span class="o">=</span> <span class="n">remaining</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">-- id=2 락 잡음</span>
-<span class="c1">-- 잠시 후</span>
-<span class="k">UPDATE</span> <span class="n">coupon</span> <span class="k">SET</span> <span class="n">remaining</span> <span class="o">=</span> <span class="n">remaining</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">-- id=1 락 필요!</span>
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="rouge-code"><pre><span class="k">import</span> <span class="nx">axios</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">axios</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kr">interface</span> <span class="nx">GetOrderListParams</span> <span class="p">{</span>
+  <span class="nl">accessToken</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nl">shopId</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+  <span class="nl">timeFrom</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span> <span class="c1">// unix timestamp</span>
+  <span class="nl">timeTo</span><span class="p">:</span> <span class="kr">number</span><span class="p">;</span>
+  <span class="nl">cursor</span><span class="p">?:</span> <span class="kr">string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="k">async</span> <span class="kd">function</span> <span class="nf">getOrderList</span><span class="p">({</span>
+  <span class="nx">accessToken</span><span class="p">,</span>
+  <span class="nx">shopId</span><span class="p">,</span>
+  <span class="nx">timeFrom</span><span class="p">,</span>
+  <span class="nx">timeTo</span><span class="p">,</span>
+  <span class="nx">cursor</span> <span class="o">=</span> <span class="dl">""</span><span class="p">,</span>
+<span class="p">}:</span> <span class="nx">GetOrderListParams</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/api/v2/order/get_order_list</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">floor</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nf">signShopApi</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="nx">accessToken</span><span class="p">,</span> <span class="nx">shopId</span><span class="p">);</span>
+
+  <span class="kd">const</span> <span class="p">{</span> <span class="nx">data</span> <span class="p">}</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s2">`https://partner.shopeemobile.com</span><span class="p">${</span><span class="nx">path</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">params</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">partner_id</span><span class="p">:</span> <span class="nx">PARTNER_ID</span><span class="p">,</span>
+      <span class="nx">timestamp</span><span class="p">,</span>
+      <span class="na">access_token</span><span class="p">:</span> <span class="nx">accessToken</span><span class="p">,</span>
+      <span class="na">shop_id</span><span class="p">:</span> <span class="nx">shopId</span><span class="p">,</span>
+      <span class="na">sign</span><span class="p">:</span> <span class="nx">signature</span><span class="p">,</span>
+      <span class="na">time_range_field</span><span class="p">:</span> <span class="dl">"</span><span class="s2">create_time</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// create_time | update_time</span>
+      <span class="na">time_from</span><span class="p">:</span> <span class="nx">timeFrom</span><span class="p">,</span>
+      <span class="na">time_to</span><span class="p">:</span> <span class="nx">timeTo</span><span class="p">,</span>
+      <span class="na">page_size</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="c1">// 최대 100</span>
+      <span class="nx">cursor</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">});</span>
+
+  <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+  <span class="c1">// data.response.order_list: [{ order_sn, order_status }, ...]</span>
+  <span class="c1">// data.response.more: 다음 페이지 존재 여부</span>
+  <span class="c1">// data.response.next_cursor: 다음 페이지 조회용 커서</span>
+<span class="p">}</span>
 </pre></td></tr></tbody></table></code></div></div>
 
-<h3 id="무슨-일이-벌어지는가"><span class="me-2">무슨 일이 벌어지는가</span><a href="#무슨-일이-벌어지는가" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">time_from</code> ~ <code class="language-plaintext highlighter-rouge">time_to</code>는 <strong>최대 15일 범위</strong>까지만 조회 가능하다 (그 이상은 구간을 나눠서 여러 번 호출해야 한다).</li>
+  <li>응답이 많으면 <code class="language-plaintext highlighter-rouge">more: true</code>와 함께 <code class="language-plaintext highlighter-rouge">next_cursor</code>가 오는데, 이 값을 다음 요청의 <code class="language-plaintext highlighter-rouge">cursor</code>에 넣어서 <strong>페이지네이션</strong>한다.</li>
+</ul>
 
-<ol>
-  <li>트랜잭션 A는 <code class="language-plaintext highlighter-rouge">id=1</code>을 잡고, <code class="language-plaintext highlighter-rouge">id=2</code>를 요청한다.</li>
-  <li>트랜잭션 B는 <code class="language-plaintext highlighter-rouge">id=2</code>를 잡고, <code class="language-plaintext highlighter-rouge">id=1</code>을 요청한다.</li>
-  <li>트랜잭션 A는 <strong>B가 <code class="language-plaintext highlighter-rouge">id=2</code>를 커밋해서 락을 풀 때까지</strong> 대기한다.</li>
-  <li>트랜잭션 B는 <strong>A가 <code class="language-plaintext highlighter-rouge">id=1</code>을 커밋해서 락을 풀 때까지</strong> 대기한다.</li>
-  <li>서로가 서로를 기다리므로 <strong>둘 다 영원히 대기 → 데드락.</strong></li>
-</ol>
+<h3 id="페이지-끝까지-다-가져오기"><span class="me-2">페이지 끝까지 다 가져오기</span><a href="#페이지-끝까지-다-가져오기" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 
-<p>핵심은, <strong>두 트랜잭션이 같은 자원(id=1, id=2)을 서로 다른 순서로 건드렸다는 것.</strong> A는 1→2 순서로, B는 2→1 순서로 접근했기 때문에 이런 교착 상태가 만들어진다.</p>
+<div class="language-ts highlighter-rouge"><div class="code-header">
+        <span data-label-text="TypeScript"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="rouge-code"><pre><span class="k">export</span> <span class="k">async</span> <span class="kd">function</span> <span class="nf">getAllOrderSns</span><span class="p">(</span>
+  <span class="nx">accessToken</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+  <span class="nx">shopId</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+  <span class="nx">timeFrom</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+  <span class="nx">timeTo</span><span class="p">:</span> <span class="kr">number</span>
+<span class="p">):</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">[]</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="na">orderSns</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">let</span> <span class="nx">cursor</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
 
-<blockquote>
-  <p>실제로는 MySQL(InnoDB)이 데드락을 감지하면, 둘 중 하나(보통 변경량이 적은 쪽)를 강제로 <strong>롤백</strong>시켜서 나머지 하나는 진행되게 한다. 그래도 롤백당한 쪽은 애플리케이션에서 재시도 로직이 필요하다.</p>
-</blockquote>
+  <span class="k">while </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">{</span> <span class="nx">response</span> <span class="p">}</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">getOrderList</span><span class="p">({</span>
+      <span class="nx">accessToken</span><span class="p">,</span>
+      <span class="nx">shopId</span><span class="p">,</span>
+      <span class="nx">timeFrom</span><span class="p">,</span>
+      <span class="nx">timeTo</span><span class="p">,</span>
+      <span class="nx">cursor</span><span class="p">,</span>
+    <span class="p">});</span>
 
-<h3 id="실무-예방법"><span class="me-2">실무 예방법</span><a href="#실무-예방법" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+    <span class="nx">orderSns</span><span class="p">.</span><span class="nf">push</span><span class="p">(...</span><span class="nx">response</span><span class="p">.</span><span class="nx">order_list</span><span class="p">.</span><span class="nf">map</span><span class="p">((</span><span class="na">o</span><span class="p">:</span> <span class="kr">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">o</span><span class="p">.</span><span class="nx">order_sn</span><span class="p">));</span>
 
-<p><strong>여러 row를 건드릴 땐 항상 같은 순서로 접근한다.</strong></p>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">more</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+    <span class="nx">cursor</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">next_cursor</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">orderSns</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<h2 id="2-주문-상세-조회-get_order_detail"><span class="me-2">2. 주문 상세 조회 (<code class="language-plaintext highlighter-rouge">get_order_detail</code>)</span><a href="#2-주문-상세-조회-get_order_detail" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p><code class="language-plaintext highlighter-rouge">get_order_list</code>로 얻은 <code class="language-plaintext highlighter-rouge">order_sn</code> 목록으로, 실제 상품/배송/결제 정보가 담긴 상세 데이터를 가져온다.</p>
+
+<div class="language-ts highlighter-rouge"><div class="code-header">
+        <span data-label-text="TypeScript"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="rouge-code"><pre><span class="k">export</span> <span class="k">async</span> <span class="kd">function</span> <span class="nf">getOrderDetail</span><span class="p">(</span>
+  <span class="nx">accessToken</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+  <span class="nx">shopId</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+  <span class="nx">orderSnList</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span>
+<span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/api/v2/order/get_order_detail</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">floor</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nf">signShopApi</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="nx">accessToken</span><span class="p">,</span> <span class="nx">shopId</span><span class="p">);</span>
+
+  <span class="kd">const</span> <span class="p">{</span> <span class="nx">data</span> <span class="p">}</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s2">`https://partner.shopeemobile.com</span><span class="p">${</span><span class="nx">path</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">params</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">partner_id</span><span class="p">:</span> <span class="nx">PARTNER_ID</span><span class="p">,</span>
+      <span class="nx">timestamp</span><span class="p">,</span>
+      <span class="na">access_token</span><span class="p">:</span> <span class="nx">accessToken</span><span class="p">,</span>
+      <span class="na">shop_id</span><span class="p">:</span> <span class="nx">shopId</span><span class="p">,</span>
+      <span class="na">sign</span><span class="p">:</span> <span class="nx">signature</span><span class="p">,</span>
+      <span class="na">order_sn_list</span><span class="p">:</span> <span class="nx">orderSnList</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="dl">"</span><span class="s2">,</span><span class="dl">"</span><span class="p">),</span> <span class="c1">// 한 번에 최대 50개</span>
+      <span class="na">response_optional_fields</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">item_list,total_amount,recipient_address,buyer_username</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">});</span>
+
+  <span class="k">return</span> <span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">order_list</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></div></div>
 
 <ul>
-  <li>A, B 둘 다 <code class="language-plaintext highlighter-rouge">id</code> 오름차순으로 접근했다면, 하나가 먼저 두 락을 다 잡고 끝낼 때까지 다른 하나는 처음(<code class="language-plaintext highlighter-rouge">id=1</code>)부터 기다리기만 할 뿐 서로 물고 물리는 상황 자체가 생기지 않는다.</li>
-  <li>그 외 방법: 트랜잭션을 짧게 유지하기, 락이 필요한 순서를 애플리케이션 레벨에서 통일하기, 필요 이상으로 넓은 범위를 잠그지 않기.</li>
+  <li><code class="language-plaintext highlighter-rouge">order_sn_list</code>는 <strong>한 번에 최대 50개</strong>까지만 넣을 수 있다. 50개 넘으면 잘라서 여러 번 호출해야 한다.</li>
+  <li><code class="language-plaintext highlighter-rouge">response_optional_fields</code>로 필요한 필드만 골라서 요청할 수 있다 — 안 쓰는 필드까지 다 받아오면 응답이 쓸데없이 커지니, 실제 쓰는 필드만 지정하는 게 좋다.</li>
 </ul>
+
+<h2 id="목록--상세-한-번에-묶기"><span class="me-2">목록 → 상세 한 번에 묶기</span><a href="#목록--상세-한-번에-묶기" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<div class="language-ts highlighter-rouge"><div class="code-header">
+        <span data-label-text="TypeScript"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="k">export</span> <span class="k">async</span> <span class="kd">function</span> <span class="nf">fetchOrders</span><span class="p">(</span>
+  <span class="nx">accessToken</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span>
+  <span class="nx">shopId</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+  <span class="nx">timeFrom</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span>
+  <span class="nx">timeTo</span><span class="p">:</span> <span class="kr">number</span>
+<span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">orderSns</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">getAllOrderSns</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">,</span> <span class="nx">shopId</span><span class="p">,</span> <span class="nx">timeFrom</span><span class="p">,</span> <span class="nx">timeTo</span><span class="p">);</span>
+
+  <span class="c1">// 50개씩 끊어서 상세 조회</span>
+  <span class="kd">const</span> <span class="nx">chunks</span><span class="p">:</span> <span class="kr">string</span><span class="p">[][]</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">orderSns</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">50</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">orderSns</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">50</span><span class="p">));</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="nx">results</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">chunk</span> <span class="k">of</span> <span class="nx">chunks</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">detail</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">getOrderDetail</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">,</span> <span class="nx">shopId</span><span class="p">,</span> <span class="nx">chunk</span><span class="p">);</span>
+    <span class="nx">results</span><span class="p">.</span><span class="nf">push</span><span class="p">(...</span><span class="nx">detail</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">results</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></div></div>
 
 <h2 id="정리"><span class="me-2">정리</span><a href="#정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
 <ul>
-  <li>InnoDB의 락은 <strong>Row 단위</strong>라서 MyISAM의 테이블 락보다 동시성이 훨씬 좋다.</li>
-  <li><code class="language-plaintext highlighter-rouge">SELECT ... FOR UPDATE</code>로 명시적으로 쓰기 락을 걸 수 있고, 트랜잭션이 끝나야(<code class="language-plaintext highlighter-rouge">COMMIT</code>/<code class="language-plaintext highlighter-rouge">ROLLBACK</code>) 풀린다.</li>
-  <li>데드락은 <strong>서로 다른 트랜잭션이 같은 자원을 서로 다른 순서로 잠글 때</strong> 발생한다.</li>
-  <li>예방법은 간단하다 — <strong>여러 row에 접근할 때 항상 같은 순서로 접근하기.</strong></li>
+  <li>Shop API는 서명에 <code class="language-plaintext highlighter-rouge">access_token</code>, <code class="language-plaintext highlighter-rouge">shop_id</code>가 추가로 들어간다 (Public API 서명과 다름).</li>
+  <li>주문은 <strong>목록(order_sn만) → 상세(실제 데이터)</strong> 두 단계로 나눠서 가져온다.</li>
+  <li><code class="language-plaintext highlighter-rouge">get_order_list</code>는 최대 15일 범위, <code class="language-plaintext highlighter-rouge">get_order_detail</code>은 한 번에 최대 50개 <code class="language-plaintext highlighter-rouge">order_sn</code> 제한이 있으므로 큰 범위/많은 주문을 다룰 땐 <strong>구간 분할 + 페이지네이션 + 청크 처리</strong>가 기본이다.</li>
 </ul>
 
   </div>
@@ -702,7 +941,7 @@
       <div class="post-meta mb-3">
         <i class="far fa-folder-open fa-fw me-1"></i>
         
-          <a href="/categories/mysql/">MySQL</a>
+          <a href="/categories/e-commerce-api/">E-commerce API</a>
       </div>
     
 
@@ -712,29 +951,19 @@
         <i class="fa fa-tags fa-fw me-1"></i>
         
           <a
-            href="/tags/sql/"
+            href="/tags/shopee/"
             class="post-tag no-text-decoration"
-          >sql</a>
+          >shopee</a>
         
           <a
-            href="/tags/mysql/"
+            href="/tags/open-api/"
             class="post-tag no-text-decoration"
-          >mysql</a>
+          >open-api</a>
         
           <a
-            href="/tags/lock/"
+            href="/tags/order/"
             class="post-tag no-text-decoration"
-          >lock</a>
-        
-          <a
-            href="/tags/deadlock/"
-            class="post-tag no-text-decoration"
-          >deadlock</a>
-        
-          <a
-            href="/tags/transaction/"
-            class="post-tag no-text-decoration"
-          >transaction</a>
+          >order</a>
         
       </div>
     
@@ -1440,79 +1669,7 @@
   
 
   
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
 
 
 
@@ -1528,7 +1685,7 @@
     <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
       
         <article class="col">
-          <a href="/posts/mysql-acid/" class="post-preview card h-100">
+          <a href="/posts/shopee-app-setup/" class="post-preview card h-100">
             <div class="card-body">
               <!--
   Date format snippet
@@ -1540,72 +1697,16 @@
 
 <time
   
-  data-ts="1787625900"
+  data-ts="1787788800"
   data-df="YYYY/MM/DD"
   
 >
-  2026/08/25
+  2026/08/27
 </time>
 
-              <h4 class="pt-0 my-2">MySQL ACID</h4>
+              <h4 class="pt-0 my-2">Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지</h4>
               <div class="text-muted">
-                <p>MySQL 트랜잭션의 ACID(원자성·일관성·격리성·지속성)와 트랜잭션 격리 수준(Isolation Level)을 예시와 함께 정리한다.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
-        <article class="col">
-          <a href="/posts/mysql-replication/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787637000"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 복제(Replication)와 Read Replica</h4>
-              <div class="text-muted">
-                <p>MySQL Master-Slave 복제 구조와 binlog, 복제 지연(Replication Lag) 문제와 해결 방법을 정리한다.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
-        <article class="col">
-          <a href="/posts/mysql-connection-pool/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787636700"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 커넥션 풀(Connection Pool)</h4>
-              <div class="text-muted">
-                <p>DB 커넥션 풀이 필요한 이유와, 풀 크기를 잘못 잡았을 때 발생하는 Too many connections 문제를 정리한다.</p>
+                <p>Shopee Open API를 쓰기 위한 앱 생성, 앱 인증, 토큰 생성 과정을 정리한다.</p>
               </div>
             </div>
           </a>
@@ -1626,22 +1727,18 @@
 
   
     <a
-      href="/posts/mysql-clustered-covering-index/"
+      href="/posts/shopee-app-setup/"
       class="btn btn-outline-primary"
       aria-label="이전 글"
     >
-      <p>MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</p>
+      <p>Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지</p>
     </a>
   
 
   
-    <a
-      href="/posts/mysql-connection-pool/"
-      class="btn btn-outline-primary"
-      aria-label="다음 글"
-    >
-      <p>MySQL 커넥션 풀(Connection Pool)</p>
-    </a>
+    <div class="btn btn-outline-primary disabled" aria-label="다음 글">
+      <p>-</p>
+    </div>
   
 </nav>
 
