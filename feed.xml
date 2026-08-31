@@ -4,7 +4,7 @@
   <id>https://choisooyoung-dev.github.io/</id>
   <title>Soo Dev Log</title>
   <subtitle>MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록</subtitle>
-  <updated>2026-08-31T15:54:04+09:00</updated>
+  <updated>2026-08-31T16:42:38+09:00</updated>
   <author>
     <name>Sooyoung Choi</name>
     <uri>https://choisooyoung-dev.github.io/</uri>
@@ -17,6 +17,102 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>LIKE 검색과 인덱스 한계, 그리고 FULLTEXT 인덱스</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-like-fulltext/" rel="alternate" type="text/html" title="LIKE 검색과 인덱스 한계, 그리고 FULLTEXT 인덱스" />
+    <published>2026-08-31T16:35:00+09:00</published>
+  
+    <updated>2026-08-31T16:35:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-like-fulltext/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-like-fulltext/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>LIKE 검색이 인덱스를 타는 경우와 못 타는 경우를 B+Tree 관점에서 정리하고, 포함 검색 대안인 FULLTEXT 인덱스 사용법을 정리한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>EXPLAIN 결과 읽는 법 - type 컬럼과 옵티마이저</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-explain-type/" rel="alternate" type="text/html" title="EXPLAIN 결과 읽는 법 - type 컬럼과 옵티마이저" />
+    <published>2026-08-31T16:30:00+09:00</published>
+  
+    <updated>2026-08-31T16:30:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-explain-type/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-explain-type/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>EXPLAIN의 type 컬럼(const/ref/range/index/ALL) 읽는 법과 옵티마이저의 역할, range와 index의 차이를 정리한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>페이지네이션 - OFFSET vs Cursor 기반</title>
+    <link href="https://choisooyoung-dev.github.io/posts/pagination-offset-vs-cursor/" rel="alternate" type="text/html" title="페이지네이션 - OFFSET vs Cursor 기반" />
+    <published>2026-08-31T16:15:00+09:00</published>
+  
+    <updated>2026-08-31T16:15:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/pagination-offset-vs-cursor/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/pagination-offset-vs-cursor/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>OFFSET 기반과 Cursor 기반 페이지네이션의 차이, 성능 문제, TypeORM 예시와 복합 정렬 기준 커서 만드는 법까지 정리한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>N+1 문제</title>
+    <link href="https://choisooyoung-dev.github.io/posts/orm-n-plus-one/" rel="alternate" type="text/html" title="N+1 문제" />
+    <published>2026-08-31T16:00:00+09:00</published>
+  
+    <updated>2026-08-31T16:00:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/orm-n-plus-one/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/orm-n-plus-one/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>ORM에서 흔히 발생하는 N+1 문제의 원인과, TypeORM으로 해결하는 방법(relations, QueryBuilder, IN절 배치 조회)을 정리한다.</summary>
+
+  </entry>
 
   
   <entry>
@@ -39,102 +135,6 @@
   
 
   <summary>샤딩의 개념과 복제와의 차이, 샤딩 키 선택과 핫스팟 문제, 크로스 샤드 JOIN·분산 트랜잭션·리샤딩의 어려움을 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 파티셔닝(Partitioning) - 한 서버에서 테이블 쪼개기</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-partitioning/" rel="alternate" type="text/html" title="MySQL 파티셔닝(Partitioning) - 한 서버에서 테이블 쪼개기" />
-    <published>2026-08-31T15:40:00+09:00</published>
-  
-    <updated>2026-08-31T15:40:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-partitioning/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-partitioning/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>MySQL 파티셔닝의 개념과 파티션 프루닝, DELETE/DROP PARTITION 예시, 주의사항을 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 문자셋(Character Set)과 Collation</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-charset-collation/" rel="alternate" type="text/html" title="MySQL 문자셋(Character Set)과 Collation" />
-    <published>2026-08-31T15:35:00+09:00</published>
-  
-    <updated>2026-08-31T15:35:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-charset-collation/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-charset-collation/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>문자셋(Character Set)과 Collation의 차이, utf8mb4를 써야 하는 이유, 대소문자 구분 collation까지 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 슬로우 쿼리 로그(Slow Query Log)</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-slow-query-log/" rel="alternate" type="text/html" title="MySQL 슬로우 쿼리 로그(Slow Query Log)" />
-    <published>2026-08-31T15:25:00+09:00</published>
-  
-    <updated>2026-08-31T15:25:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-slow-query-log/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-slow-query-log/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>느린 쿼리를 찾아내는 슬로우 쿼리 로그 설정 방법과, EXPLAIN과의 역할 차이를 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>SQL - IN vs EXISTS, 그리고 GROUP BY와 SELECT의 관계</title>
-    <link href="https://choisooyoung-dev.github.io/posts/sql-in-exists/" rel="alternate" type="text/html" title="SQL - IN vs EXISTS, 그리고 GROUP BY와 SELECT의 관계" />
-    <published>2026-08-31T14:00:00+09:00</published>
-  
-    <updated>2026-08-31T14:00:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/sql-in-exists/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/sql-in-exists/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>IN/NOT IN과 EXISTS/NOT EXISTS의 차이, 서브쿼리 예제, SELECT에 집계 함수와 일반 컬럼이 같이 있을 때 GROUP BY가 필요한 이유를 정리한다.</summary>
 
   </entry>
 
