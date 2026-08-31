@@ -30,24 +30,24 @@
 
   <!-- Begin Jekyll SEO tag v2.9.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="MySQL 정규화, 역정규화" />
+<meta property="og:title" content="MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다." />
-<meta name="twitter:description" property="og:description" content="MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다." />
-<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-normalization/" />
-<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-normalization/" />
+<meta name="description" content="샤딩의 개념과 복제와의 차이, 샤딩 키 선택과 핫스팟 문제, 크로스 샤드 JOIN·분산 트랜잭션·리샤딩의 어려움을 정리한다." />
+<meta name="twitter:description" property="og:description" content="샤딩의 개념과 복제와의 차이, 샤딩 키 선택과 핫스팟 문제, 크로스 샤드 JOIN·분산 트랜잭션·리샤딩의 어려움을 정리한다." />
+<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-sharding/" />
+<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-sharding/" />
 <meta property="og:site_name" content="Soo Dev Log" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2026-08-25T11:24:00+09:00" />
-<meta property="article:modified_time" content="2026-08-25T11:24:00+09:00" />
+<meta property="article:published_time" content="2026-08-31T15:50:00+09:00" />
+<meta property="article:modified_time" content="2026-08-31T15:50:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="MySQL 정규화, 역정규화" />
+<meta name="twitter:title" content="MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T11:24:00+09:00","datePublished":"2026-08-25T11:24:00+09:00","description":"MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다.","headline":"MySQL 정규화, 역정규화","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-normalization/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-normalization/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-31T15:50:00+09:00","datePublished":"2026-08-31T15:50:00+09:00","description":"샤딩의 개념과 복제와의 차이, 샤딩 키 선택과 핫스팟 문제, 크로스 샤드 JOIN·분산 트랜잭션·리샤딩의 어려움을 정리한다.","headline":"MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-sharding/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-sharding/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>MySQL 정규화, 역정규화 | Soo Dev Log
+  <title>MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기 | Soo Dev Log
   </title>
 
   <!--
@@ -462,6 +462,39 @@
 
       
     
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
 
     
   
@@ -477,28 +510,6 @@
       
         
         
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
       
 
       
@@ -571,10 +582,10 @@
       <a href="javascript:history.back()" aria-label="back" class="me-2 text-muted" style="text-decoration:none;">
         <i class="fas fa-arrow-left"></i>
       </a>
-      MySQL 정규화, 역정규화
+      MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기
     </h1>
     
-      <p class="post-desc fw-light mb-4">MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다.</p>
+      <p class="post-desc fw-light mb-4">샤딩의 개념과 복제와의 차이, 샤딩 키 선택과 핫스팟 문제, 크로스 샤드 JOIN·분산 트랜잭션·리샤딩의 어려움을 정리한다.</p>
     
 
     <div class="post-meta text-muted">
@@ -591,13 +602,13 @@
 
 <time
   
-  data-ts="1787624640"
+  data-ts="1788159000"
   data-df="YYYY/MM/DD"
   
     data-bs-toggle="tooltip" data-bs-placement="bottom"
   
 >
-  2026/08/25
+  2026/08/31
 </time>
 
       </span>
@@ -646,9 +657,9 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="1227 단어"
+  title="1918 단어"
 >읽는 시간
-     <em>6분</em>
+     <em>10분</em>
 </span>
 
         </div>
@@ -657,136 +668,147 @@
   </header>
 
   <div class="content">
-    <p>테이블을 설계할 때 늘 고민하게 되는 정규화(Normalization)와 역정규화(Denormalization)를 정리해본다.</p>
+    <p><a href="/posts/mysql-partitioning/">파티셔닝</a>이 <strong>한 서버 안에서</strong> 테이블을 쪼갠 거라면, 샤딩은 <strong>여러 대의 DB 서버로 데이터 자체를 분산</strong>시키는 것이다.</p>
 
-<h2 id="정규화-normalization"><span class="me-2">정규화 (Normalization)</span><a href="#정규화-normalization" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<h2 id="샤딩이란"><span class="me-2">샤딩이란</span><a href="#샤딩이란" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<p><strong>데이터 중복을 없애서 갱신 이상(Anomaly)을 방지하는 테이블 설계 원칙.</strong>
-하나의 정보는 한 곳에만 저장하고, 나머지 테이블에서는 그 정보를 참조(FK)하게 만드는 게 핵심이다.</p>
-
-<h3 id="정규화를-안-하면-생기는-문제-이상-현상"><span class="me-2">정규화를 안 하면 생기는 문제 (이상 현상)</span><a href="#정규화를-안-하면-생기는-문제-이상-현상" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<div class="table-wrapper"><table>
-  <thead>
-    <tr>
-      <th>종류</th>
-      <th>설명</th>
-      <th>예시</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>삽입 이상 (Insert Anomaly)</td>
-      <td>불필요한 데이터까지 같이 넣어야 저장이 가능한 상황</td>
-      <td>학생이 없는데 강의 정보만 등록하고 싶어도 학생 컬럼이 필수라 등록 불가</td>
-    </tr>
-    <tr>
-      <td>갱신 이상 (Update Anomaly)</td>
-      <td>중복 저장된 값 중 일부만 바뀌어서 데이터 불일치 발생</td>
-      <td>고객 주소를 주문 테이블마다 저장 → 고객이 이사해도 과거 주문 행들은 옛 주소로 남음</td>
-    </tr>
-    <tr>
-      <td>삭제 이상 (Delete Anomaly)</td>
-      <td>한 행을 지웠는데 의도치 않게 다른 정보까지 같이 사라짐</td>
-      <td>마지막 주문 하나를 지웠더니 그 고객의 주소 정보 자체가 통째로 사라짐</td>
-    </tr>
-  </tbody>
-</table></div>
+<p><strong>다른 데이터를 여러 서버에 나눠 담는 것.</strong> 데이터 양 자체가 한 대의 DB로는 감당이 안 될 만큼 커졌을 때 쓴다.</p>
 
 <blockquote>
-  <p><strong>EX)</strong> 주문 테이블에 매번 고객 주소를 같이 기입 →
-고객이 주소를 변경 →
-이미 저장된 과거 주문 행들에는 반영이 안 됨 (갱신 이상)</p>
+  <p><strong>EX)</strong> 유저가 수억 명이라 <code class="language-plaintext highlighter-rouge">users</code>, <code class="language-plaintext highlighter-rouge">orders</code> 테이블이 너무 커졌다면 →
+<code class="language-plaintext highlighter-rouge">user_id % 4</code> 값으로 4대의 DB 서버(shard-0 ~ shard-3)에 유저 데이터를 나눠 담는다.</p>
+  <ul>
+    <li><code class="language-plaintext highlighter-rouge">user_id = 101</code> → <code class="language-plaintext highlighter-rouge">101 % 4 = 1</code> → <strong>shard-1</strong>에 저장</li>
+    <li><code class="language-plaintext highlighter-rouge">user_id = 102</code> → <code class="language-plaintext highlighter-rouge">102 % 4 = 2</code> → <strong>shard-2</strong>에 저장</li>
+  </ul>
+
+  <p>이러면 각 서버는 전체 데이터의 1/4만 갖고 있으면 된다.</p>
 </blockquote>
 
-<h3 id="해결-방법"><span class="me-2">해결 방법</span><a href="#해결-방법" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<h2 id="복제replication와-다르다"><span class="me-2">복제(Replication)와 다르다</span><a href="#복제replication와-다르다" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">customerId</code> 같은 식별자만 주문 테이블에 남기고, 주소 같은 상세 정보는 <code class="language-plaintext highlighter-rouge">customer</code> 테이블로 따로 뺀다.</li>
-  <li>이후엔 FK(<code class="language-plaintext highlighter-rouge">customerId</code>)로 조인해서 주소를 조회 → 주소는 <code class="language-plaintext highlighter-rouge">customer</code> 테이블 딱 한 곳에서만 관리되므로 변경 시 모든 주문에 자동으로 반영된 것처럼 조회된다.</li>
-</ul>
-
-<h3 id="정규화-단계-간단-정리"><span class="me-2">정규화 단계 (간단 정리)</span><a href="#정규화-단계-간단-정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li><strong>1NF</strong>: 컬럼 값이 원자값(더 이상 쪼갤 수 없는 값)이어야 함 — 한 컬럼에 여러 값을 콤마로 넣지 않기</li>
-  <li><strong>2NF</strong>: 1NF를 만족하면서, 기본키의 일부에만 종속되는 컬럼(부분 함수 종속)을 제거</li>
-  <li><strong>3NF</strong>: 2NF를 만족하면서, 기본키가 아닌 컬럼이 다른 일반 컬럼에 종속되는 것(이행 종속)을 제거</li>
-</ul>
-
-<p>실무에서는 보통 3NF 정도까지만 맞추고, 그 이상(BCNF 등)은 상황에 따라 판단한다.</p>
-
-<h2 id="역정규화-denormalization"><span class="me-2">역정규화 (Denormalization)</span><a href="#역정규화-denormalization" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-
-<p><strong>조회 성능을 위해, 정규화로 쪼개놓은 데이터를 일부러 다시 중복 저장하는 것.</strong>
-JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.</p>
-
-<blockquote>
-  <p><strong>EX)</strong> 주문 통계 화면에서 매번 <code class="language-plaintext highlighter-rouge">SUM(price)</code>로 총 주문 금액 계산 →
-주문 건수가 많아질수록 매번 전체를 훑어야 해서 성능 저하</p>
-</blockquote>
-
-<h3 id="해결-방법-1"><span class="me-2">해결 방법</span><a href="#해결-방법-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li>집계값(SUM)을 미리 계산해서 별도 컬럼/테이블에 중복 저장해둔다.</li>
-  <li>조회할 땐 그 저장된 값을 그냥 읽기만 하면 되므로 빠르다.</li>
-</ul>
-
-<h3 id="trade-off"><span class="me-2">Trade-off</span><a href="#trade-off" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li>저장해둔 값과 원본 데이터가 어긋나지 않으려면, 주문이 추가/수정/삭제될 때마다 중복 저장된 값도 같이 갱신해줘야 한다.</li>
-  <li>즉 <strong>읽기(조회) 성능은 좋아지지만, 쓰기(갱신) 로직이 복잡해지고 데이터 일관성 관리 부담이 커진다.</strong></li>
-</ul>
-
-<blockquote>
-  <p><strong>trade-off</strong>: 하나를 얻으면 하나를 포기해야 하는 관계. 여기서는 “조회 속도” ↔ “데이터 일관성/쓰기 복잡도”의 트레이드오프.</p>
-</blockquote>
-
-<h3 id="역정규화를-고려하는-경우"><span class="me-2">역정규화를 고려하는 경우</span><a href="#역정규화를-고려하는-경우" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li>통계/대시보드처럼 집계 조회가 매우 잦고, 실시간성이 크게 중요하지 않은 경우</li>
-  <li>JOIN 비용이 실제로 병목으로 확인된 경우 (막연히 “느릴 것 같다”가 아니라 측정 후 판단)</li>
-  <li>캐시나 배치(batch)로 집계값을 갱신하는 방식으로 일관성 부담을 줄일 수 있는 경우</li>
-</ul>
-
-<h2 id="정리"><span class="me-2">정리</span><a href="#정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<p>헷갈리기 쉬운데 목적 자체가 다르다.</p>
 
 <div class="table-wrapper"><table>
   <thead>
     <tr>
       <th> </th>
-      <th>정규화</th>
-      <th>역정규화</th>
+      <th>복제 (Replication)</th>
+      <th>샤딩 (Sharding)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
+      <td>데이터</td>
+      <td><strong>같은</strong> 데이터를 여러 대에 복사</td>
+      <td><strong>다른</strong> 데이터를 여러 대에 나눠 담음</td>
+    </tr>
+    <tr>
       <td>목적</td>
-      <td>데이터 무결성 유지, 중복 제거</td>
-      <td>조회 성능 향상</td>
+      <td>읽기 부하 분산 (Read Replica)</td>
+      <td>데이터 양 자체를 분산 (용량 한계 돌파)</td>
     </tr>
     <tr>
-      <td>장점</td>
-      <td>갱신 이상 방지, 저장 공간 절약</td>
-      <td>JOIN 감소로 조회 빠름</td>
-    </tr>
-    <tr>
-      <td>단점</td>
-      <td>JOIN이 많아져 조회가 느려질 수 있음</td>
-      <td>중복 데이터 관리(갱신) 부담, 일관성 깨질 위험</td>
-    </tr>
-    <tr>
-      <td>우선순위</td>
-      <td>기본적으로 정규화부터</td>
-      <td>성능 문제가 실측으로 확인된 부분만 부분적으로 역정규화</td>
+      <td>한 서버 장애 시</td>
+      <td>다른 서버가 같은 데이터를 갖고 있어서 대체 가능</td>
+      <td>그 샤드의 데이터만 못 씀 (전체 중 일부만 영향)</td>
     </tr>
   </tbody>
 </table></div>
 
-<p>결론적으로 <strong>기본은 정규화로 설계하고, 실제로 성능 문제가 확인된 부분에 한해 선택적으로 역정규화를 적용</strong>하는 게 일반적인 접근이다.</p>
+<p><a href="/posts/mysql-replication/">복제 글</a>에서 다뤘던 Master-Slave는 “같은 데이터를 여러 벌 복사해서 읽기를 분산”하는 거고, 샤딩은 “애초에 데이터를 쪼개서 서로 다른 서버에 나눠 담는” 거라 완전히 다른 문제를 푼다. 실무에서는 <strong>둘을 같이 쓰기도 한다</strong> (샤드마다 각각 Read Replica를 둘 수도 있음).</p>
+
+<h2 id="샤딩-키-선택이-관건"><span class="me-2">샤딩 키 선택이 관건</span><a href="#샤딩-키-선택이-관건" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p><strong>어떤 컬럼 값을 기준으로 데이터를 나눌지(샤딩 키)가 샤딩의 성패를 가른다.</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">user_id</code>를 샤딩 키로 잡으면, “이 유저와 관련된 쿼리는 어느 샤드로 가야 할지” 계산 한 번으로 바로 알 수 있어서 효율적이다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>shard_index = user_id % 샤드_개수
+</pre></td></tr></tbody></table></code></div></div>
+
+<h3 id="키를-잘못-고르면-생기는-문제-핫스팟hotspot"><span class="me-2">키를 잘못 고르면 생기는 문제: 핫스팟(Hotspot)</span><a href="#키를-잘못-고르면-생기는-문제-핫스팟hotspot" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<p>샤딩 키를 잘못 고르면, <strong>특정 샤드에만 데이터와 트래픽이 몰리는 핫스팟 문제</strong>가 생긴다.</p>
+
+<blockquote>
+  <p><strong>EX)</strong> 샤딩 키를 <code class="language-plaintext highlighter-rouge">signup_date</code>(가입일)로 잡았다고 하면 →
+최근에 가입한 유저일수록 활동이 많은데, “최근 가입자”는 전부 같은(가장 최신) 샤드에 몰려 있다.
+→ 그 샤드만 트래픽이 폭주하고, 오래된 유저가 담긴 다른 샤드들은 한가하다.
+→ 샤드를 여러 대로 늘린 의미가 없어진다 (분산의 목적 상실).</p>
+</blockquote>
+
+<p>그래서 보통 <code class="language-plaintext highlighter-rouge">user_id</code>처럼 <strong>값이 고르게 분포하고, 특정 값에 트래픽이 쏠리지 않는 컬럼</strong>을 샤딩 키로 고른다.</p>
+
+<h2 id="샤딩이-어려운-이유"><span class="me-2">샤딩이 어려운 이유</span><a href="#샤딩이-어려운-이유" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<h3 id="1-크로스-샤드-join-cross-shard-join"><span class="me-2">1. 크로스 샤드 JOIN (Cross-shard JOIN)</span><a href="#1-크로스-샤드-join-cross-shard-join" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<p>서로 다른 DB 서버에 있는 데이터는 SQL의 <code class="language-plaintext highlighter-rouge">JOIN</code>으로 한 번에 못 묶는다. <strong>각 샤드에서 따로 조회한 다음, 애플리케이션 코드에서 직접 합쳐야</strong> 한다.</p>
+
+<blockquote>
+  <p><strong>EX)</strong> “유저 A와 유저 B가 같이 참여한 주문”을 조회한다면?</p>
+  <ul>
+    <li>유저 A는 shard-1에, 유저 B는 shard-3에 있을 수 있음</li>
+    <li>shard-1에서 A의 주문 목록 조회, shard-3에서 B의 주문 목록 조회 → <strong>각각 따로 쿼리</strong></li>
+    <li>두 결과를 애플리케이션 코드(예: JS의 <code class="language-plaintext highlighter-rouge">Array.filter</code>/<code class="language-plaintext highlighter-rouge">Map</code>)로 직접 매칭해서 합침</li>
+  </ul>
+
+  <p>한 서버 안에서라면 <code class="language-plaintext highlighter-rouge">JOIN orders o ON ...</code> 한 줄이면 끝날 일이, 샤딩 환경에서는 <strong>쿼리 2번 + 애플리케이션 레벨 병합 로직</strong>이 필요해진다.</p>
+</blockquote>
+
+<h3 id="2-트랜잭션"><span class="me-2">2. 트랜잭션</span><a href="#2-트랜잭션" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<p>두 샤드에 걸친 데이터를 <strong>원자적으로(ACID)</strong> 처리하려면, 단일 서버의 <code class="language-plaintext highlighter-rouge">BEGIN ~ COMMIT</code> 트랜잭션으로는 안 된다. <strong>2PC(Two-Phase Commit) 같은 훨씬 복잡한 분산 트랜잭션</strong>이 필요해진다.</p>
+
+<blockquote>
+  <p><strong>EX)</strong> 유저 A(shard-1)의 포인트를 차감하고 유저 B(shard-3)에게 적립하는 “포인트 이체”를 한다면 →
+shard-1에서의 차감과 shard-3에서의 적립이 <strong>둘 다 성공하거나 둘 다 실패</strong>해야 하는데, 서로 다른 DB라 하나의 트랜잭션으로 묶을 수가 없다. 한쪽만 성공하고 다른 쪽이 실패하면 데이터가 어긋난다.</p>
+</blockquote>
+
+<h3 id="3-리샤딩re-sharding"><span class="me-2">3. 리샤딩(Re-sharding)</span><a href="#3-리샤딩re-sharding" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<p>나중에 샤드를 늘리거나 재분배해야 할 때, <strong>이미 나뉜 데이터를 다시 옮기는 작업</strong>이 필요한데 이게 굉장히 크고 위험하다.</p>
+
+<blockquote>
+  <p><strong>EX)</strong> 샤드를 4대 → 8대로 늘리면 →
+<code class="language-plaintext highlighter-rouge">user_id % 4</code>로 계산했던 기존 샤드 배치가 <code class="language-plaintext highlighter-rouge">user_id % 8</code> 기준으로는 <strong>전부 재계산돼서 위치가 바뀐다.</strong></p>
+  <ul>
+    <li>기존: <code class="language-plaintext highlighter-rouge">user_id = 5</code> → <code class="language-plaintext highlighter-rouge">5 % 4 = 1</code> → shard-1</li>
+    <li>변경 후: <code class="language-plaintext highlighter-rouge">user_id = 5</code> → <code class="language-plaintext highlighter-rouge">5 % 8 = 5</code> → shard-5</li>
+  </ul>
+
+  <p>거의 <strong>모든 데이터를 다른 서버로 옮겨야</strong> 하는 대규모 마이그레이션이 발생한다. 서비스 운영 중에 데이터 정합성을 유지하면서 옮기는 건 실무에서 가장 부담스러운 작업 중 하나다. (이런 문제 때문에 처음부터 나누기 쉬운 방식, 예를 들어 고정 개수보다 훨씬 많은 논리 샤드를 만들고 물리 서버에는 여러 논리 샤드를 묶어서 배치하는 방식(consistent hashing 등)을 쓰기도 한다.)</p>
+</blockquote>
+
+<h2 id="실무에서는-최후의-수단"><span class="me-2">실무에서는 최후의 수단</span><a href="#실무에서는-최후의-수단" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p><strong>단일 DB 서버로 감당이 안 될 때만 샤딩을 도입한다.</strong> 그 전에는 아래 조합으로 최대한 버틴다.</p>
+
+<ul>
+  <li><strong><a href="/posts/mysql-replication/">복제(Replication)</a></strong>: 읽기 트래픽을 Read Replica로 분산</li>
+  <li><strong><a href="/posts/mysql-partitioning/">파티셔닝</a></strong>: 한 서버 안에서 테이블을 쪼개 조회 범위를 줄임</li>
+  <li><strong>캐싱</strong>: 자주 조회되는 데이터를 DB 앞단(Redis 등)에서 미리 처리해서 DB까지 안 가게 함</li>
+</ul>
+
+<blockquote>
+  <p><strong>EX)</strong> 상품 상세 페이지 조회 →
+매번 DB에서 상품 정보를 읽는 대신, Redis에 <code class="language-plaintext highlighter-rouge">product:1234</code> 형태로 캐싱해두고 캐시에 있으면 DB를 아예 안 거친다. 캐시가 없을 때만(cache miss) DB를 조회하고, 그 결과를 다시 캐시에 저장한다. 이러면 실제 DB로 가는 요청 자체가 크게 줄어든다.</p>
+</blockquote>
+
+<p><strong>샤딩은 한 번 도입하면 되돌리기 어렵고, 크로스 샤드 JOIN·분산 트랜잭션·리샤딩 문제로 시스템 복잡도가 확 늘어나는 선택이다.</strong> 그래서 “데이터 양 자체가 진짜로 한계에 부딪혔을 때”의 최후 수단으로 접근하는 게 일반적이다.</p>
+
+<h2 id="정리"><span class="me-2">정리</span><a href="#정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<ul>
+  <li>샤딩은 <strong>다른</strong> 데이터를 여러 서버에 나눠 담는 것 (복제는 <strong>같은</strong> 데이터를 복사하는 것 — 목적이 다름).</li>
+  <li>샤딩 키를 잘못 고르면 특정 샤드에 트래픽이 몰리는 <strong>핫스팟</strong> 문제가 생긴다.</li>
+  <li>크로스 샤드 JOIN, 분산 트랜잭션, 리샤딩이 샤딩을 어렵게 만드는 3대 요인이다.</li>
+  <li>복제 + 파티셔닝 + 캐싱으로 버틸 수 있는 만큼 버티고, <strong>정말 데이터 양이 한계에 부딪혔을 때만</strong> 샤딩을 최후 수단으로 도입한다.</li>
+</ul>
 
   </div>
 
@@ -816,14 +838,14 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
           >mysql</a>
         
           <a
-            href="/tags/%EC%A0%95%EA%B7%9C%ED%99%94/"
+            href="/tags/sharding/"
             class="post-tag no-text-decoration"
-          >정규화</a>
+          >sharding</a>
         
           <a
-            href="/tags/%EC%97%AD%EC%A0%95%EA%B7%9C%ED%99%94/"
+            href="/tags/scaling/"
             class="post-tag no-text-decoration"
-          >역정규화</a>
+          >scaling</a>
         
       </div>
     
@@ -1722,175 +1744,175 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
 
 
 
@@ -2003,19 +2025,19 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
   
 
   
-    <div class="btn btn-outline-primary disabled" aria-label="이전 글">
-      <p>-</p>
-    </div>
+    <a
+      href="/posts/mysql-partitioning/"
+      class="btn btn-outline-primary"
+      aria-label="이전 글"
+    >
+      <p>MySQL 파티셔닝(Partitioning) - 한 서버에서 테이블 쪼개기</p>
+    </a>
   
 
   
-    <a
-      href="/posts/mysql-acid/"
-      class="btn btn-outline-primary"
-      aria-label="다음 글"
-    >
-      <p>MySQL ACID</p>
-    </a>
+    <div class="btn btn-outline-primary disabled" aria-label="다음 글">
+      <p>-</p>
+    </div>
   
 </nav>
 

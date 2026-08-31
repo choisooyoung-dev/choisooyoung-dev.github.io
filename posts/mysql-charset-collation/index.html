@@ -30,24 +30,24 @@
 
   <!-- Begin Jekyll SEO tag v2.9.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="MySQL 정규화, 역정규화" />
+<meta property="og:title" content="MySQL 문자셋(Character Set)과 Collation" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다." />
-<meta name="twitter:description" property="og:description" content="MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다." />
-<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-normalization/" />
-<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-normalization/" />
+<meta name="description" content="문자셋(Character Set)과 Collation의 차이, utf8mb4를 써야 하는 이유, 대소문자 구분 collation까지 정리한다." />
+<meta name="twitter:description" property="og:description" content="문자셋(Character Set)과 Collation의 차이, utf8mb4를 써야 하는 이유, 대소문자 구분 collation까지 정리한다." />
+<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/mysql-charset-collation/" />
+<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/mysql-charset-collation/" />
 <meta property="og:site_name" content="Soo Dev Log" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2026-08-25T11:24:00+09:00" />
-<meta property="article:modified_time" content="2026-08-25T11:24:00+09:00" />
+<meta property="article:published_time" content="2026-08-31T15:35:00+09:00" />
+<meta property="article:modified_time" content="2026-08-31T15:35:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="MySQL 정규화, 역정규화" />
+<meta name="twitter:title" content="MySQL 문자셋(Character Set)과 Collation" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-25T11:24:00+09:00","datePublished":"2026-08-25T11:24:00+09:00","description":"MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다.","headline":"MySQL 정규화, 역정규화","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-normalization/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-normalization/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-31T15:35:00+09:00","datePublished":"2026-08-31T15:35:00+09:00","description":"문자셋(Character Set)과 Collation의 차이, utf8mb4를 써야 하는 이유, 대소문자 구분 collation까지 정리한다.","headline":"MySQL 문자셋(Character Set)과 Collation","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/mysql-charset-collation/"},"url":"https://choisooyoung-dev.github.io/posts/mysql-charset-collation/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>MySQL 정규화, 역정규화 | Soo Dev Log
+  <title>MySQL 문자셋(Character Set)과 Collation | Soo Dev Log
   </title>
 
   <!--
@@ -462,6 +462,50 @@
 
       
     
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
 
     
   
@@ -477,50 +521,6 @@
       
         
         
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
-      
-
-      
-      
-
-      
-      
-      
-
-      
-    
       
 
       
@@ -571,10 +571,10 @@
       <a href="javascript:history.back()" aria-label="back" class="me-2 text-muted" style="text-decoration:none;">
         <i class="fas fa-arrow-left"></i>
       </a>
-      MySQL 정규화, 역정규화
+      MySQL 문자셋(Character Set)과 Collation
     </h1>
     
-      <p class="post-desc fw-light mb-4">MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다.</p>
+      <p class="post-desc fw-light mb-4">문자셋(Character Set)과 Collation의 차이, utf8mb4를 써야 하는 이유, 대소문자 구분 collation까지 정리한다.</p>
     
 
     <div class="post-meta text-muted">
@@ -591,13 +591,13 @@
 
 <time
   
-  data-ts="1787624640"
+  data-ts="1788158100"
   data-df="YYYY/MM/DD"
   
     data-bs-toggle="tooltip" data-bs-placement="bottom"
   
 >
-  2026/08/25
+  2026/08/31
 </time>
 
       </span>
@@ -646,7 +646,7 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="1227 단어"
+  title="1216 단어"
 >읽는 시간
      <em>6분</em>
 </span>
@@ -657,136 +657,151 @@
   </header>
 
   <div class="content">
-    <p>테이블을 설계할 때 늘 고민하게 되는 정규화(Normalization)와 역정규화(Denormalization)를 정리해본다.</p>
+    <h2 id="문자셋character-set"><span class="me-2">문자셋(Character Set)</span><a href="#문자셋character-set" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<h2 id="정규화-normalization"><span class="me-2">정규화 (Normalization)</span><a href="#정규화-normalization" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<p><strong>문자를 저장할 때 어떤 바이트로 인코딩할지 정하는 것.</strong> 같은 문자라도 문자셋에 따라 몇 바이트로, 어떤 값으로 저장되는지가 달라진다.</p>
 
-<p><strong>데이터 중복을 없애서 갱신 이상(Anomaly)을 방지하는 테이블 설계 원칙.</strong>
-하나의 정보는 한 곳에만 저장하고, 나머지 테이블에서는 그 정보를 참조(FK)하게 만드는 게 핵심이다.</p>
+<h2 id="collation"><span class="me-2">Collation</span><a href="#collation" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<h3 id="정규화를-안-하면-생기는-문제-이상-현상"><span class="me-2">정규화를 안 하면 생기는 문제 (이상 현상)</span><a href="#정규화를-안-하면-생기는-문제-이상-현상" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<p><strong>문자열을 비교하고 정렬할 때 어떤 규칙을 쓸지 정하는 것.</strong> 같은 문자셋이어도 collation에 따라 <code class="language-plaintext highlighter-rouge">a</code>와 <code class="language-plaintext highlighter-rouge">A</code>를 같은 걸로 볼지, <code class="language-plaintext highlighter-rouge">가</code>와 <code class="language-plaintext highlighter-rouge">나</code> 중 뭐가 먼저인지가 달라진다.</p>
+
+<p>즉 <strong>문자셋 = 저장 방식</strong>, <strong>collation = 비교/정렬 규칙</strong>으로 역할이 나뉜다. 하나의 문자셋에는 보통 여러 개의 collation이 딸려 있고, 그중 하나를 골라서 쓰는 구조다.</p>
+
+<div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="k">SHOW</span> <span class="k">COLLATION</span> <span class="k">WHERE</span> <span class="n">Charset</span> <span class="o">=</span> <span class="s1">'utf8mb4'</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<h2 id="mysql에서-꼭-알아야-하는-함정-utf8-vs-utf8mb4"><span class="me-2">MySQL에서 꼭 알아야 하는 함정: utf8 vs utf8mb4</span><a href="#mysql에서-꼭-알아야-하는-함정-utf8-vs-utf8mb4" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>MySQL의 <code class="language-plaintext highlighter-rouge">utf8</code>은 사실 <strong>진짜 UTF-8이 아니다.</strong> 문자 1개당 <strong>최대 3바이트까지만</strong> 지원한다. 그런데 이모지(😀)나 일부 한자는 <strong>4바이트</strong>가 필요하다 — 즉 <code class="language-plaintext highlighter-rouge">utf8</code>로 설정된 컬럼에 이모지를 저장하려고 하면 <strong>에러가 나거나 깨진다.</strong></p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">utf8</code></strong>: 최대 3바이트. 이모지 저장 불가.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">utf8mb4</code></strong>: 최대 4바이트. 진짜 완전한 UTF-8. 이모지, 일부 한자 다 지원.</li>
+</ul>
+
+<blockquote>
+  <p>이름 때문에 자주 헷갈리는데, <strong><code class="language-plaintext highlighter-rouge">utf8mb4</code>가 진짜 표준 UTF-8</strong>이고 <code class="language-plaintext highlighter-rouge">utf8</code>은 MySQL 초기에 만들어진 반쪽짜리 구현이 그대로 이름으로 굳어진 것이다. <strong>지금 새로 테이블/DB를 만든다면 무조건 <code class="language-plaintext highlighter-rouge">utf8mb4</code>를 써야 한다.</strong></p>
+</blockquote>
+
+<div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">posts</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">BIGINT</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+<span class="p">)</span> <span class="nb">CHARACTER</span> <span class="k">SET</span> <span class="n">utf8mb4</span> <span class="k">COLLATE</span> <span class="n">utf8mb4_0900_ai_ci</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<h2 id="collation-이름-읽는-법"><span class="me-2">Collation 이름 읽는 법</span><a href="#collation-이름-읽는-법" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p><code class="language-plaintext highlighter-rouge">utf8mb4_0900_ai_ci</code> 같은 이름은 규칙이 있다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>utf8mb4  _  0900   _  ai        _  ci
+문자셋      버전(대략)   억양 구분     대소문자 구분
+</pre></td></tr></tbody></table></code></div></div>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">ai</code> (accent-insensitive)</strong>: 억양 부호(<code class="language-plaintext highlighter-rouge">é</code>, <code class="language-plaintext highlighter-rouge">e</code>처럼) 구분 안 함. <code class="language-plaintext highlighter-rouge">as</code>면 구분함.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">ci</code> (case-insensitive)</strong>: 대소문자 구분 안 함 (<code class="language-plaintext highlighter-rouge">a</code> = <code class="language-plaintext highlighter-rouge">A</code>로 취급)</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">cs</code> (case-sensitive)</strong>: 대소문자 구분함 (<code class="language-plaintext highlighter-rouge">a</code> ≠ <code class="language-plaintext highlighter-rouge">A</code>)</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">bin</code></strong>: 문자를 그대로 바이너리(바이트값)로 비교. 가장 엄격함, 대소문자/억양 다 구분.</li>
+</ul>
 
 <div class="table-wrapper"><table>
   <thead>
     <tr>
-      <th>종류</th>
-      <th>설명</th>
-      <th>예시</th>
+      <th>Collation</th>
+      <th><code class="language-plaintext highlighter-rouge">WHERE name = 'abc'</code>로 <code class="language-plaintext highlighter-rouge">ABC</code> 검색 시</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>삽입 이상 (Insert Anomaly)</td>
-      <td>불필요한 데이터까지 같이 넣어야 저장이 가능한 상황</td>
-      <td>학생이 없는데 강의 정보만 등록하고 싶어도 학생 컬럼이 필수라 등록 불가</td>
+      <td><code class="language-plaintext highlighter-rouge">utf8mb4_general_ci</code> / <code class="language-plaintext highlighter-rouge">utf8mb4_0900_ai_ci</code></td>
+      <td><strong>매칭됨</strong> (대소문자 구분 안 함)</td>
     </tr>
     <tr>
-      <td>갱신 이상 (Update Anomaly)</td>
-      <td>중복 저장된 값 중 일부만 바뀌어서 데이터 불일치 발생</td>
-      <td>고객 주소를 주문 테이블마다 저장 → 고객이 이사해도 과거 주문 행들은 옛 주소로 남음</td>
+      <td><code class="language-plaintext highlighter-rouge">utf8mb4_0900_as_cs</code></td>
+      <td>매칭 안 됨 (대소문자 + 억양 구분)</td>
     </tr>
     <tr>
-      <td>삭제 이상 (Delete Anomaly)</td>
-      <td>한 행을 지웠는데 의도치 않게 다른 정보까지 같이 사라짐</td>
-      <td>마지막 주문 하나를 지웠더니 그 고객의 주소 정보 자체가 통째로 사라짐</td>
+      <td><code class="language-plaintext highlighter-rouge">utf8mb4_bin</code></td>
+      <td>매칭 안 됨 (바이트 그대로 비교)</td>
     </tr>
   </tbody>
 </table></div>
 
-<blockquote>
-  <p><strong>EX)</strong> 주문 테이블에 매번 고객 주소를 같이 기입 →
-고객이 주소를 변경 →
-이미 저장된 과거 주문 행들에는 반영이 안 됨 (갱신 이상)</p>
-</blockquote>
+<p>로그인 아이디, 이메일처럼 <strong>대소문자를 구분해야 하는 컬럼</strong>이라면 <code class="language-plaintext highlighter-rouge">_ci</code> 계열이 아니라 <code class="language-plaintext highlighter-rouge">_bin</code>이나 <code class="language-plaintext highlighter-rouge">_cs</code> 계열을 써야 의도한 대로 동작한다. 반대로 일반적인 검색/정렬용 텍스트는 보통 <code class="language-plaintext highlighter-rouge">_ci</code>가 사용자 입장에서 자연스럽다 (검색할 때 대소문자 안 가리고 찾아지는 게 편하니까).</p>
 
-<h3 id="해결-방법"><span class="me-2">해결 방법</span><a href="#해결-방법" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<h2 id="실무에서-문제가-되는-경우"><span class="me-2">실무에서 문제가 되는 경우</span><a href="#실무에서-문제가-되는-경우" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">customerId</code> 같은 식별자만 주문 테이블에 남기고, 주소 같은 상세 정보는 <code class="language-plaintext highlighter-rouge">customer</code> 테이블로 따로 뺀다.</li>
-  <li>이후엔 FK(<code class="language-plaintext highlighter-rouge">customerId</code>)로 조인해서 주소를 조회 → 주소는 <code class="language-plaintext highlighter-rouge">customer</code> 테이블 딱 한 곳에서만 관리되므로 변경 시 모든 주문에 자동으로 반영된 것처럼 조회된다.</li>
-</ul>
+<h3 id="1-컬럼마다-charsetcollation이-다를-때-join-에러"><span class="me-2">1. 컬럼마다 charset/collation이 다를 때 JOIN 에러</span><a href="#1-컬럼마다-charsetcollation이-다를-때-join-에러" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 
-<h3 id="정규화-단계-간단-정리"><span class="me-2">정규화 단계 (간단 정리)</span><a href="#정규화-단계-간단-정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and
+(utf8mb4_0900_ai_ci,IMPLICIT) for operation '='
+</pre></td></tr></tbody></table></code></div></div>
 
-<ul>
-  <li><strong>1NF</strong>: 컬럼 값이 원자값(더 이상 쪼갤 수 없는 값)이어야 함 — 한 컬럼에 여러 값을 콤마로 넣지 않기</li>
-  <li><strong>2NF</strong>: 1NF를 만족하면서, 기본키의 일부에만 종속되는 컬럼(부분 함수 종속)을 제거</li>
-  <li><strong>3NF</strong>: 2NF를 만족하면서, 기본키가 아닌 컬럼이 다른 일반 컬럼에 종속되는 것(이행 종속)을 제거</li>
-</ul>
+<p>서로 다른 collation을 가진 컬럼끼리 비교/조인하면 이런 에러가 난다. DB/테이블/컬럼을 만들 때 <strong>문자셋과 collation을 일관되게</strong> 맞춰두는 게 중요한 이유다.</p>
 
-<p>실무에서는 보통 3NF 정도까지만 맞추고, 그 이상(BCNF 등)은 상황에 따라 판단한다.</p>
+<h3 id="2-이미-운영-중인-테이블이-utf83바이트로-되어-있을-때"><span class="me-2">2. 이미 운영 중인 테이블이 <code class="language-plaintext highlighter-rouge">utf8</code>(3바이트)로 되어 있을 때</span><a href="#2-이미-운영-중인-테이블이-utf83바이트로-되어-있을-때" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 
-<h2 id="역정규화-denormalization"><span class="me-2">역정규화 (Denormalization)</span><a href="#역정규화-denormalization" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<p>이모지가 포함된 데이터를 저장하려다 에러가 나거나, 이모지만 잘려서 저장된다. 이 경우 <code class="language-plaintext highlighter-rouge">utf8mb4</code>로 변환해줘야 한다.</p>
 
-<p><strong>조회 성능을 위해, 정규화로 쪼개놓은 데이터를 일부러 다시 중복 저장하는 것.</strong>
-JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.</p>
-
-<blockquote>
-  <p><strong>EX)</strong> 주문 통계 화면에서 매번 <code class="language-plaintext highlighter-rouge">SUM(price)</code>로 총 주문 금액 계산 →
-주문 건수가 많아질수록 매번 전체를 훑어야 해서 성능 저하</p>
-</blockquote>
-
-<h3 id="해결-방법-1"><span class="me-2">해결 방법</span><a href="#해결-방법-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li>집계값(SUM)을 미리 계산해서 별도 컬럼/테이블에 중복 저장해둔다.</li>
-  <li>조회할 땐 그 저장된 값을 그냥 읽기만 하면 되므로 빠르다.</li>
-</ul>
-
-<h3 id="trade-off"><span class="me-2">Trade-off</span><a href="#trade-off" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-
-<ul>
-  <li>저장해둔 값과 원본 데이터가 어긋나지 않으려면, 주문이 추가/수정/삭제될 때마다 중복 저장된 값도 같이 갱신해줘야 한다.</li>
-  <li>즉 <strong>읽기(조회) 성능은 좋아지지만, 쓰기(갱신) 로직이 복잡해지고 데이터 일관성 관리 부담이 커진다.</strong></li>
-</ul>
+<div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">posts</span>
+  <span class="k">CONVERT</span> <span class="k">TO</span> <span class="nb">CHARACTER</span> <span class="k">SET</span> <span class="n">utf8mb4</span> <span class="k">COLLATE</span> <span class="n">utf8mb4_0900_ai_ci</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div></div>
 
 <blockquote>
-  <p><strong>trade-off</strong>: 하나를 얻으면 하나를 포기해야 하는 관계. 여기서는 “조회 속도” ↔ “데이터 일관성/쓰기 복잡도”의 트레이드오프.</p>
+  <p>데이터가 많은 테이블에서 이 작업은 <strong>테이블 전체를 다시 쓰는 무거운 작업</strong>이라, 운영 중인 서비스라면 트래픽이 적은 시간대에 진행하거나 온라인 스키마 변경 도구(gh-ost, pt-online-schema-change 등)를 고려해야 한다.</p>
 </blockquote>
 
-<h3 id="역정규화를-고려하는-경우"><span class="me-2">역정규화를 고려하는 경우</span><a href="#역정규화를-고려하는-경우" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<h2 id="확인하는-법"><span class="me-2">확인하는 법</span><a href="#확인하는-법" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<ul>
-  <li>통계/대시보드처럼 집계 조회가 매우 잦고, 실시간성이 크게 중요하지 않은 경우</li>
-  <li>JOIN 비용이 실제로 병목으로 확인된 경우 (막연히 “느릴 것 같다”가 아니라 측정 후 판단)</li>
-  <li>캐시나 배치(batch)로 집계값을 갱신하는 방식으로 일관성 부담을 줄일 수 있는 경우</li>
-</ul>
+<div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="c1">-- 현재 DB의 기본 문자셋/collation</span>
+<span class="k">SHOW</span> <span class="n">VARIABLES</span> <span class="k">LIKE</span> <span class="s1">'character_set_database'</span><span class="p">;</span>
+<span class="k">SHOW</span> <span class="n">VARIABLES</span> <span class="k">LIKE</span> <span class="s1">'collation_database'</span><span class="p">;</span>
+
+<span class="c1">-- 특정 테이블의 컬럼별 문자셋/collation</span>
+<span class="k">SELECT</span> <span class="k">COLUMN_NAME</span><span class="p">,</span> <span class="k">CHARACTER_SET_NAME</span><span class="p">,</span> <span class="k">COLLATION_NAME</span>
+<span class="k">FROM</span> <span class="n">information_schema</span><span class="p">.</span><span class="n">COLUMNS</span>
+<span class="k">WHERE</span> <span class="n">TABLE_SCHEMA</span> <span class="o">=</span> <span class="s1">'my_db'</span> <span class="k">AND</span> <span class="k">TABLE_NAME</span> <span class="o">=</span> <span class="s1">'posts'</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div></div>
 
 <h2 id="정리"><span class="me-2">정리</span><a href="#정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<div class="table-wrapper"><table>
-  <thead>
-    <tr>
-      <th> </th>
-      <th>정규화</th>
-      <th>역정규화</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>목적</td>
-      <td>데이터 무결성 유지, 중복 제거</td>
-      <td>조회 성능 향상</td>
-    </tr>
-    <tr>
-      <td>장점</td>
-      <td>갱신 이상 방지, 저장 공간 절약</td>
-      <td>JOIN 감소로 조회 빠름</td>
-    </tr>
-    <tr>
-      <td>단점</td>
-      <td>JOIN이 많아져 조회가 느려질 수 있음</td>
-      <td>중복 데이터 관리(갱신) 부담, 일관성 깨질 위험</td>
-    </tr>
-    <tr>
-      <td>우선순위</td>
-      <td>기본적으로 정규화부터</td>
-      <td>성능 문제가 실측으로 확인된 부분만 부분적으로 역정규화</td>
-    </tr>
-  </tbody>
-</table></div>
-
-<p>결론적으로 <strong>기본은 정규화로 설계하고, 실제로 성능 문제가 확인된 부분에 한해 선택적으로 역정규화를 적용</strong>하는 게 일반적인 접근이다.</p>
+<ul>
+  <li><strong>문자셋</strong>은 “어떻게 저장할지”(바이트 인코딩), <strong>collation</strong>은 “어떻게 비교/정렬할지”를 정한다.</li>
+  <li>MySQL의 <code class="language-plaintext highlighter-rouge">utf8</code>은 최대 3바이트라 이모지를 못 담는다 — <strong>항상 <code class="language-plaintext highlighter-rouge">utf8mb4</code>를 써야 한다.</strong></li>
+  <li>Collation 이름의 <code class="language-plaintext highlighter-rouge">_ci</code>/<code class="language-plaintext highlighter-rouge">_cs</code>/<code class="language-plaintext highlighter-rouge">_bin</code>으로 대소문자 구분 여부가 정해진다. 로그인 ID처럼 구분이 필요한 곳엔 <code class="language-plaintext highlighter-rouge">_ci</code>를 쓰면 안 된다.</li>
+  <li>DB/테이블/컬럼마다 charset·collation이 다르면 JOIN/비교에서 에러가 날 수 있으므로, 프로젝트 전체에서 일관되게 맞춰두는 게 좋다.</li>
+</ul>
 
   </div>
 
@@ -816,14 +831,14 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
           >mysql</a>
         
           <a
-            href="/tags/%EC%A0%95%EA%B7%9C%ED%99%94/"
+            href="/tags/charset/"
             class="post-tag no-text-decoration"
-          >정규화</a>
+          >charset</a>
         
           <a
-            href="/tags/%EC%97%AD%EC%A0%95%EA%B7%9C%ED%99%94/"
+            href="/tags/collation/"
             class="post-tag no-text-decoration"
-          >역정규화</a>
+          >collation</a>
         
       </div>
     
@@ -1722,151 +1737,151 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   
 
   
@@ -2003,18 +2018,22 @@ JOIN이 너무 잦고 무거워서 조회 성능이 떨어질 때 고려한다.<
   
 
   
-    <div class="btn btn-outline-primary disabled" aria-label="이전 글">
-      <p>-</p>
-    </div>
+    <a
+      href="/posts/mysql-slow-query-log/"
+      class="btn btn-outline-primary"
+      aria-label="이전 글"
+    >
+      <p>MySQL 슬로우 쿼리 로그(Slow Query Log)</p>
+    </a>
   
 
   
     <a
-      href="/posts/mysql-acid/"
+      href="/posts/mysql-partitioning/"
       class="btn btn-outline-primary"
       aria-label="다음 글"
     >
-      <p>MySQL ACID</p>
+      <p>MySQL 파티셔닝(Partitioning) - 한 서버에서 테이블 쪼개기</p>
     </a>
   
 </nav>

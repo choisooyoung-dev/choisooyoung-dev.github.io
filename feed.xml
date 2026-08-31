@@ -4,7 +4,7 @@
   <id>https://choisooyoung-dev.github.io/</id>
   <title>Soo Dev Log</title>
   <subtitle>MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록</subtitle>
-  <updated>2026-08-31T15:33:34+09:00</updated>
+  <updated>2026-08-31T15:54:04+09:00</updated>
   <author>
     <name>Sooyoung Choi</name>
     <uri>https://choisooyoung-dev.github.io/</uri>
@@ -17,6 +17,78 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-sharding/" rel="alternate" type="text/html" title="MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기" />
+    <published>2026-08-31T15:50:00+09:00</published>
+  
+    <updated>2026-08-31T15:50:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-sharding/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-sharding/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>샤딩의 개념과 복제와의 차이, 샤딩 키 선택과 핫스팟 문제, 크로스 샤드 JOIN·분산 트랜잭션·리샤딩의 어려움을 정리한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>MySQL 파티셔닝(Partitioning) - 한 서버에서 테이블 쪼개기</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-partitioning/" rel="alternate" type="text/html" title="MySQL 파티셔닝(Partitioning) - 한 서버에서 테이블 쪼개기" />
+    <published>2026-08-31T15:40:00+09:00</published>
+  
+    <updated>2026-08-31T15:40:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-partitioning/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-partitioning/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>MySQL 파티셔닝의 개념과 파티션 프루닝, DELETE/DROP PARTITION 예시, 주의사항을 정리한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>MySQL 문자셋(Character Set)과 Collation</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-charset-collation/" rel="alternate" type="text/html" title="MySQL 문자셋(Character Set)과 Collation" />
+    <published>2026-08-31T15:35:00+09:00</published>
+  
+    <updated>2026-08-31T15:35:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-charset-collation/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-charset-collation/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>문자셋(Character Set)과 Collation의 차이, utf8mb4를 써야 하는 이유, 대소문자 구분 collation까지 정리한다.</summary>
+
+  </entry>
 
   
   <entry>
@@ -63,78 +135,6 @@
   
 
   <summary>IN/NOT IN과 EXISTS/NOT EXISTS의 차이, 서브쿼리 예제, SELECT에 집계 함수와 일반 컬럼이 같이 있을 때 GROUP BY가 필요한 이유를 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>SQL - JOIN (INNER JOIN vs LEFT JOIN)</title>
-    <link href="https://choisooyoung-dev.github.io/posts/sql-join/" rel="alternate" type="text/html" title="SQL - JOIN (INNER JOIN vs LEFT JOIN)" />
-    <published>2026-08-31T13:55:00+09:00</published>
-  
-    <updated>2026-08-31T13:55:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/sql-join/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/sql-join/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>INNER JOIN과 LEFT JOIN의 차이를 예제 쿼리로 정리한다. 주문 0건 유저도 포함해서 조회하는 방법.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>SQL 실행 순서 - WHERE vs HAVING</title>
-    <link href="https://choisooyoung-dev.github.io/posts/sql-execution-order/" rel="alternate" type="text/html" title="SQL 실행 순서 - WHERE vs HAVING" />
-    <published>2026-08-31T13:50:00+09:00</published>
-  
-    <updated>2026-08-31T13:50:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/sql-execution-order/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/sql-execution-order/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>WHERE와 HAVING의 역할 차이, SQL 실행 순서(FROM~ORDER BY)를 예제 쿼리로 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>Shopee Open API로 주문 목록/상세 조회하기</title>
-    <link href="https://choisooyoung-dev.github.io/posts/shopee-get-orders/" rel="alternate" type="text/html" title="Shopee Open API로 주문 목록/상세 조회하기" />
-    <published>2026-08-27T14:25:00+09:00</published>
-  
-    <updated>2026-08-27T14:25:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/shopee-get-orders/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/shopee-get-orders/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="E-commerce API" />
-    
-  
-
-  <summary>Shopee Open API의 주문 목록(get_order_list)과 주문 상세(get_order_detail) 조회 API를 코드로 정리한다.</summary>
 
   </entry>
 
