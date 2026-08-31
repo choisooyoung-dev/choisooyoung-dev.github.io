@@ -241,8 +241,121 @@
       <a href="/">Soo Dev Log</a>
     </h1>
     <p class="site-subtitle fst-italic mb-0"></p>
+
+    <!-- GitHub / 이메일 아이콘: 제목 바로 아래, 검색창 위 -->
+    <div class="d-flex justify-content-center align-items-center" style="gap: 1rem; margin-top: 0.75rem;">
+      
+        <a
+          href="https://github.com/choisooyoung-dev"
+          aria-label="github"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-muted"
+        >
+          <i class="fab fa-github fa-lg"></i>
+        </a>
+      
+
+      
+        <span class="position-relative d-inline-block">
+          <button
+            type="button"
+            id="email-btn"
+            aria-label="email"
+            data-email="sooyoung.choi.dev@gmail.com"
+            data-title-succeed="복사되었습니다!"
+            class="text-muted"
+            style="padding: 0; margin: 0; border: none; background: none; font: inherit; vertical-align: middle;"
+          >
+            <i class="fas fa-envelope fa-lg"></i>
+          </button>
+          <span
+            id="email-tooltip"
+            class="position-absolute"
+            style="
+              display: none;
+              bottom: 130%;
+              left: 50%;
+              transform: translateX(-50%);
+              white-space: nowrap;
+              background: var(--tb-bg, #333);
+              color: #fff;
+              padding: 0.25rem 0.6rem;
+              border-radius: 0.375rem;
+              font-size: 0.75rem;
+              z-index: 10;
+            "
+          ></span>
+        </span>
+      
+    </div>
   </header>
   <!-- .profile-wrapper -->
+
+  
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('email-btn');
+        var tip = document.getElementById('email-tooltip');
+        if (!btn || !tip) return;
+
+        var email = btn.getAttribute('data-email');
+        var succeedText = btn.getAttribute('data-title-succeed');
+        var hideTimer;
+
+        function showTip(text) {
+          tip.textContent = text;
+          tip.style.display = 'block';
+          clearTimeout(hideTimer);
+          hideTimer = setTimeout(function () {
+            tip.style.display = 'none';
+          }, 1800);
+        }
+
+        function fallbackCopy(text) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          try {
+            document.execCommand('copy');
+          } catch (e) {
+            // 복사 실패해도 툴팁으로 주소는 이미 보여주고 있으니 무시
+          }
+          document.body.removeChild(ta);
+        }
+
+        btn.addEventListener('click', function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(email).then(
+              function () {
+                showTip(succeedText + ' (' + email + ')');
+              },
+              function () {
+                fallbackCopy(email);
+                showTip(succeedText + ' (' + email + ')');
+              }
+            );
+          } else {
+            fallbackCopy(email);
+            showTip(succeedText + ' (' + email + ')');
+          }
+        });
+
+        btn.addEventListener('mouseenter', function () {
+          tip.textContent = email;
+          tip.style.display = 'block';
+        });
+        btn.addEventListener('mouseleave', function () {
+          clearTimeout(hideTimer);
+          tip.style.display = 'none';
+        });
+      });
+    </script>
+  
 
   <!-- 검색창: topbar에서 이쪽으로 옮김. nav-item(HOME 등)과 좌우 폭 + 높이를 맞춤 -->
   <div class="w-100 mb-3" style="padding-left: 1.5rem; padding-right: 1.5rem;">
@@ -319,10 +432,6 @@
       <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
         <i class="fas fa-adjust"></i>
       </button>
-
-      
-    
-
     
   </div>
   <!-- .sidebar-bottom -->
