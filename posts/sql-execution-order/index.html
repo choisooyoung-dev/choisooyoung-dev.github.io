@@ -30,22 +30,24 @@
 
   <!-- Begin Jekyll SEO tag v2.9.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="lock" />
+<meta property="og:title" content="SQL 실행 순서 - WHERE vs HAVING" />
 <meta property="og:locale" content="ko_KR" />
-<meta name="description" content="MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록" />
-<meta name="twitter:description" property="og:description" content="MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록" />
-<link rel="canonical" href="https://choisooyoung-dev.github.io/tags/lock/" />
-<meta property="og:url" content="https://choisooyoung-dev.github.io/tags/lock/" />
+<meta name="description" content="WHERE와 HAVING의 역할 차이, SQL 실행 순서(FROM~ORDER BY)를 예제 쿼리로 정리한다." />
+<meta name="twitter:description" property="og:description" content="WHERE와 HAVING의 역할 차이, SQL 실행 순서(FROM~ORDER BY)를 예제 쿼리로 정리한다." />
+<link rel="canonical" href="https://choisooyoung-dev.github.io/posts/sql-execution-order/" />
+<meta property="og:url" content="https://choisooyoung-dev.github.io/posts/sql-execution-order/" />
 <meta property="og:site_name" content="Soo Dev Log" />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-08-31T13:50:00+09:00" />
+<meta property="article:modified_time" content="2026-08-31T13:50:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="lock" />
+<meta name="twitter:title" content="SQL 실행 순서 - WHERE vs HAVING" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록","headline":"lock","url":"https://choisooyoung-dev.github.io/tags/lock/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-08-31T13:50:00+09:00","datePublished":"2026-08-31T13:50:00+09:00","description":"WHERE와 HAVING의 역할 차이, SQL 실행 순서(FROM~ORDER BY)를 예제 쿼리로 정리한다.","headline":"SQL 실행 순서 - WHERE vs HAVING","mainEntityOfPage":{"@type":"WebPage","@id":"https://choisooyoung-dev.github.io/posts/sql-execution-order/"},"url":"https://choisooyoung-dev.github.io/posts/sql-execution-order/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>lock | Soo Dev Log
+  <title>SQL 실행 순서 - WHERE vs HAVING | Soo Dev Log
   </title>
 
   <!--
@@ -105,9 +107,16 @@
   <!-- 3rd-party Dependencies -->
 
   
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.27.20/dist/tocbot.min.css">
   
 
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css">
+  
+
+  
+    <!-- Image Popup -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css">
   
 
   <!-- JavaScript -->
@@ -342,7 +351,7 @@
     </button>
 
     <div id="topbar-title">
-      태그
+      포스트
     </div>
   </div>
 </header>
@@ -370,27 +379,175 @@
         <div class="row flex-grow-1">
           <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
             
-              
+              <!-- Refactor the HTML structure -->
+
+
+
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+
+<!-- Change the icon of checkbox -->
+
+
+
+<!-- Handle images -->
+
+
+
+
+
+<!-- Add header for code snippets -->
+
+
+
+<!-- Create heading anchors -->
+
+
+
+
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+
+
+
+<!-- return -->
+
 
 
 
 <article class="px-1">
-  
+  <header>
+    <h1 data-toc-skip class="d-flex align-items-center">
+      <a href="javascript:history.back()" aria-label="back" class="me-2 text-muted" style="text-decoration:none;">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      SQL 실행 순서 - WHERE vs HAVING
+    </h1>
+    
+      <p class="post-desc fw-light mb-4">WHERE와 HAVING의 역할 차이, SQL 실행 순서(FROM~ORDER BY)를 예제 쿼리로 정리한다.</p>
     
 
-
-
-<div id="page-tag">
-  <h1 class="ps-lg-2">
-    <i class="fa fa-tag fa-fw text-muted"></i>
-    lock
-    <span class="lead text-muted ps-2">1</span>
-  </h1>
-  <ul class="content ps-0">
-    
-      <li class="d-flex justify-content-between px-md-3">
-        <a href="/posts/mysql-lock-deadlock/">MySQL 락(Lock)과 데드락(Deadlock)</a>
-        <span class="dash flex-grow-1"></span>
+    <div class="post-meta text-muted">
+      <!-- published date -->
+      <span>
+        게시
         <!--
   Date format snippet
   See: ${JS_ROOT}/utils/locale-dateime.js
@@ -401,22 +558,263 @@
 
 <time
   
-    class="text-muted small text-nowrap"
-  
-  data-ts="1787636100"
+  data-ts="1788151800"
   data-df="YYYY/MM/DD"
   
+    data-bs-toggle="tooltip" data-bs-placement="bottom"
+  
 >
-  2026/08/25
+  2026/08/31
 </time>
 
-      </li>
+      </span>
+
+      <!-- lastmod date -->
+      
+
+      
+
+      <div class="d-flex justify-content-between">
+        <!-- author(s) -->
+        <span>
+          
+
+          By
+
+          <em>
+            
+              <a href="">Sooyoung Choi</a>
+            
+          </em>
+        </span>
+
+        <div>
+          <!-- pageviews -->
+          
+
+          <!-- read time -->
+          <!-- Calculate the post's reading time, and display the word count in tooltip -->
+
+
+
+<!-- words per minute -->
+
+
+
+
+
+
+
+
+
+
+<!-- return element -->
+<span
+  class="readtime"
+  data-bs-toggle="tooltip"
+  data-bs-placement="bottom"
+  title="704 단어"
+>읽는 시간
+     <em>3분</em>
+</span>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <p>DML(SELECT) 쿼리를 짤 때마다 헷갈리는 <strong>WHERE vs HAVING</strong>, 그리고 SQL이 실제로 실행되는 순서를 정리한다.</p>
+
+<h2 id="where"><span class="me-2">WHERE</span><a href="#where" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p><strong><code class="language-plaintext highlighter-rouge">GROUP BY</code> 하기 전에, 개별 Row를 거르는 역할.</strong></p>
+
+<p>아직 그룹이 만들어지기 전 단계라서, 원본 테이블의 각 행 기준으로 조건을 건다.</p>
+
+<h2 id="having"><span class="me-2">HAVING</span><a href="#having" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p><strong><code class="language-plaintext highlighter-rouge">GROUP BY</code>가 다 끝난 뒤, 집계 결과를 거르는 역할.</strong></p>
+
+<p>그룹이 이미 만들어진 상태이므로, <code class="language-plaintext highlighter-rouge">SUM</code>, <code class="language-plaintext highlighter-rouge">COUNT</code>, <code class="language-plaintext highlighter-rouge">AVG</code> 같은 <strong>집계 함수를 조건으로 쓸 수 있다.</strong> (WHERE에는 집계 함수를 못 쓴다 — 아직 그룹이 없으니까)</p>
+
+<h2 id="sql-실행-순서"><span class="me-2">SQL 실행 순서</span><a href="#sql-실행-순서" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>작성 순서(<code class="language-plaintext highlighter-rouge">SELECT ... FROM ... WHERE ... GROUP BY ... HAVING ... ORDER BY</code>)와 <strong>실제 실행 순서는 다르다.</strong></p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>순서</th>
+      <th>절</th>
+      <th>하는 일</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><strong>FROM</strong></td>
+      <td>테이블 읽기. <code class="language-plaintext highlighter-rouge">JOIN</code>도 FROM의 일부로 이 단계에서 처리</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>WHERE</strong></td>
+      <td>개별 Row 필터링 (아직 그룹 생성 X)</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>GROUP BY</strong></td>
+      <td>그룹 생성</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>HAVING</strong></td>
+      <td>그룹별 집계 결과 필터링 (이때부터 <code class="language-plaintext highlighter-rouge">SUM</code>, <code class="language-plaintext highlighter-rouge">COUNT</code> 등 집계 함수 사용 가능)</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>SELECT</strong></td>
+      <td>실제 조회할 컬럼 선택</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>ORDER BY</strong></td>
+      <td>정렬</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p><strong>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</strong> 순서로 기억해두면, WHERE와 HAVING 중 뭘 써야 할지, 왜 WHERE에 집계 함수를 못 쓰는지가 자연스럽게 이해된다. (SELECT보다 GROUP BY/HAVING이 먼저 실행되기 때문에, SELECT에서 정한 별칭(alias)을 HAVING에서 못 쓰는 이유도 여기서 나온다.)</p>
+
+<h2 id="예제"><span class="me-2">예제</span><a href="#예제" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<blockquote>
+  <p><strong>EX)</strong> 2024년 이후(<code class="language-plaintext highlighter-rouge">created_at &gt;= '2024-01-01'</code>) 주문 중, <strong>유저별 주문건수가 5건 이상인 유저</strong>를 찾는다면?</p>
+</blockquote>
+
+<p>실행 순서대로 짚어보면:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">FROM orders o</code> — orders 테이블 읽기</li>
+  <li><code class="language-plaintext highlighter-rouge">WHERE o.created_at &gt;= '2024-01-01'</code> — 2024년 이후 주문만 개별 필터링 (아직 그룹 없음)</li>
+  <li><code class="language-plaintext highlighter-rouge">GROUP BY o.user_id</code> — 유저 단위로 그룹 생성</li>
+  <li><code class="language-plaintext highlighter-rouge">HAVING COUNT(o.id) &gt;= 5</code> — 그룹별 주문 개수가 5개 이상인 그룹만 필터링</li>
+  <li><code class="language-plaintext highlighter-rouge">SELECT o.user_id</code> — user_id만 조회</li>
+  <li><code class="language-plaintext highlighter-rouge">ORDER BY o.user_id</code> — 정렬</li>
+</ol>
+
+<h3 id="전체-쿼리"><span class="me-2">전체 쿼리</span><a href="#전체-쿼리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
+<div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="k">SELECT</span> <span class="n">o</span><span class="p">.</span><span class="n">user_id</span>
+<span class="k">FROM</span> <span class="n">orders</span> <span class="n">o</span>
+<span class="k">WHERE</span> <span class="n">o</span><span class="p">.</span><span class="n">created_at</span> <span class="o">&gt;=</span> <span class="s1">'2024-01-01'</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">o</span><span class="p">.</span><span class="n">user_id</span>
+<span class="k">HAVING</span> <span class="k">COUNT</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">5</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">o</span><span class="p">.</span><span class="n">user_id</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">created_at</code> 조건은 그룹과 무관하게 각 행에 바로 걸 수 있는 조건이라 <strong>WHERE</strong>에, 주문 건수는 그룹으로 묶은 뒤에만 셀 수 있는 값이라 <strong>HAVING</strong>에 들어간 걸 확인할 수 있다.</p>
+
+<h2 id="정리"><span class="me-2">정리</span><a href="#정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<ul>
+  <li><strong>WHERE</strong>: 그룹 생성 전, 개별 Row 필터링. 집계 함수 사용 불가.</li>
+  <li><strong>HAVING</strong>: 그룹 생성 후, 집계 결과 필터링. 집계 함수 사용 가능.</li>
+  <li>실행 순서는 <strong>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</strong>. 작성 순서와 다르다는 걸 기억해두면 WHERE/HAVING 선택이 헷갈리지 않는다.</li>
+</ul>
+
+  </div>
+
+  <div class="post-tail-wrapper text-muted">
+    <!-- categories -->
     
-  </ul>
+      <div class="post-meta mb-3">
+        <i class="far fa-folder-open fa-fw me-1"></i>
+        
+          <a href="/categories/mysql/">MySQL</a>
+      </div>
+    
+
+    <!-- tags -->
+    
+      <div class="post-tags">
+        <i class="fa fa-tags fa-fw me-1"></i>
+        
+          <a
+            href="/tags/sql/"
+            class="post-tag no-text-decoration"
+          >sql</a>
+        
+          <a
+            href="/tags/mysql/"
+            class="post-tag no-text-decoration"
+          >mysql</a>
+        
+          <a
+            href="/tags/dml/"
+            class="post-tag no-text-decoration"
+          >dml</a>
+        
+      </div>
+    
+
+    <div
+      class="
+        post-tail-bottom
+        d-flex justify-content-between align-items-center mt-5 pb-2
+      "
+    >
+      <div class="license-wrapper">
+        
+          
+
+          This post is licensed under 
+        <a href="https://creativecommons.org/licenses/by/4.0/">
+          CC BY 4.0
+        </a>
+         by the author.
+        
+      </div>
+
+      <!-- Post sharing snippet -->
+
+<div class="share-wrapper d-flex align-items-center">
+  <span class="share-label text-muted">공유하기</span>
+  <span class="share-icons">
+    
+    
+    
+
+    
+
+    <button
+      id="copy-link"
+      aria-label="Copy link"
+      class="btn small"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="링크 복사하기"
+      data-title-succeed="링크가 복사되었습니다!"
+    >
+      <i class="fa-fw fas fa-link pe-none fs-6"></i>
+    </button>
+  </span>
 </div>
 
-  
+    </div>
+    <!-- .post-tail-bottom -->
+  </div>
+  <!-- div.post-tail-wrapper -->
 </article>
+
 
             
           </main>
@@ -1110,12 +1508,323 @@
             </div>
 
             
+              
+              
+
+
+
+  <section id="toc-wrapper" class="d-none ps-0 pe-4">
+    <h2 class="panel-heading ps-3 mb-2">바로가기</h2>
+    <nav id="toc"></nav>
+  </section>
+
+
+            
           </aside>
         </div>
 
         <div class="row">
           <!-- tail -->
           <div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            
+              
+              <!-- Recommend the other 3 posts according to the tags and categories of the current post. -->
+
+<!-- The total size of related posts -->
+
+
+<!-- An random integer that bigger than 0 -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy} -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  <aside id="related-posts" aria-labelledby="related-label">
+    <h3 class="mb-4" id="related-label">관련된 글</h3>
+    <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+      
+        <article class="col">
+          <a href="/posts/sql-join/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1788152100"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/31
+</time>
+
+              <h4 class="pt-0 my-2">SQL - JOIN (INNER JOIN vs LEFT JOIN)</h4>
+              <div class="text-muted">
+                <p>INNER JOIN과 LEFT JOIN의 차이를 예제 쿼리로 정리한다. 주문 0건 유저도 포함해서 조회하는 방법.</p>
+              </div>
+            </div>
+          </a>
+        </article>
+      
+        <article class="col">
+          <a href="/posts/mysql-replication/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787637000"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+              <h4 class="pt-0 my-2">MySQL 복제(Replication)와 Read Replica</h4>
+              <div class="text-muted">
+                <p>MySQL Master-Slave 복제 구조와 binlog, 복제 지연(Replication Lag) 문제와 해결 방법을 정리한다.</p>
+              </div>
+            </div>
+          </a>
+        </article>
+      
+        <article class="col">
+          <a href="/posts/mysql-connection-pool/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787636700"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+              <h4 class="pt-0 my-2">MySQL 커넥션 풀(Connection Pool)</h4>
+              <div class="text-muted">
+                <p>DB 커넥션 풀이 필요한 이유와, 풀 크기를 잘못 잡았을 때 발생하는 Too many connections 문제를 정리한다.</p>
+              </div>
+            </div>
+          </a>
+        </article>
+      
+    </nav>
+  </aside>
+  <!-- #related-posts -->
+
+
+            
+              
+              <!-- Navigation buttons at the bottom of the post. -->
+
+<nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation">
+  
+  
+
+  
+    <a
+      href="/posts/shopee-get-orders/"
+      class="btn btn-outline-primary"
+      aria-label="이전 글"
+    >
+      <p>Shopee Open API로 주문 목록/상세 조회하기</p>
+    </a>
+  
+
+  
+    <a
+      href="/posts/sql-join/"
+      class="btn btn-outline-primary"
+      aria-label="다음 글"
+    >
+      <p>SQL - JOIN (INNER JOIN vs LEFT JOIN)</p>
+    </a>
+  
+</nav>
+
+            
+              
+              <!-- The comments switcher -->
+
+
             
 
             <!-- The Footer -->
@@ -1816,6 +2525,13 @@
 
 
 
+  
+
+  
+    <!-- image lazy-loading & popup & clipboard -->
+    
+  
+
 
 
 
@@ -1865,20 +2581,52 @@
 
   
 
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/dayjs@1.11.11/dayjs.min.js,npm/dayjs@1.11.11/locale/ko.min.js,npm/dayjs@1.11.11/plugin/relativeTime.min.js,npm/dayjs@1.11.11/plugin/localizedFormat.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/glightbox@3.3.0/dist/js/glightbox.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.11/dayjs.min.js,npm/dayjs@1.11.11/locale/ko.min.js,npm/dayjs@1.11.11/plugin/relativeTime.min.js,npm/dayjs@1.11.11/plugin/localizedFormat.min.js,npm/tocbot@4.27.20/dist/tocbot.min.js"></script>
 
 
 
 
 
 
-<script src="/assets/js/dist/misc.min.js"></script>
+<script src="/assets/js/dist/post.min.js"></script>
 
 
 
 <!-- Pageviews -->
+
+  
+
+  
 
 
 

@@ -364,6 +364,17 @@
 <div id="search-trigger" class="d-none" aria-hidden="true"></div>
 <button type="button" class="btn btn-link text-decoration-none d-none" id="search-cancel" aria-hidden="true">취소</button>
 
+<!-- 본문 복사 차단 (코드블록 내부는 예외 — 복사 버튼 + 직접 드래그 복사 둘 다 허용) -->
+<script>
+  document.addEventListener('copy', function (e) {
+    var target = e.target;
+    if (target && target.closest && target.closest('pre, code, .highlight')) {
+      return; // 코드블록 안이면 그대로 복사 허용
+    }
+    e.preventDefault();
+  });
+</script>
+
 
         <div class="row flex-grow-1">
           <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
@@ -911,35 +922,35 @@ Client ────────────────▶ Master ── binlog 
         
         
         <li class="text-truncate lh-lg">
+          <a href="/posts/mysql-slow-query-log/">MySQL 슬로우 쿼리 로그(Slow Query Log)</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/sql-in-exists/">SQL - IN vs EXISTS, 그리고 GROUP BY와 SELECT의 관계</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/sql-join/">SQL - JOIN (INNER JOIN vs LEFT JOIN)</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/sql-execution-order/">SQL 실행 순서 - WHERE vs HAVING</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
           <a href="/posts/shopee-get-orders/">Shopee Open API로 주문 목록/상세 조회하기</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/shopee-app-setup/">Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-replication/">MySQL 복제(Replication)와 Read Replica</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-connection-pool/">MySQL 커넥션 풀(Connection Pool)</a>
-        </li>
-      
-        
-        
-        
-        <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-lock-deadlock/">MySQL 락(Lock)과 데드락(Deadlock)</a>
         </li>
       
     </ul>
@@ -1008,72 +1019,6 @@ Client ────────────────▶ Master ── binlog 
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1103,6 +1048,93 @@ Client ────────────────▶ Master ── binlog 
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -1118,43 +1150,9 @@ Client ────────────────▶ Master ── binlog 
     
     
       
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1223,7 +1221,95 @@ Client ────────────────▶ Master ── binlog 
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
     
   
     
@@ -1303,23 +1389,6 @@ Client ────────────────▶ Master ── binlog 
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1352,7 +1421,49 @@ Client ────────────────▶ Master ── binlog 
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -1606,6 +1717,54 @@ Client ────────────────▶ Master ── binlog 
 
   
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
 
 
 
@@ -1619,6 +1778,62 @@ Client ────────────────▶ Master ── binlog 
   <aside id="related-posts" aria-labelledby="related-label">
     <h3 class="mb-4" id="related-label">관련된 글</h3>
     <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+      
+        <article class="col">
+          <a href="/posts/sql-join/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1788152100"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/31
+</time>
+
+              <h4 class="pt-0 my-2">SQL - JOIN (INNER JOIN vs LEFT JOIN)</h4>
+              <div class="text-muted">
+                <p>INNER JOIN과 LEFT JOIN의 차이를 예제 쿼리로 정리한다. 주문 0건 유저도 포함해서 조회하는 방법.</p>
+              </div>
+            </div>
+          </a>
+        </article>
+      
+        <article class="col">
+          <a href="/posts/sql-execution-order/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1788151800"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/31
+</time>
+
+              <h4 class="pt-0 my-2">SQL 실행 순서 - WHERE vs HAVING</h4>
+              <div class="text-muted">
+                <p>WHERE와 HAVING의 역할 차이, SQL 실행 순서(FROM~ORDER BY)를 예제 쿼리로 정리한다.</p>
+              </div>
+            </div>
+          </a>
+        </article>
       
         <article class="col">
           <a href="/posts/mysql-connection-pool/" class="post-preview card h-100">
@@ -1643,62 +1858,6 @@ Client ────────────────▶ Master ── binlog 
               <h4 class="pt-0 my-2">MySQL 커넥션 풀(Connection Pool)</h4>
               <div class="text-muted">
                 <p>DB 커넥션 풀이 필요한 이유와, 풀 크기를 잘못 잡았을 때 발생하는 Too many connections 문제를 정리한다.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
-        <article class="col">
-          <a href="/posts/mysql-lock-deadlock/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787636100"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 락(Lock)과 데드락(Deadlock)</h4>
-              <div class="text-muted">
-                <p>MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
-        <article class="col">
-          <a href="/posts/mysql-clustered-covering-index/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787634000"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 클러스터드 인덱스 · 커버링 인덱스 · 복합 인덱스</h4>
-              <div class="text-muted">
-                <p>클러스터드 인덱스, 커버링 인덱스, 복합 인덱스의 컬럼 순서(카디널리티)까지 EXPLAIN 예제와 함께 정리한다.</p>
               </div>
             </div>
           </a>
@@ -1850,72 +2009,6 @@ Client ────────────────▶ Master ── binlog 
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1945,6 +2038,93 @@ Client ────────────────▶ Master ── binlog 
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -1960,43 +2140,9 @@ Client ────────────────▶ Master ── binlog 
     
     
       
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
         
         
 
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2065,7 +2211,95 @@ Client ────────────────▶ Master ── binlog 
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
     
   
     
@@ -2145,23 +2379,6 @@ Client ────────────────▶ Master ── binlog 
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2194,7 +2411,49 @@ Client ────────────────▶ Master ── binlog 
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     

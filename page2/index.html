@@ -30,22 +30,23 @@
 
   <!-- Begin Jekyll SEO tag v2.9.0 -->
 <meta name="generator" content="Jekyll v4.4.1" />
-<meta property="og:title" content="lock" />
+<meta property="og:title" content="Soo Dev Log" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="description" content="MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록" />
 <meta name="twitter:description" property="og:description" content="MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록" />
-<link rel="canonical" href="https://choisooyoung-dev.github.io/tags/lock/" />
-<meta property="og:url" content="https://choisooyoung-dev.github.io/tags/lock/" />
+<link rel="canonical" href="https://choisooyoung-dev.github.io/page2/" />
+<meta property="og:url" content="https://choisooyoung-dev.github.io/page2/" />
 <meta property="og:site_name" content="Soo Dev Log" />
 <meta property="og:type" content="website" />
+<link rel="prev" href="https://choisooyoung-dev.github.io/" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="lock" />
+<meta name="twitter:title" content="Soo Dev Log" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록","headline":"lock","url":"https://choisooyoung-dev.github.io/tags/lock/"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록","headline":"Soo Dev Log","url":"https://choisooyoung-dev.github.io/page2/"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>lock | Soo Dev Log
+  <title>Soo Dev Log
   </title>
 
   <!--
@@ -106,6 +107,8 @@
 
   
 
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css">
   
 
   
@@ -259,7 +262,7 @@
   <nav class="flex-column flex-grow-1 w-100 ps-0">
     <ul class="nav">
       <!-- home -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <a href="/" class="nav-link">
           <i class="fa-fw fas fa-home"></i>
           <span>HOME</span>
@@ -342,7 +345,7 @@
     </button>
 
     <div id="topbar-title">
-      태그
+      Soo Dev Log
     </div>
   </div>
 </header>
@@ -370,28 +373,118 @@
         <div class="row flex-grow-1">
           <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
             
-              
+              <!-- Refactor the HTML structure -->
 
 
 
-<article class="px-1">
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+
+<!-- Change the icon of checkbox -->
+
+
+
+<!-- Handle images -->
+
+
+
+
+
+<!-- Add header for code snippets -->
+
+
+
+<!-- Create heading anchors -->
+
+
+
+
+
   
-    
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
 
 
 
-<div id="page-tag">
-  <h1 class="ps-lg-2">
-    <i class="fa fa-tag fa-fw text-muted"></i>
-    lock
-    <span class="lead text-muted ps-2">1</span>
-  </h1>
-  <ul class="content ps-0">
-    
-      <li class="d-flex justify-content-between px-md-3">
-        <a href="/posts/mysql-lock-deadlock/">MySQL 락(Lock)과 데드락(Deadlock)</a>
-        <span class="dash flex-grow-1"></span>
-        <!--
+
+<!-- return -->
+
+
+
+
+
+
+
+
+
+<!-- Get pinned posts -->
+
+
+
+
+
+
+<!-- Get default posts -->
+
+
+
+
+
+
+
+
+
+
+<div id="post-list" class="flex-grow-1 px-xl-1">
+  
+  
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-index-btree/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 인덱스 자료구조 - B+Tree</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>MySQL 인덱스의 실체인 B+Tree 자료구조를 B-Tree와 비교하고, WHERE/ORDER BY와의 관계를 정리한다.</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
   Date format snippet
   See: ${JS_ROOT}/utils/locale-dateime.js
 -->
@@ -401,22 +494,277 @@
 
 <time
   
-    class="text-muted small text-nowrap"
-  
-  data-ts="1787636100"
+  data-ts="1787628300"
   data-df="YYYY/MM/DD"
   
 >
   2026/08/25
 </time>
 
-      </li>
-    
-  </ul>
-</div>
 
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
   
-</article>
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-storage-engine/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 스토리지 엔진 (InnoDB vs MyISAM)</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>InnoDB와 MyISAM 스토리지 엔진의 차이를 트랜잭션 지원, 락 단위, FK 제약조건 중심으로 비교 정리한다.</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787627700"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-acid/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL ACID</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>MySQL 트랜잭션의 ACID(원자성·일관성·격리성·지속성)와 트랜잭션 격리 수준(Isolation Level)을 예시와 함께 정리한다.</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787625900"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+    <article class="card-wrapper card">
+      <a href="/posts/mysql-normalization/" class="post-preview row g-0 flex-md-row-reverse">
+        
+
+        
+
+        <div class="col-md-12">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">MySQL 정규화, 역정규화</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>MySQL 정규화와 역정규화 개념을 이상 현상(삽입/갱신/삭제) 예시, 정규화 단계(1NF~3NF), 비교표로 정리한다.</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1787624640"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/08/25
+</time>
+
+
+                <!-- categories -->
+                
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    
+                      MySQL
+                  </span>
+                
+              </div>
+
+              
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  
+</div>
+<!-- #post-list -->
+
+
+  <!-- The paginator for post list on HomgPage. -->
+
+<nav aria-label="Page Navigation">
+  <ul class="pagination align-items-center mt-4 mb-0">
+    <!-- left arrow -->
+    
+
+    <li class="page-item ">
+      <a class="page-link" href="/" aria-label="previous-page">
+        <i class="fas fa-angle-left"></i>
+      </a>
+    </li>
+
+    <!-- page numbers -->
+    
+    
+
+    
+      
+      
+      
+      
+      
+
+      
+
+      
+        <!-- show number -->
+        <li class="page-item ">
+          <a
+            class="page-link"
+            href="/"
+          >1</a>
+        </li>
+      
+    
+      
+      
+      
+      
+      
+
+      
+
+      
+        <!-- show number -->
+        <li class="page-item  active">
+          <a
+            class="page-link"
+            href="/page2"
+          >2</a>
+        </li>
+      
+    
+
+    <!-- mobile pagination -->
+    <li class="page-index align-middle">
+      <span>2</span>
+      <span class="text-muted">/ 2</span>
+    </li>
+
+    <!-- right arrow -->
+    
+
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="next-page">
+        <i class="fas fa-angle-right"></i>
+      </a>
+    </li>
+  </ul>
+</nav>
+<!-- .pagination -->
+
+
+
 
             
           </main>
@@ -1816,6 +2164,10 @@
 
 
 
+  
+
+  
+
 
 
 
@@ -1865,16 +2217,23 @@
 
   
 
+  
+    
+
+    
+
+  
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/dayjs@1.11.11/dayjs.min.js,npm/dayjs@1.11.11/locale/ko.min.js,npm/dayjs@1.11.11/plugin/relativeTime.min.js,npm/dayjs@1.11.11/plugin/localizedFormat.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/dayjs@1.11.11/dayjs.min.js,npm/dayjs@1.11.11/locale/ko.min.js,npm/dayjs@1.11.11/plugin/relativeTime.min.js,npm/dayjs@1.11.11/plugin/localizedFormat.min.js"></script>
 
 
 
 
 
 
-<script src="/assets/js/dist/misc.min.js"></script>
+<script src="/assets/js/dist/home.min.js"></script>
 
 
 

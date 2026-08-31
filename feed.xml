@@ -4,7 +4,7 @@
   <id>https://choisooyoung-dev.github.io/</id>
   <title>Soo Dev Log</title>
   <subtitle>MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록</subtitle>
-  <updated>2026-08-27T15:31:06+09:00</updated>
+  <updated>2026-08-31T15:33:34+09:00</updated>
   <author>
     <name>Sooyoung Choi</name>
     <uri>https://choisooyoung-dev.github.io/</uri>
@@ -17,6 +17,102 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>MySQL 슬로우 쿼리 로그(Slow Query Log)</title>
+    <link href="https://choisooyoung-dev.github.io/posts/mysql-slow-query-log/" rel="alternate" type="text/html" title="MySQL 슬로우 쿼리 로그(Slow Query Log)" />
+    <published>2026-08-31T15:25:00+09:00</published>
+  
+    <updated>2026-08-31T15:25:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/mysql-slow-query-log/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/mysql-slow-query-log/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>느린 쿼리를 찾아내는 슬로우 쿼리 로그 설정 방법과, EXPLAIN과의 역할 차이를 정리한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>SQL - IN vs EXISTS, 그리고 GROUP BY와 SELECT의 관계</title>
+    <link href="https://choisooyoung-dev.github.io/posts/sql-in-exists/" rel="alternate" type="text/html" title="SQL - IN vs EXISTS, 그리고 GROUP BY와 SELECT의 관계" />
+    <published>2026-08-31T14:00:00+09:00</published>
+  
+    <updated>2026-08-31T14:00:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/sql-in-exists/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/sql-in-exists/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>IN/NOT IN과 EXISTS/NOT EXISTS의 차이, 서브쿼리 예제, SELECT에 집계 함수와 일반 컬럼이 같이 있을 때 GROUP BY가 필요한 이유를 정리한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>SQL - JOIN (INNER JOIN vs LEFT JOIN)</title>
+    <link href="https://choisooyoung-dev.github.io/posts/sql-join/" rel="alternate" type="text/html" title="SQL - JOIN (INNER JOIN vs LEFT JOIN)" />
+    <published>2026-08-31T13:55:00+09:00</published>
+  
+    <updated>2026-08-31T13:55:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/sql-join/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/sql-join/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>INNER JOIN과 LEFT JOIN의 차이를 예제 쿼리로 정리한다. 주문 0건 유저도 포함해서 조회하는 방법.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>SQL 실행 순서 - WHERE vs HAVING</title>
+    <link href="https://choisooyoung-dev.github.io/posts/sql-execution-order/" rel="alternate" type="text/html" title="SQL 실행 순서 - WHERE vs HAVING" />
+    <published>2026-08-31T13:50:00+09:00</published>
+  
+    <updated>2026-08-31T13:50:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/sql-execution-order/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/sql-execution-order/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="MySQL" />
+    
+  
+
+  <summary>WHERE와 HAVING의 역할 차이, SQL 실행 순서(FROM~ORDER BY)를 예제 쿼리로 정리한다.</summary>
+
+  </entry>
 
   
   <entry>
@@ -39,102 +135,6 @@
   
 
   <summary>Shopee Open API의 주문 목록(get_order_list)과 주문 상세(get_order_detail) 조회 API를 코드로 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지</title>
-    <link href="https://choisooyoung-dev.github.io/posts/shopee-app-setup/" rel="alternate" type="text/html" title="Shopee Open API 연동 준비 - 앱 생성부터 토큰 발급까지" />
-    <published>2026-08-27T09:00:00+09:00</published>
-  
-    <updated>2026-08-27T09:00:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/shopee-app-setup/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/shopee-app-setup/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="E-commerce API" />
-    
-  
-
-  <summary>Shopee Open API를 쓰기 위한 앱 생성, 앱 인증, 토큰 생성 과정을 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 복제(Replication)와 Read Replica</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-replication/" rel="alternate" type="text/html" title="MySQL 복제(Replication)와 Read Replica" />
-    <published>2026-08-25T14:50:00+09:00</published>
-  
-    <updated>2026-08-25T14:50:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-replication/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-replication/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>MySQL Master-Slave 복제 구조와 binlog, 복제 지연(Replication Lag) 문제와 해결 방법을 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 커넥션 풀(Connection Pool)</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-connection-pool/" rel="alternate" type="text/html" title="MySQL 커넥션 풀(Connection Pool)" />
-    <published>2026-08-25T14:45:00+09:00</published>
-  
-    <updated>2026-08-25T14:45:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-connection-pool/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-connection-pool/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>DB 커넥션 풀이 필요한 이유와, 풀 크기를 잘못 잡았을 때 발생하는 Too many connections 문제를 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 락(Lock)과 데드락(Deadlock)</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/" rel="alternate" type="text/html" title="MySQL 락(Lock)과 데드락(Deadlock)" />
-    <published>2026-08-25T14:35:00+09:00</published>
-  
-    <updated>2026-08-25T14:35:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-lock-deadlock/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>MySQL Row Lock의 동작 방식과 데드락(Deadlock) 발생 과정, 실무 예방법을 예제 쿼리로 정리한다.</summary>
 
   </entry>
 
