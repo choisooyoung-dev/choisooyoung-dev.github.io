@@ -268,7 +268,6 @@
             id="email-btn"
             aria-label="email"
             data-email="sooyoung.choi.dev@gmail.com"
-            data-title-succeed="복사되었습니다!"
             class="text-muted"
             style="padding: 0; margin: 0; border: none; background: none; font: inherit; vertical-align: middle;"
           >
@@ -279,7 +278,7 @@
             class="position-absolute"
             style="
               display: none;
-              bottom: 130%;
+              top: 130%;
               left: 50%;
               transform: translateX(-50%);
               white-space: nowrap;
@@ -287,7 +286,7 @@
               color: #fff;
               padding: 0.25rem 0.6rem;
               border-radius: 0.375rem;
-              font-size: 0.75rem;
+              font-size: 0.7rem;
               z-index: 10;
             "
           ></span>
@@ -305,7 +304,6 @@
         if (!btn || !tip) return;
 
         var email = btn.getAttribute('data-email');
-        var succeedText = btn.getAttribute('data-title-succeed');
         var hideTimer;
 
         function showTip(text) {
@@ -337,16 +335,16 @@
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(email).then(
               function () {
-                showTip(succeedText + ' (' + email + ')');
+                showTip(email + '(복사완료)');
               },
               function () {
                 fallbackCopy(email);
-                showTip(succeedText + ' (' + email + ')');
+                showTip(email + '(복사완료)');
               }
             );
           } else {
             fallbackCopy(email);
-            showTip(succeedText + ' (' + email + ')');
+            showTip(email + '(복사완료)');
           }
         });
 
@@ -777,7 +775,7 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="1773 단어"
+  title="1787 단어"
 >읽는 시간
      <em>9분</em>
 </span>
@@ -837,7 +835,7 @@
 
 <h2 id="대안-1-fulltext-인덱스"><span class="me-2">대안 1: FULLTEXT 인덱스</span><a href="#대안-1-fulltext-인덱스" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<p>MySQL이 자체 제공하는 <strong>전문(全文) 검색</strong> 기능. 단어 단위로 미리 인덱싱해둬서, “포함 검색”도 인덱스로 처리할 수 있게 해준다.</p>
+<p>MySQL이 자체 제공하는 <strong>전문 검색</strong>(제목/본문 전체를 대상으로 하는 검색) 기능. 단어 단위로 미리 인덱싱해둬서, “포함 검색”도 인덱스로 처리할 수 있게 해준다.</p>
 
 <h3 id="인덱스-생성"><span class="me-2">인덱스 생성</span><a href="#인덱스-생성" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 
