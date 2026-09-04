@@ -453,6 +453,11 @@
   >
     <!-- breadcrumb 완전히 제거함. post 페이지는 제목 옆 "<" 뒤로가기 버튼을 사용함 (_layouts/post.html 참고) -->
 
+    <!-- 데스크탑용 사이드바 접기/펼치기 버튼 (모바일 전용 sidebar-trigger와는 별개) -->
+    <button type="button" id="sidebar-collapse-toggle" class="btn btn-link" aria-label="Toggle sidebar">
+      <i class="fas fa-angles-left"></i>
+    </button>
+
     <button type="button" id="sidebar-trigger" class="btn btn-link">
       <i class="fas fa-bars fa-fw"></i>
     </button>
@@ -480,6 +485,34 @@
     }
     e.preventDefault();
   });
+</script>
+
+<!-- 데스크탑 사이드바 접기/펼치기: 상태는 localStorage에 저장해서 새로고침해도 유지 -->
+<script>
+  (function () {
+    var STORAGE_KEY = 'sidebarCollapsed';
+    var btn = document.getElementById('sidebar-collapse-toggle');
+    if (!btn) return;
+
+    var icon = btn.querySelector('i');
+
+    function applyState(collapsed) {
+      document.body.classList.toggle('sidebar-collapsed', collapsed);
+      if (icon) {
+        icon.classList.toggle('fa-angles-left', !collapsed);
+        icon.classList.toggle('fa-angles-right', collapsed);
+      }
+    }
+
+    var saved = localStorage.getItem(STORAGE_KEY) === '1';
+    applyState(saved);
+
+    btn.addEventListener('click', function () {
+      var next = !document.body.classList.contains('sidebar-collapsed');
+      applyState(next);
+      localStorage.setItem(STORAGE_KEY, next ? '1' : '0');
+    });
+  })();
 </script>
 
 
@@ -536,6 +569,17 @@
       
         
         
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
       
 
       
@@ -742,9 +786,9 @@
   class="readtime"
   data-bs-toggle="tooltip"
   data-bs-placement="bottom"
-  title="1599 단어"
+  title="2147 단어"
 >읽는 시간
-     <em>8분</em>
+     <em>11분</em>
 </span>
 
         </div>
@@ -895,9 +939,41 @@
 
 <p>즉 <strong>격리 수준(읽기 일관성)과 락(쓰기 순서 보장)은 서로 다른 역할</strong>이며, 동시성이 중요한 로직(재고 차감, 선착순 이벤트 등)에는 격리 수준만 믿지 말고 락을 함께 고려해야 한다.</p>
 
+<h2 id="mvcc-multi-version-concurrency-control"><span class="me-2">MVCC (Multi-Version Concurrency Control)</span><a href="#mvcc-multi-version-concurrency-control" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>격리 수준 표에서 <code class="language-plaintext highlighter-rouge">REPEATABLE READ</code>가 “트랜잭션 시작 시점의 스냅샷을 계속 읽는다”고 했는데, 이게 실제로 어떻게 가능한지가 <strong>MVCC(다중 버전 동시성 제어)</strong> 다.</p>
+
+<p>InnoDB는 row를 수정할 때 그 자리에서 덮어쓰지 않는다. 대신 <strong>이전 버전을 undo log에 남겨두고, 새 버전을 만든다.</strong></p>
+
+<div class="language-sql highlighter-rouge"><div class="code-header">
+        <span data-label-text="Sql"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="복사되었습니다!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="c1">-- 트랜잭션 A: 시작 시점 스냅샷 기준으로 읽기 시작</span>
+<span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="n">qty</span> <span class="k">FROM</span> <span class="n">coupon</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">-- 10</span>
+
+<span class="c1">-- 그 사이 트랜잭션 B가 qty를 5로 바꾸고 커밋 (A 눈엔 아직 안 보임)</span>
+
+<span class="k">SELECT</span> <span class="n">qty</span> <span class="k">FROM</span> <span class="n">coupon</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">-- 여전히 10 (REPEATABLE READ)</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<ul>
+  <li>A가 트랜잭션을 시작한 시점을 기준으로 “어떤 버전이 보여야 하는지” 판단한다. B가 그 사이 값을 바꿔서 커밋해도, A는 자신이 시작한 시점의 이전 버전(undo log)을 계속 보게 된다.</li>
+  <li>핵심은 <strong>읽기(SELECT)가 쓰기 락을 기다릴 필요가 없다는 것</strong>이다. 읽는 쪽은 undo log에 남은 예전 버전을 보고, 쓰는 쪽은 새 버전을 만들면 되므로 서로 막지 않는다. <code class="language-plaintext highlighter-rouge">SELECT</code>가 기본적으로 락을 걸지 않는 이유가 이거다 — 명시적으로 락이 필요하면 <code class="language-plaintext highlighter-rouge">SELECT ... FOR UPDATE</code>처럼 <a href="/posts/mysql-lock-deadlock/">별도로 요청</a>해야 한다.</li>
+  <li>즉 <strong>격리 수준은 “MVCC에서 어느 시점의 스냅샷을 보여줄지”를 정하는 규칙</strong>이고, MVCC는 그 스냅샷을 락 없이 유지해주는 실제 메커니즘이다.</li>
+</ul>
+
+<p>이 덕분에 <code class="language-plaintext highlighter-rouge">mysqldump --single-transaction</code>처럼 <strong>서비스를 멈추지 않고도 일관된 백업</strong>을 뜰 수 있다 (<a href="/posts/mysql-backup-recovery/">백업/복구 전략</a> 참고) — 덤프가 시작된 시점의 스냅샷을 MVCC가 계속 보여주기 때문에, 덤프 도중 다른 트랜잭션이 데이터를 바꿔도 영향받지 않는다.</p>
+
 <h2 id="정리"><span class="me-2">정리</span><a href="#정리" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<p>ACID는 각각 독립된 개념이라기보다, <strong>트랜잭션이 안전하게 동작하기 위해 서로 맞물려 있는 4가지 측면</strong>이다. 원자성과 일관성이 “정확성”을 보장한다면, 격리성은 “동시성 상황에서의 정확성”, 지속성은 “장애 상황에서의 정확성”을 보장하는 셈이다.</p>
+<p>ACID는 각각 독립된 개념이라기보다, <strong>트랜잭션이 안전하게 동작하기 위해 서로 맞물려 있는 4가지 측면</strong>이다. 원자성과 일관성이 “정확성”을 보장한다면, 격리성은 “동시성 상황에서의 정확성”, 지속성은 “장애 상황에서의 정확성”을 보장하는 셈이다. 그리고 그 격리성을 락 없이 구현하는 핵심 메커니즘이 <strong>MVCC</strong>다.</p>
 
   </div>
 
@@ -1018,35 +1094,35 @@
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-like-fulltext/">LIKE 검색과 인덱스 한계, 그리고 FULLTEXT 인덱스</a>
+          <a href="/posts/mysql-innodb-buffer-pool/">InnoDB Buffer Pool</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-explain-type/">EXPLAIN 결과 읽는 법 - type 컬럼과 옵티마이저</a>
+          <a href="/posts/mysql-schema-migration/">스키마 마이그레이션 관리</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/pagination-offset-vs-cursor/">페이지네이션 - OFFSET vs Cursor 기반</a>
+          <a href="/posts/mysql-backup-recovery/">MySQL 백업/복구 전략</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/orm-n-plus-one/">N+1 문제</a>
+          <a href="/posts/mysql-bulk-insert-update/">벌크 INSERT/UPDATE 최적화</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-sharding/">MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기</a>
+          <a href="/posts/mysql-datetime-timestamp-timezone/">MySQL DATETIME vs TIMESTAMP, 그리고 타임존</a>
         </li>
       
     </ul>
@@ -1150,122 +1226,6 @@
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1360,35 +1320,10 @@
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1420,21 +1355,10 @@
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1507,116 +1431,6 @@
     
     
     
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1682,8 +1496,6 @@
     
     
     
-      
-    
   
     
     
@@ -1708,65 +1520,6 @@
     
     
     
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1819,6 +1572,330 @@
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -1859,28 +1936,6 @@
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1943,53 +1998,6 @@
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2006,23 +2014,6 @@
     
     
     
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -2033,6 +2024,528 @@
         
         
 
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
   
     
     
@@ -2058,25 +2571,25 @@
         <a class="post-tag btn btn-outline-primary" href="/tags/index/">index</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/typeorm/">typeorm</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/btree/">btree</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/explain/">explain</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/innodb/">innodb</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/open-api/">open-api</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/performance/">performance</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/shopee/">shopee</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/transaction/">transaction</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/typeorm/">typeorm</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/acid/">acid</a>
       
     </div>
   </section>
@@ -2145,6 +2658,66 @@
 
   
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
   
 
   
@@ -2628,122 +3201,6 @@
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2838,35 +3295,10 @@
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -2898,21 +3330,10 @@
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -2985,116 +3406,6 @@
     
     
     
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -3160,8 +3471,6 @@
     
     
     
-      
-    
   
     
     
@@ -3186,65 +3495,6 @@
     
     
     
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -3297,6 +3547,330 @@
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -3337,28 +3911,6 @@
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -3421,53 +3973,6 @@
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -3484,23 +3989,6 @@
     
     
     
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -3511,6 +3999,528 @@
         
         
 
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
   
     
     
@@ -3536,25 +4546,25 @@
         <a class="post-tag btn btn-outline-primary" href="/tags/index/">index</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/typeorm/">typeorm</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/btree/">btree</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/explain/">explain</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/innodb/">innodb</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/open-api/">open-api</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/performance/">performance</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/shopee/">shopee</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/transaction/">transaction</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/typeorm/">typeorm</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/acid/">acid</a>
       
     </div>
   </section>

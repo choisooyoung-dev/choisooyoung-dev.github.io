@@ -453,6 +453,11 @@
   >
     <!-- breadcrumb 완전히 제거함. post 페이지는 제목 옆 "<" 뒤로가기 버튼을 사용함 (_layouts/post.html 참고) -->
 
+    <!-- 데스크탑용 사이드바 접기/펼치기 버튼 (모바일 전용 sidebar-trigger와는 별개) -->
+    <button type="button" id="sidebar-collapse-toggle" class="btn btn-link" aria-label="Toggle sidebar">
+      <i class="fas fa-angles-left"></i>
+    </button>
+
     <button type="button" id="sidebar-trigger" class="btn btn-link">
       <i class="fas fa-bars fa-fw"></i>
     </button>
@@ -480,6 +485,34 @@
     }
     e.preventDefault();
   });
+</script>
+
+<!-- 데스크탑 사이드바 접기/펼치기: 상태는 localStorage에 저장해서 새로고침해도 유지 -->
+<script>
+  (function () {
+    var STORAGE_KEY = 'sidebarCollapsed';
+    var btn = document.getElementById('sidebar-collapse-toggle');
+    if (!btn) return;
+
+    var icon = btn.querySelector('i');
+
+    function applyState(collapsed) {
+      document.body.classList.toggle('sidebar-collapsed', collapsed);
+      if (icon) {
+        icon.classList.toggle('fa-angles-left', !collapsed);
+        icon.classList.toggle('fa-angles-right', collapsed);
+      }
+    }
+
+    var saved = localStorage.getItem(STORAGE_KEY) === '1';
+    applyState(saved);
+
+    btn.addEventListener('click', function () {
+      var next = !document.body.classList.contains('sidebar-collapsed');
+      applyState(next);
+      localStorage.setItem(STORAGE_KEY, next ? '1' : '0');
+    });
+  })();
 </script>
 
 
@@ -943,35 +976,35 @@ MyISAM 테이블로 처리한다고 가정</p>
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-like-fulltext/">LIKE 검색과 인덱스 한계, 그리고 FULLTEXT 인덱스</a>
+          <a href="/posts/mysql-innodb-buffer-pool/">InnoDB Buffer Pool</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-explain-type/">EXPLAIN 결과 읽는 법 - type 컬럼과 옵티마이저</a>
+          <a href="/posts/mysql-schema-migration/">스키마 마이그레이션 관리</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/pagination-offset-vs-cursor/">페이지네이션 - OFFSET vs Cursor 기반</a>
+          <a href="/posts/mysql-backup-recovery/">MySQL 백업/복구 전략</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/orm-n-plus-one/">N+1 문제</a>
+          <a href="/posts/mysql-bulk-insert-update/">벌크 INSERT/UPDATE 최적화</a>
         </li>
       
         
         
         
         <li class="text-truncate lh-lg">
-          <a href="/posts/mysql-sharding/">MySQL 샤딩(Sharding) - 여러 대의 DB 서버로 데이터 분산시키기</a>
+          <a href="/posts/mysql-datetime-timestamp-timezone/">MySQL DATETIME vs TIMESTAMP, 그리고 타임존</a>
         </li>
       
     </ul>
@@ -1075,122 +1108,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1285,35 +1202,10 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1345,21 +1237,10 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1432,116 +1313,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1607,8 +1378,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-    
   
     
     
@@ -1633,65 +1402,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1744,6 +1454,330 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -1784,28 +1818,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1868,53 +1880,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -1931,23 +1896,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -1958,6 +1906,528 @@ MyISAM 테이블로 처리한다고 가정</p>
         
         
 
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
   
     
     
@@ -1983,25 +2453,25 @@ MyISAM 테이블로 처리한다고 가정</p>
         <a class="post-tag btn btn-outline-primary" href="/tags/index/">index</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/typeorm/">typeorm</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/btree/">btree</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/explain/">explain</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/innodb/">innodb</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/open-api/">open-api</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/performance/">performance</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/shopee/">shopee</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/transaction/">transaction</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/typeorm/">typeorm</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/acid/">acid</a>
       
     </div>
   </section>
@@ -2274,6 +2744,66 @@ MyISAM 테이블로 처리한다고 가정</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
 
 
 
@@ -2287,6 +2817,34 @@ MyISAM 테이블로 처리한다고 가정</p>
   <aside id="related-posts" aria-labelledby="related-label">
     <h3 class="mb-4" id="related-label">관련된 글</h3>
     <nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4">
+      
+        <article class="col">
+          <a href="/posts/mysql-innodb-buffer-pool/" class="post-preview card h-100">
+            <div class="card-body">
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1788399000"
+  data-df="YYYY/MM/DD"
+  
+>
+  2026/09/03
+</time>
+
+              <h4 class="pt-0 my-2">InnoDB Buffer Pool</h4>
+              <div class="text-muted">
+                <p>InnoDB Buffer Pool이 디스크 I/O를 줄이는 방식, LRU 캐시 교체 정책, 적정 크기 설정과 워밍업까지 정리한다.</p>
+              </div>
+            </div>
+          </a>
+        </article>
       
         <article class="col">
           <a href="/posts/sql-join/" class="post-preview card h-100">
@@ -2339,34 +2897,6 @@ MyISAM 테이블로 처리한다고 가정</p>
               <h4 class="pt-0 my-2">SQL 실행 순서 - WHERE vs HAVING</h4>
               <div class="text-muted">
                 <p>WHERE와 HAVING의 역할 차이, SQL 실행 순서(FROM~ORDER BY)를 예제 쿼리로 정리한다.</p>
-              </div>
-            </div>
-          </a>
-        </article>
-      
-        <article class="col">
-          <a href="/posts/mysql-replication/" class="post-preview card h-100">
-            <div class="card-body">
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-<time
-  
-  data-ts="1787637000"
-  data-df="YYYY/MM/DD"
-  
->
-  2026/08/25
-</time>
-
-              <h4 class="pt-0 my-2">MySQL 복제(Replication)와 Read Replica</h4>
-              <div class="text-muted">
-                <p>MySQL Master-Slave 복제 구조와 binlog, 복제 지연(Replication Lag) 문제와 해결 방법을 정리한다.</p>
               </div>
             </div>
           </a>
@@ -2553,122 +3083,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -2763,35 +3177,10 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -2823,21 +3212,10 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-        
-        
-
   
     
     
     
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -2910,116 +3288,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -3085,8 +3353,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-    
   
     
     
@@ -3111,65 +3377,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -3222,6 +3429,330 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
     
   
     
@@ -3262,28 +3793,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -3346,53 +3855,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-      
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
   
     
     
@@ -3409,23 +3871,6 @@ MyISAM 테이블로 처리한다고 가정</p>
     
     
     
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
-      
     
   
     
@@ -3436,6 +3881,528 @@ MyISAM 테이블로 처리한다고 가정</p>
         
         
 
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
   
     
     
@@ -3461,25 +4428,25 @@ MyISAM 테이블로 처리한다고 가정</p>
         <a class="post-tag btn btn-outline-primary" href="/tags/index/">index</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/typeorm/">typeorm</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/btree/">btree</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/explain/">explain</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/innodb/">innodb</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/open-api/">open-api</a>
       
         
+        <a class="post-tag btn btn-outline-primary" href="/tags/performance/">performance</a>
+      
+        
         <a class="post-tag btn btn-outline-primary" href="/tags/shopee/">shopee</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/transaction/">transaction</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/typeorm/">typeorm</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/acid/">acid</a>
       
     </div>
   </section>
