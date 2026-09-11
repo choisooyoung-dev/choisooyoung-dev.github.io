@@ -4,7 +4,7 @@
   <id>https://choisooyoung-dev.github.io/</id>
   <title>Soo Dev Log</title>
   <subtitle>MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록</subtitle>
-  <updated>2026-09-04T10:46:14+09:00</updated>
+  <updated>2026-09-11T16:31:48+09:00</updated>
   <author>
     <name>Sooyoung Choi</name>
     <uri>https://choisooyoung-dev.github.io/</uri>
@@ -17,6 +17,78 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Git 실습 3: stash와 fast-forward 병합</title>
+    <link href="https://choisooyoung-dev.github.io/posts/git-practice-03-stash-fast-forward/" rel="alternate" type="text/html" title="Git 실습 3: stash와 fast-forward 병합" />
+    <published>2026-09-11T16:20:00+09:00</published>
+  
+    <updated>2026-09-11T16:20:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/git-practice-03-stash-fast-forward/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/git-practice-03-stash-fast-forward/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="Git" />
+    
+  
+
+  <summary>커밋하기 어려운 작업을 stash에 보관하고 다른 브랜치에서 복원한 뒤, fast-forward 방식으로 main에 병합한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>Git 실습 2: staging 영역과 status 두 글자 읽기</title>
+    <link href="https://choisooyoung-dev.github.io/posts/git-practice-02-staging/" rel="alternate" type="text/html" title="Git 실습 2: staging 영역과 status 두 글자 읽기" />
+    <published>2026-09-11T16:20:00+09:00</published>
+  
+    <updated>2026-09-11T16:20:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/git-practice-02-staging/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/git-practice-02-staging/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="Git" />
+    
+  
+
+  <summary>같은 파일에 staged 변경과 unstaged 변경을 함께 만들어 Git status의 두 열과 diff의 차이를 관찰한다.</summary>
+
+  </entry>
+
+  
+  <entry>
+    <title>Git 실습 1: 저장소 초기화와 첫 커밋</title>
+    <link href="https://choisooyoung-dev.github.io/posts/git-practice-01-status-first-commit/" rel="alternate" type="text/html" title="Git 실습 1: 저장소 초기화와 첫 커밋" />
+    <published>2026-09-11T16:10:00+09:00</published>
+  
+    <updated>2026-09-11T16:10:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/git-practice-01-status-first-commit/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/git-practice-01-status-first-commit/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="Git" />
+    
+  
+
+  <summary>Git 저장소의 루트를 확인하고, 새 파일을 스테이징해 첫 커밋을 만드는 과정을 정리한다.</summary>
+
+  </entry>
 
   
   <entry>
@@ -63,78 +135,6 @@
   
 
   <summary>스키마 변경을 코드로 관리해야 하는 이유, 마이그레이션 도구의 동작 방식, 무중단으로 컬럼을 안전하게 바꾸는 절차를 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL 백업/복구 전략</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-backup-recovery/" rel="alternate" type="text/html" title="MySQL 백업/복구 전략" />
-    <published>2026-09-03T10:20:00+09:00</published>
-  
-    <updated>2026-09-03T10:20:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-backup-recovery/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-backup-recovery/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>논리 백업(mysqldump)과 물리 백업(스냅샷)의 차이, 바이너리 로그를 이용한 특정 시점 복구(PITR), 복제와 백업의 역할 차이를 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>벌크 INSERT/UPDATE 최적화</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-bulk-insert-update/" rel="alternate" type="text/html" title="벌크 INSERT/UPDATE 최적화" />
-    <published>2026-09-03T10:15:00+09:00</published>
-  
-    <updated>2026-09-03T10:15:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-bulk-insert-update/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-bulk-insert-update/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>여러 건을 한 건씩 INSERT/UPDATE할 때 느려지는 이유와, 멀티 밸류 INSERT·배치 처리·INSERT ... ON DUPLICATE KEY UPDATE로 최적화하는 방법을 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>MySQL DATETIME vs TIMESTAMP, 그리고 타임존</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-datetime-timestamp-timezone/" rel="alternate" type="text/html" title="MySQL DATETIME vs TIMESTAMP, 그리고 타임존" />
-    <published>2026-09-03T10:00:00+09:00</published>
-  
-    <updated>2026-09-03T10:00:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-datetime-timestamp-timezone/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-datetime-timestamp-timezone/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>DATETIME과 TIMESTAMP의 저장 방식·범위·타임존 처리 차이를 정리하고, 서버-DB 간 타임존이 다를 때 흔히 겪는 문제를 예제로 정리한다.</summary>
 
   </entry>
 
