@@ -4,7 +4,7 @@
   <id>https://choisooyoung-dev.github.io/</id>
   <title>Soo Dev Log</title>
   <subtitle>MySQL, JS/Node.js, 개발방법론, CS 등 공부 기록</subtitle>
-  <updated>2026-09-11T16:31:48+09:00</updated>
+  <updated>2026-09-14T11:12:26+09:00</updated>
   <author>
     <name>Sooyoung Choi</name>
     <uri>https://choisooyoung-dev.github.io/</uri>
@@ -17,6 +17,30 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>환경변수 관리: Parameter Store, Secrets Manager, GitHub Actions</title>
+    <link href="https://choisooyoung-dev.github.io/posts/env-variable-management/" rel="alternate" type="text/html" title="환경변수 관리: Parameter Store, Secrets Manager, GitHub Actions" />
+    <published>2026-09-14T10:00:00+09:00</published>
+  
+    <updated>2026-09-14T10:00:00+09:00</updated>
+  
+    <id>https://choisooyoung-dev.github.io/posts/env-variable-management/</id>
+    <content src="https://choisooyoung-dev.github.io/posts/env-variable-management/" />
+    <author>
+      <name>Sooyoung Choi</name>
+    </author>
+
+  
+    
+    <category term="CI/CD" />
+    
+  
+
+  <summary>여러 대의 서버에 배포할 때 환경변수를 서버마다 관리하지 않고, AWS Parameter Store/Secrets Manager와 GitHub Actions로 중앙에서 관리하는 방법을 정리한다.</summary>
+
+  </entry>
 
   
   <entry>
@@ -111,30 +135,6 @@
   
 
   <summary>InnoDB Buffer Pool이 디스크 I/O를 줄이는 방식, LRU 캐시 교체 정책, 적정 크기 설정과 워밍업까지 정리한다.</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>스키마 마이그레이션 관리</title>
-    <link href="https://choisooyoung-dev.github.io/posts/mysql-schema-migration/" rel="alternate" type="text/html" title="스키마 마이그레이션 관리" />
-    <published>2026-09-03T10:25:00+09:00</published>
-  
-    <updated>2026-09-03T10:25:00+09:00</updated>
-  
-    <id>https://choisooyoung-dev.github.io/posts/mysql-schema-migration/</id>
-    <content src="https://choisooyoung-dev.github.io/posts/mysql-schema-migration/" />
-    <author>
-      <name>Sooyoung Choi</name>
-    </author>
-
-  
-    
-    <category term="MySQL" />
-    
-  
-
-  <summary>스키마 변경을 코드로 관리해야 하는 이유, 마이그레이션 도구의 동작 방식, 무중단으로 컬럼을 안전하게 바꾸는 절차를 정리한다.</summary>
 
   </entry>
 

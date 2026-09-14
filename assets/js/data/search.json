@@ -1,6 +1,23 @@
 [
   
   {
+    "title": "환경변수 관리: Parameter Store, Secrets Manager, GitHub Actions",
+    "url": "/posts/env-variable-management/",
+    "categories": "CI/CD",
+    "tags": "aws, parameter-store, secrets-manager, github-actions, env, ci-cd, ec2",
+    "date": "2026-09-14 10:00:00 +0900",
+    
+
+
+
+
+
+    
+    "snippet": "동일한 프로젝트를 여러 서버에 배포할 때, 서버마다 환경변수 파일을 만들어 넣고 값이 바뀔 때마다 하나씩 수정해야 할까? 서버가 한두 대면 버틸 만하지만, 서버가 늘어날수록 이 방식은 관리 비용이 커진다. 이 문제를 어떻게 풀 수 있는지 EC2 배포, GitHub Actions 배포, 그리고 둘을 조합한 상황 순으로 정리한다.1. EC2 배포 상황: ...",
+    "content": "동일한 프로젝트를 여러 서버에 배포할 때, 서버마다 환경변수 파일을 만들어 넣고 값이 바뀔 때마다 하나씩 수정해야 할까? 서버가 한두 대면 버틸 만하지만, 서버가 늘어날수록 이 방식은 관리 비용이 커진다. 이 문제를 어떻게 풀 수 있는지 EC2 배포, GitHub Actions 배포, 그리고 둘을 조합한 상황 순으로 정리한다.1. EC2 배포 상황: Parameter Store / Secrets ManagerAWS의 Parameter Store나 Secrets Manager를 쓰면 환경변수를 한 곳에만 등록해두고, 각 EC2가 필요할 때 조회해가는 구조를 만들 수 있다.EC2 → \"환경변수 주세요\" → AWS     Parameter Store / Secrets Manager              ↓     ┌────────┼────────┐     ↓        ↓         ↓    EC2      EC2       EC2예를 들어 EC2가 5대여도 DATABASE_URL, JWT_SECRET 같은 값을 AWS에 한 번만 등록한다. 각 EC2에는 이 값을 읽을 수 있는 권한(IAM Role)만 부여한다. 그러면 서버를 한 대 추가하더라도 사람이 환경변수를 다시 입력할 필요 없이, AWS에서 동일한 값을 가져오게 만들 수 있다.1-1. Parameter Store와 Secrets Manager 차이                   Parameter Store (중앙 환경변수 저장소)      Secrets Manager (보안 기능)                  DB 비밀번호      O      O              API Key      O      O              일반 설정값 저장      적합      굳이(민감 정보 관리를 위해 만들어진 기능)              Secret 자동 Rotation      제한적      강함              비용      저렴 / 일부 무료      상대적으로 비쌈      둘 다 DB 비밀번호나 API Key 같은 값을 저장할 수 있지만, 성격이 다르다. Parameter Store는 일반 설정값을 포함해 넓게 쓰는 중앙 저장소에 가깝고, Secrets Manager는 민감 정보 보호에 특화된 기능(자동 Rotation, 세밀한 접근 제어 등)을 제공하는 대신 비용이 더 든다.1-2. Secrets Manager의 자동 RotationRotation은 쉽게 말해 비밀번호를 주기적으로 자동 변경하는 기능이다. 애플리케이션이 Secrets Manager에서 항상 최신 비밀번호를 가져오는 구조라면, 개발자가 비밀번호를 직접 관리할 필요가 줄어든다.Secrets Manager   DB_PASSWORD        │        │ 30일 경과        ↓   새 비밀번호 생성        ↓   실제 DB 비밀번호 변경        ↓   Secrets Manager에 새 비밀번호 저장Parameter Store는 이런 Secret lifecycle 관리 기능이 Secrets Manager만큼 전문적이지는 않다. 그래서 실무에서는 “일반 설정값은 Parameter Store, 진짜 민감한 비밀값이면서 주기적 교체가 필요하면 Secrets Manager”로 나누어 쓰는 경우가 많다.2. GitHub Actions 배포 상황: GitHub SecretsCI/CD 파이프라인으로 배포한다면 GitHub Secrets에 환경변수를 저장하고, GitHub Actions가 배포 과정에서 이 값을 EC2에 전달하는 방식도 있다.GitHub Actions → \"환경변수 여기 있어\" → EC2  GitHub Secrets        ↓  GitHub Actions        ↓  ┌─────┼─────┐  ↓     ↓      ↓ EC2   EC2    EC2GitHub Secrets에 환경변수를 한 번 등록해두면, GitHub Actions로 배포할 때 아래처럼 순차적으로 각 서버에 값을 전달할 수 있다.코드 빌드   ↓EC2 1에 배포 + 환경변수 전달   ↓EC2 2에 배포 + 환경변수 전달   ↓EC2 3에 배포 + 환경변수 전달다만 이 방식에는 GitHub Actions가 환경변수를 EC2에 “어떻게” 전달할지 구체적인 방법이 필요하다는 전제가 붙는다. 예를 들어 서버의 .env 파일을 Actions가 SSH로 접속해 생성하거나, PM2/Docker 실행 시점에 환경변수를 주입하는 식이다. 즉 전달 방식 자체를 파이프라인 안에 직접 구현해야 한다.3. GitHub Actions + EC2 여러 대 배포 상황: 역할 분리앞의 두 방식을 조합하면 좀 더 깔끔한 구조를 만들 수 있다. GitHub Actions는 배포만 담당하고, Parameter Store는 환경변수 관리만 담당하도록 역할을 나누는 것이다.GitHub Actions      │      │ 배포만 담당      ↓ EC2  EC2  EC2      │      │ 환경변수 조회      ↓AWS Parameter Store이렇게 하면 GitHub Actions(그리고 GitHub Secrets)에 DB 비밀번호 같은 운영 Secret을 잔뜩 넣어둘 필요가 없다. GitHub Actions는 “배포”라는 한 가지 책임만 지고, 각 EC2는 시작 시점(또는 실행 시점)에 IAM Role 권한으로 Parameter Store에서 필요한 값을 직접 조회한다. EC2가 추가되어도 해당 인스턴스에 동일한 IAM Role만 붙여주면, 별도 설정 없이 같은 환경변수를 가져올 수 있다.정리  서버가 여러 대일수록 환경변수를 서버마다 따로 관리하는 방식은 확장성이 떨어진다.  Parameter Store는 일반 설정값까지 폭넓게 담는 중앙 저장소, Secrets Manager는 자동 Rotation 등 보안에 특화된 기능을 제공하는 대신 비용이 더 크다.  GitHub Actions로 배포한다면 GitHub Secrets에 값을 두고 Actions가 각 서버에 전달할 수 있지만, 전달 방법을 파이프라인에서 직접 구현해야 한다.  규모가 커지면 GitHub Actions는 배포, Parameter Store는 환경변수 관리로 책임을 분리하는 편이 운영 Secret 노출 범위를 줄이고, 서버 확장에도 대응하기 쉽다."
+  },
+  
+  {
     "title": "Git 실습 3: stash와 fast-forward 병합",
     "url": "/posts/git-practice-03-stash-fast-forward/",
     "categories": "Git",
